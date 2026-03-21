@@ -1,3 +1,15 @@
+# Test reports and coverage
+reports/
+htmlcov/
+.coverage
+allure-results/
+allure-report/
+
+# Screenshots, traces, videos from tests
+screenshots/
+traces/
+videos/
+
 # Python
 __pycache__/
 *.py[cod]
