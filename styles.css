@@ -95,12 +95,15 @@ body {
 .layout {
   display: flex;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 /* SIDEBAR */
 .sidebar {
   width: 260px;
   min-width: 260px;
+  height: 100vh;
+  overflow-y: auto;
   background: var(--bg2);
   border-right: 1px solid var(--border);
   position: sticky;
@@ -191,6 +194,8 @@ body {
 .main {
   flex: 1;
   min-width: 0;
+  overflow-y: auto;
+  max-height: 100vh;
 }
 
 /* HERO */
