@@ -1,0 +1,89 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: pytest (Current File)",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "${file}",
+                "-v",
+                "--headed"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: pytest (All Tests)",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-v",
+                "--headed",
+                "--html=reports/test_report.html",
+                "--self-contained-html"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: pytest (Smoke Tests)",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-m",
+                "smoke",
+                "-v",
+                "--headed"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: pytest (Debug Mode)",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "${file}",
+                "-v",
+                "--headed",
+                "-s"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Playwright: Install Browsers",
+            "type": "python",
+            "request": "launch",
+            "module": "playwright",
+            "args": [
+                "install"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Playwright: Codegen",
+            "type": "python",
+            "request": "launch",
+            "module": "playwright",
+            "args": [
+                "codegen",
+                "https://www.saucedemo.com"
+            ],
+            "console": "integratedTerminal"
+        }
+    ]
+}
