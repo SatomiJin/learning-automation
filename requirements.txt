@@ -1,0 +1,32 @@
+# Python Automation Testing Requirements
+# Install with: pip install -r requirements.txt
+
+# Core Automation Framework
+playwright>=1.40.0
+pytest>=7.0.0
+pytest-playwright>=0.4.0
+
+# Reporting & Visualization
+pytest-html>=3.1.0
+allure-pytest>=2.13.0
+
+# Data Processing (for test data management)
+pandas>=1.5.0
+openpyxl>=3.0.0  # For Excel files
+
+# API Testing (Phase 3)
+requests>=2.28.0
+pytest-httpx>=0.21.0
+
+# Utilities
+python-dotenv>=0.19.0  # For environment variables
+faker>=15.0.0         # For test data generation
+
+# Code Quality (Optional but recommended)
+black>=22.0.0         # Code formatting
+flake8>=5.0.0         # Linting
+mypy>=1.0.0          # Type checking
+
+# Development Tools
+jupyter>=1.0.0       # For interactive learning
+ipykernel>=6.0.0     # Jupyter kernel

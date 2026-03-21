@@ -1,0 +1,898 @@
+<div class="phase-block" id="phase3" data-phase="3">
+    <div class="phase-tag p3">Phase 3 · Tuần 9–12</div>
+    <div class="phase-title">Nâng Cao & Production-Ready</div>
+    <div class="phase-subtitle">POM · Allure Report · API Testing · CI/CD · Best Practices</div>
+    <div class="phase-progress-wrap p3" id="prog-phase3">
+        <div class="phase-progress-header">
+            <span class="phase-progress-title">Tiến độ Phase 3</span>
+            <span class="phase-progress-pct" style="color:var(--p3)" id="pct-phase3">0%</span>
+        </div>
+        <div class="phase-bar-track">
+            <div class="phase-bar-fill" id="bar-phase3"></div>
+        </div>
+        <div class="phase-progress-tasks" id="tasks-phase3">0 / 0 nhiệm vụ hoàn thành</div>
+    </div>
+
+    <!-- WEEK 9 -->
+    <div class="week-block" id="p3-w9">
+        <div class="week-label">Tuần 9 · Page Object Model (POM)</div>
+
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🏛️</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Page Object Model — Kiến trúc POM</div>
+                    <div class="topic-desc">BasePage · locators tập trung · action methods · tách logic</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot" id="note-dot-14"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Lý thuyết — POM là gì và tại sao cần dùng?</div>
+                    <p><strong>POM (Page Object Model)</strong> là design pattern tổ chức code automation. Thay vì viết
+                        locator và action rải rác trong test, bạn <strong>tạo một class cho mỗi trang</strong> — class
+                        đó chứa locators và các method tương tác.</p>
+
+                    <div class="tip-box info">
+                        <span class="tip-icon">💡</span>
+                        <div class="tip-content"><strong>Lợi ích POM:</strong> Khi UI thay đổi (ví dụ dev đổi id của
+                            nút), bạn chỉ cần sửa <strong>1 chỗ</strong> trong page class — thay vì tìm và sửa trong 20
+                            file test.</div>
+                    </div>
+
+                    <p><strong>Cấu trúc thư mục chuẩn:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">Cấu trúc project</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><div class="tree">
+<span class="tree-dir">my_automation_project/</span>
+├── <span class="tree-dir">pages/</span>              <span class="tree-comment"># Mỗi file = 1 trang web</span>
+│   ├── <span class="tree-py">base_page.py</span>    <span class="tree-comment"># Class cha: common methods</span>
+│   ├── <span class="tree-py">login_page.py</span>   <span class="tree-comment"># Trang login</span>
+│   ├── <span class="tree-py">inventory_page.py</span>
+│   └── <span class="tree-py">cart_page.py</span>
+├── <span class="tree-dir">tests/</span>             <span class="tree-comment"># Chỉ chứa test logic</span>
+│   ├── <span class="tree-py">conftest.py</span>
+│   ├── <span class="tree-py">test_login.py</span>
+│   ├── <span class="tree-py">test_cart.py</span>
+│   └── <span class="tree-py">test_checkout.py</span>
+├── <span class="tree-dir">test_data/</span>         <span class="tree-comment"># Data tách riêng</span>
+│   ├── <span class="tree-file">users.json</span>
+│   └── <span class="tree-file">products.csv</span>
+├── <span class="tree-file">.env</span>               <span class="tree-comment"># Biến môi trường (URL, credentials)</span>
+├── <span class="tree-file">pytest.ini</span>         <span class="tree-comment"># Cấu hình pytest</span>
+└── <span class="tree-file">requirements.txt</span></div></pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang python">Python</span>
+                            <span class="code-filename">pages/base_page.py</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><span class="imp">from</span> playwright.sync_api <span class="imp">import</span> Page, expect
+
+<span class="kw">class</span> <span class="cls">BasePage</span>:
+    <span class="str">"""Class cha chứa các method dùng chung"""</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="self">self</span>, page: <span class="cls">Page</span>):
+        <span class="self">self</span>.page = page
+
+    <span class="kw">def</span> <span class="fn">navigate</span>(<span class="self">self</span>, url: <span class="fn">str</span>):
+        <span class="self">self</span>.page.<span class="fn">goto</span>(url)
+
+    <span class="kw">def</span> <span class="fn">wait_for_page_load</span>(<span class="self">self</span>):
+        <span class="self">self</span>.page.<span class="fn">wait_for_load_state</span>(<span class="str">"networkidle"</span>)
+
+    <span class="kw">def</span> <span class="fn">take_screenshot</span>(<span class="self">self</span>, name: <span class="fn">str</span>):
+        <span class="self">self</span>.page.<span class="fn">screenshot</span>(path=<span class="str">f"screenshots/<span class="dec">{name}</span>.png"</span>)
+
+    <span class="kw">def</span> <span class="fn">get_title</span>(<span class="self">self</span>) -> <span class="fn">str</span>:
+        <span class="kw">return</span> <span class="self</span>.page.<span class="fn">title</span>()</pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang python">Python</span>
+                            <span class="code-filename">pages/login_page.py</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><span class="imp">from</span> playwright.sync_api <span class="imp">import</span> expect
+<span class="imp">from</span> pages.base_page <span class="imp">import</span> BasePage
+
+<span class="kw">class</span> <span class="cls">LoginPage</span>(<span class="cls">BasePage</span>):
+    <span class="cmt"># Locators — tập trung tại đây</span>
+    URL          = <span class="str">"https://www.saucedemo.com"</span>
+    USERNAME_INP = <span class="str">"#user-name"</span>
+    PASSWORD_INP = <span class="str">"#password"</span>
+    LOGIN_BTN    = <span class="str">"#login-button"</span>
+    ERROR_MSG    = <span class="str">"[data-test='error']"</span>
+
+    <span class="kw">def</span> <span class="fn">open</span>(<span class="self">self</span>):
+        <span class="self">self</span>.<span class="fn">navigate</span>(<span class="self">self</span>.URL)
+        <span class="kw">return</span> <span class="self">self</span>
+
+    <span class="kw">def</span> <span class="fn">login</span>(<span class="self">self</span>, username: <span class="fn">str</span>, password: <span class="fn">str</span>):
+        <span class="self">self</span>.page.<span class="fn">fill</span>(<span class="self">self</span>.USERNAME_INP, username)
+        <span class="self">self</span>.page.<span class="fn">fill</span>(<span class="self">self</span>.PASSWORD_INP, password)
+        <span class="self">self</span>.page.<span class="fn">click</span>(<span class="self">self</span>.LOGIN_BTN)
+        <span class="kw">return</span> <span class="self">self</span>  <span class="cmt"># cho phép method chaining</span>
+
+    <span class="kw">def</span> <span class="fn">get_error_message</span>(<span class="self">self</span>) -> <span class="fn">str</span>:
+        <span class="kw">return</span> <span class="self</span>.page.locator(<span class="self">self</span>.ERROR_MSG).<span class="fn">inner_text</span>()
+
+    <span class="kw">def</span> <span class="fn">assert_error_visible</span>(<span class="self">self</span>):
+        <span class="fn">expect</span>(<span class="self">self</span>.page.locator(<span class="self">self</span>.ERROR_MSG)).<span class="fn">to_be_visible</span>()
+        <span class="kw">return</span> <span class="self">self</span></pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang python">Python</span>
+                            <span class="code-filename">tests/test_login.py</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><span class="imp">from</span> pages.login_page <span class="imp">import</span> LoginPage
+<span class="imp">from</span> playwright.sync_api <span class="imp">import</span> expect
+
+<span class="cmt"># Test code GỌN GÀNG — không có locator cứng</span>
+<span class="kw">def</span> <span class="fn">test_login_success</span>(page):
+    login = <span class="cls">LoginPage</span>(page)
+    login.<span class="fn">open</span>().<span class="fn">login</span>(<span class="str">"standard_user"</span>, <span class="str">"secret_sauce"</span>)
+    <span class="fn">expect</span>(page).<span class="fn">to_have_url</span>(<span class="str">"https://www.saucedemo.com/inventory.html"</span>)
+
+<span class="kw">def</span> <span class="fn">test_login_fail</span>(page):
+    login = <span class="cls">LoginPage</span>(page)
+    login.<span class="fn">open</span>().<span class="fn">login</span>(<span class="str">"wrong_user"</span>, <span class="str">"wrong_pass"</span>)
+    login.<span class="fn">assert_error_visible</span>()
+    <span class="cmt"># Nếu sau này error selector đổi, chỉ sửa trong LoginPage!</span></pre>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ex-27" onchange="onCheck(this)">
+                            <label for="ex-27" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Refactor bài Phase 2 sang POM</div>
+                                    <div class="ex-desc">Lấy test suite từ Phase 2, tạo <code>LoginPage</code>,
+                                        <code>InventoryPage</code>, <code>CartPage</code>. Mỗi page class có đủ locators
+                                        và methods. Test file chỉ gọi methods.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ex-28" onchange="onCheck(this)">
+                            <label for="ex-28" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">BasePage với common methods</div>
+                                    <div class="ex-desc">Tạo <code>BasePage</code> với: <code>navigate()</code>,
+                                        <code>wait_for_spinner_gone()</code>, <code>take_screenshot()</code>. Tất cả
+                                        page class kế thừa từ đây.</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="note-area" id="note-area-topic-10">
+                            <textarea class="note-textarea" id="note-text-topic-10"
+                                placeholder="Ghi chú của bạn về topic này... (tự động lưu)"></textarea>
+                            <div class="note-footer">
+                                <button class="note-clear-btn" onclick="clearNote('topic-10')">Xoá ghi chú</button>
+                                <span class="note-saved-msg" id="note-saved-topic-10">✓ Đã lưu</span>
+                            </div>
+                        </div>
+                        <button class="note-toggle-btn" id="note-btn-topic-10" onclick="toggleNote('topic-10')">📝 Ghi
+                            chú</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🗄️</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Test Data Management</div>
+                    <div class="topic-desc">Data fixtures · factory functions · .env config · scope</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot" id="note-dot-testdata"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Lý thuyết</div>
+                    <p>Test data nên được <strong>tách hoàn toàn khỏi test logic</strong>. Khi data thay đổi (ví dụ URL
+                        môi trường, credentials), bạn chỉ cần sửa file data — không cần chạm vào test code.</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">Cấu trúc</span>
+                            <span class="code-filename">test_data/users.json</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>{
+  <span class="str">"valid_user"</span>:   { <span class="str">"username"</span>: <span class="str">"standard_user"</span>,  <span class="str">"password"</span>: <span class="str">"secret_sauce"</span> },
+  <span class="str">"locked_user"</span>:  { <span class="str">"username"</span>: <span class="str">"locked_out_user"</span>, <span class="str">"password"</span>: <span class="str">"secret_sauce"</span> },
+  <span class="str">"invalid_user"</span>: { <span class="str">"username"</span>: <span class="str">"wrong"</span>,           <span class="str">"password"</span>: <span class="str">"wrong"</span> }
+}</pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang python">Python</span>
+                            <span class="code-filename">tests/conftest.py</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><span class="imp">import</span> json, os
+<span class="imp">import</span> pytest
+<span class="imp">from</span> dotenv <span class="imp">import</span> load_dotenv
+
+load_dotenv()   <span class="cmt"># đọc file .env</span>
+
+<span class="cmt">## Fixture đọc test users từ JSON</span>
+<span class="dec">@pytest.fixture</span>(scope=<span class="str">"session"</span>)
+<span class="kw">def</span> <span class="fn">test_users</span>():
+    <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"test_data/users.json"</span>) <span class="kw">as</span> f:
+        <span class="kw">return</span> json.<span class="fn">load</span>(f)
+
+<span class="cmt">## Fixture cấu hình base URL từ môi trường</span>
+<span class="dec">@pytest.fixture</span>(scope=<span class="str">"session"</span>)
+<span class="kw">def</span> <span class="fn">base_url</span>():
+    <span class="kw">return</span> os.<span class="fn">getenv</span>(<span class="str">"BASE_URL"</span>, <span class="str">"https://www.saucedemo.com"</span>)
+
+<span class="cmt">## Factory function — tạo test data động</span>
+<span class="dec">@pytest.fixture</span>
+<span class="kw">def</span> <span class="fn">make_user</span>():
+    <span class="kw">def</span> <span class="fn">_make</span>(role=<span class="str">"standard"</span>, **overrides):
+        defaults = {
+            <span class="str">"username"</span>: <span class="str">f"test_user_<span class="dec">{role}</span>"</span>,
+            <span class="str">"email"</span>:    <span class="str">f"<span class="dec">{role}</span>@test.com"</span>,
+            <span class="str">"role"</span>:     role
+        }
+        <span class="kw">return</span> {**defaults, **overrides}   <span class="cmt"># overrides thắng defaults</span>
+    <span class="kw">return</span> _make
+
+<span class="cmt">## Dùng trong test</span>
+<span class="kw">def</span> <span class="fn">test_admin_panel</span>(make_user, page, base_url):
+    admin = <span class="fn">make_user</span>(role=<span class="str">"admin"</span>, username=<span class="str">"actual_admin"</span>)
+    page.<span class="fn">goto</span>(base_url)
+    page.<span class="fn">fill</span>(<span class="str">"#username"</span>, admin[<span class="str">"username"</span>])</pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang bash">Bash</span>
+                            <span class="code-filename">.env</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><span class="cmt"># Môi trường dev</span>
+BASE_URL=https://staging.myapp.com
+API_URL=https://api-staging.myapp.com
+ADMIN_USER=admin_test
+ADMIN_PASS=secret123</pre>
+                    </div>
+
+                    <div class="tip-box info">
+                        <span class="tip-icon">💡</span>
+                        <div class="tip-content"><strong>scope của fixture:</strong> <code>scope="session"</code> = chạy
+                            1 lần cho cả test run (dùng cho config, DB connection). <code>scope="function"</code>
+                            (default) = chạy lại mỗi test (dùng cho page, fresh data).</div>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ex-testdata-1" onchange="onCheck(this)">
+                            <label for="ex-testdata-1" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Tách test data ra file JSON</div>
+                                    <div class="ex-desc">Di chuyển toàn bộ credentials khỏi test file sang
+                                        <code>test_data/users.json</code>. Load qua <code>session</code> fixture. Không
+                                        còn hardcode trong test.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ex-testdata-2" onchange="onCheck(this)">
+                            <label for="ex-testdata-2" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Cấu hình BASE_URL qua .env</div>
+                                    <div class="ex-desc">Cài <code>python-dotenv</code>, tạo file <code>.env</code> với
+                                        <code>BASE_URL</code>. Đọc trong conftest và truyền vào mọi
+                                        <code>page.goto()</code>.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="note-area" id="note-area-testdata">
+                    <textarea class="note-textarea" id="note-text-testdata" placeholder="Ghi chú của bạn..."
+                        oninput="handleNoteInput(this)"></textarea>
+                    <div class="note-footer">
+                        <button class="note-clear-btn" onclick="clearNote('testdata')">Xoá ghi chú</button>
+                        <span class="note-saved-msg" id="note-saved-testdata">✓ Đã lưu</span>
+                    </div>
+                </div>
+                <button class="note-toggle-btn" id="note-btn-testdata" onclick="toggleNote('testdata')">📝 Ghi
+                    chú</button>
+            </div>
+        </div>
+
+        <!-- WEEK 10 -->
+        <div class="week-block" id="p3-w10">
+            <div class="week-label">Tuần 10 · Reporting & Debugging</div>
+
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <div class="topic-icon">📊</div>
+                    <div class="topic-meta">
+                        <div class="topic-name">Allure Report & Trace Viewer</div>
+                        <div class="topic-desc">allure-pytest · steps · trace viewer · HTML report</div>
+                    </div>
+                    <div class="topic-toggle">▼</div>
+                    <span class="note-dot" id="note-dot-15"></span>
+                </div>
+                <div class="topic-body">
+                    <div class="theory-section">
+                        <div class="section-label">Lý thuyết</div>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang bash">Bash</span>
+                                <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre><span class="cmt"># Cài Allure</span>
+pip install allure-pytest
+
+<span class="cmt"># Chạy test và generate report</span>
+pytest tests/ --alluredir=./allure-results
+allure serve ./allure-results  <span class="cmt"># mở report trên browser</span></pre>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang python">Python</span>
+                                <span class="code-filename">tests/test_login.py (với Allure)</span>
+                                <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre><span class="imp">import</span> allure
+
+<span class="dec">@allure.feature</span>(<span class="str">"Authentication"</span>)
+<span class="dec">@allure.story</span>(<span class="str">"Login"</span>)
+<span class="kw">def</span> <span class="fn">test_login_success</span>(page):
+    <span class="kw">with</span> allure.<span class="fn">step</span>(<span class="str">"Mở trang login"</span>):
+        page.<span class="fn">goto</span>(<span class="str">"https://www.saucedemo.com"</span>)
+
+    <span class="kw">with</span> allure.<span class="fn">step</span>(<span class="str">"Điền credentials"</span>):
+        page.<span class="fn">fill</span>(<span class="str">"#user-name"</span>, <span class="str">"standard_user"</span>)
+        page.<span class="fn">fill</span>(<span class="str">"#password"</span>, <span class="str">"secret_sauce"</span>)
+
+    <span class="kw">with</span> allure.<span class="fn">step</span>(<span class="str">"Click Login"</span>):
+        page.<span class="fn">click</span>(<span class="str">"#login-button"</span>)
+        screenshot = page.<span class="fn">screenshot</span>()
+        allure.<span class="fn">attach</span>(screenshot, name=<span class="str">"After login"</span>,
+                      attachment_type=allure.attachment_type.PNG)</pre>
+                        </div>
+
+                        <p><strong>Playwright Trace Viewer</strong> — công cụ debug mạnh nhất:</p>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang python">Python</span>
+                                <span class="code-filename">conftest.py</span>
+                                <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre><span class="cmt"># Bật trace khi test FAIL (tự động)</span>
+<span class="dec">@pytest.fixture</span>(autouse=<span class="kw">True</span>)
+<span class="kw">def</span> <span class="fn">trace_on_failure</span>(page, request):
+    page.context.tracing.<span class="fn">start</span>(screenshots=<span class="kw">True</span>, snapshots=<span class="kw">True</span>)
+    <span class="kw">yield</span>
+    <span class="kw">if</span> request.node.rep_call.failed:
+        page.context.tracing.<span class="fn">stop</span>(path=<span class="str">f"traces/<span class="dec">{request.node.name}</span>.zip"</span>)
+    <span class="kw">else</span>:
+        page.context.tracing.<span class="fn">stop</span>()</pre>
+                        </div>
+                    </div>
+                    <div class="theory-section">
+                        <div class="section-label">Bài tập thực hành</div>
+                        <div class="exercises">
+                            <div class="ex-item">
+                                <input type="checkbox" class="ex-check" id="ex-29" onchange="onCheck(this)">
+                                <label for="ex-29" style="display:contents;cursor:pointer">
+                                    <div class="ex-text">
+                                        <div class="ex-title">Tích hợp Allure vào project</div>
+                                        <div class="ex-desc">Thêm <code>@allure.feature</code>,
+                                            <code>@allure.step</code> vào 3 test. Chạy và xem report. Attach screenshot
+                                            vào step cuối.</div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="ex-item">
+                                <input type="checkbox" class="ex-check" id="ex-30" onchange="onCheck(this)">
+                                <label for="ex-30" style="display:contents;cursor:pointer">
+                                    <div class="ex-text">
+                                        <div class="ex-title">Debug với Trace Viewer</div>
+                                        <div class="ex-desc">Cố tình viết test fail. Bật trace, chạy test, mở
+                                            <code>playwright show-trace</code> và phân tích từng step đến khi fail.
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="note-area" id="note-area-topic-11">
+                                <textarea class="note-textarea" id="note-text-topic-11"
+                                    placeholder="Ghi chú của bạn về topic này... (tự động lưu)"></textarea>
+                                <div class="note-footer">
+                                    <button class="note-clear-btn" onclick="clearNote('topic-11')">Xoá ghi chú</button>
+                                    <span class="note-saved-msg" id="note-saved-topic-11">✓ Đã lưu</span>
+                                </div>
+                            </div>
+                            <button class="note-toggle-btn" id="note-btn-topic-11" onclick="toggleNote('topic-11')">📝
+                                Ghi chú</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <div class="topic-icon">🐛</div>
+                    <div class="topic-meta">
+                        <div class="topic-name">Debugging & Flaky Test Strategies</div>
+                        <div class="topic-desc">Trace viewer · headed mode · retries · isolating failures</div>
+                    </div>
+                    <div class="topic-toggle">▼</div>
+                    <span class="note-dot" id="note-dot-flaky"></span>
+                </div>
+                <div class="topic-body">
+                    <div class="theory-section">
+                        <div class="section-label">Lý thuyết — Flaky test là gì?</div>
+                        <p><strong>Flaky test</strong> = test lúc pass lúc fail không có lý do rõ ràng. Đây là vấn đề
+                            phổ biến nhất trong automation. Nguyên nhân chính: timing issue, data không sạch, phụ thuộc
+                            giữa tests, animation chưa xong.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang bash">Bash</span>
+                                <span class="code-filename">Debug commands</span>
+                                <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre><span class="cmt"># Chạy headed để xem browser</span>
+pytest tests/ --headed
+
+<span class="cmt"># Chạy chậm lại 1000ms mỗi action</span>
+pytest tests/ --headed --slowmo 1000
+
+<span class="cmt"># Bật trace để debug sau khi fail</span>
+pytest tests/ --tracing=on
+
+<span class="cmt"># Xem trace file</span>
+playwright show-trace traces/test_login.zip
+
+<span class="cmt"># Retry tự động khi fail</span>
+pytest tests/ --retries=2</pre>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang python">Python</span>
+                                <span class="code-filename">pytest.ini</span>
+                                <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre>[pytest]
+<span class="cmt"># Tự động retry 2 lần trước khi mark FAIL</span>
+addopts = --retries=2 --retry-delay=1
+
+<span class="cmt"># Cần cài: pip install pytest-retry</span></pre>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang python">Python</span>
+                                <span class="code-filename">conftest.py — auto trace on fail</span>
+                                <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <pre><span class="dec">@pytest.fixture</span>(autouse=<span class="kw">True</span>)
+<span class="kw">def</span> <span class="fn">trace_on_failure</span>(page, request):
+    page.context.tracing.<span class="fn">start</span>(screenshots=<span class="kw">True</span>, snapshots=<span class="kw">True</span>)
+    <span class="kw">yield</span>
+    <span class="cmt"># Chỉ lưu trace khi test FAIL</span>
+    <span class="kw">if</span> <span class="fn">hasattr</span>(request.node, <span class="str">"rep_call"</span>) <span class="kw">and</span> request.node.rep_call.failed:
+        path = <span class="str">f"traces/<span class="dec">{request.node.name}</span>.zip"</span>
+        page.context.tracing.<span class="fn">stop</span>(path=path)
+        <span class="fn">print</span>(<span class="str">f"\nTrace saved: <span class="dec">{path}</span>"</span>)
+    <span class="kw">else</span>:
+        page.context.tracing.<span class="fn">stop</span>()</pre>
+                        </div>
+
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Triệu chứng</th>
+                                    <th>Nguyên nhân thường gặp</th>
+                                    <th>Cách fix</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Element not found</td>
+                                    <td>Page chưa load xong</td>
+                                    <td>Dùng <code>wait_for</code> / <code>expect().to_be_visible()</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Click không hoạt động</td>
+                                    <td>Element bị che/đang animate</td>
+                                    <td>Chờ animation xong, scroll into view</td>
+                                </tr>
+                                <tr>
+                                    <td>Data sai</td>
+                                    <td>Test trước để lại dữ liệu</td>
+                                    <td>Cleanup trong fixture teardown</td>
+                                </tr>
+                                <tr>
+                                    <td>Timeout</td>
+                                    <td>Network chậm ở CI</td>
+                                    <td>Tăng global timeout trong playwright.config</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="tip-box danger">
+                            <span class="tip-icon">❌</span>
+                            <div class="tip-content"><strong>Đừng chỉ tăng retry để che flaky test.</strong> Retry là
+                                lưới an toàn tạm thời — hãy tìm root cause thật sự. Trace viewer thường chỉ ra vấn đề
+                                trong 5 phút.</div>
+                        </div>
+                    </div>
+                    <div class="theory-section">
+                        <div class="section-label">Bài tập thực hành</div>
+                        <div class="exercises">
+                            <div class="ex-item">
+                                <input type="checkbox" class="ex-check" id="ex-flaky-1" onchange="onCheck(this)">
+                                <label for="ex-flaky-1" style="display:contents;cursor:pointer">
+                                    <div class="ex-text">
+                                        <div class="ex-title">Bật trace on failure</div>
+                                        <div class="ex-desc">Thêm fixture <code>trace_on_failure</code> vào conftest. Cố
+                                            tình viết test fail. Chạy <code>playwright show-trace</code> và phân tích
+                                            từng step.</div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="ex-item">
+                                <input type="checkbox" class="ex-check" id="ex-flaky-2" onchange="onCheck(this)">
+                                <label for="ex-flaky-2" style="display:contents;cursor:pointer">
+                                    <div class="ex-text">
+                                        <div class="ex-title">Tái hiện và fix một flaky test</div>
+                                        <div class="ex-desc">Dùng <code>--slowmo 500</code> để tìm timing issue. Thay
+                                            <code>time.sleep()</code> bằng proper wait. Chạy test 10 lần liên tiếp để
+                                            xác nhận ổn định.</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="note-area" id="note-area-flaky">
+                        <textarea class="note-textarea" id="note-text-flaky" placeholder="Ghi chú của bạn..."
+                            oninput="handleNoteInput(this)"></textarea>
+                        <div class="note-footer">
+                            <button class="note-clear-btn" onclick="clearNote('flaky')">Xoá ghi chú</button>
+                            <span class="note-saved-msg" id="note-saved-flaky">✓ Đã lưu</span>
+                        </div>
+                    </div>
+                    <button class="note-toggle-btn" id="note-btn-flaky" onclick="toggleNote('flaky')">📝 Ghi
+                        chú</button>
+                </div>
+            </div>
+
+            <!-- WEEK 11 -->
+            <div class="week-block" id="p3-w11">
+                <div class="week-label">Tuần 11 · API Testing & CI/CD</div>
+
+                <div class="topic-card">
+                    <div class="topic-header" onclick="toggleTopic(this)">
+                        <div class="topic-icon">🔌</div>
+                        <div class="topic-meta">
+                            <div class="topic-name">API Testing với Playwright</div>
+                            <div class="topic-desc">APIRequestContext · GET/POST/DELETE · headers · kết hợp UI+API</div>
+                        </div>
+                        <div class="topic-toggle">▼</div>
+                        <span class="note-dot" id="note-dot-16"></span>
+                    </div>
+                    <div class="topic-body">
+                        <div class="theory-section">
+                            <div class="section-label">Lý thuyết</div>
+                            <p>Thay vì luôn login qua UI (chậm), bạn có thể <strong>setup trạng thái qua API</strong>
+                                rồi mới chạy test UI. Điều này giúp test nhanh hơn nhiều và tách biệt concern.</p>
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-lang python">Python</span>
+                                    <span class="code-filename">tests/test_api.py</span>
+                                    <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><span class="imp">import</span> pytest
+<span class="imp">from</span> playwright.sync_api <span class="imp">import</span> Playwright
+
+<span class="dec">@pytest.fixture</span>
+<span class="kw">def</span> <span class="fn">api_context</span>(playwright: <span class="cls">Playwright</span>):
+    context = playwright.request.<span class="fn">new_context</span>(
+        base_url=<span class="str">"https://reqres.in"</span>,
+        extra_http_headers={<span class="str">"Accept"</span>: <span class="str">"application/json"</span>}
+    )
+    <span class="kw">yield</span> context
+    context.<span class="fn">dispose</span>()
+
+
+<span class="kw">def</span> <span class="fn">test_get_users</span>(api_context):
+    response = api_context.<span class="fn">get</span>(<span class="str">"/api/users"</span>, params={<span class="str">"page"</span>: <span class="num">1</span>})
+    <span class="fn">assert</span> response.status == <span class="num">200</span>
+    body = response.<span class="fn">json</span>()
+    <span class="fn">assert</span> <span class="str">"data"</span> <span class="kw">in</span> body
+    <span class="fn">assert</span> <span class="fn">len</span>(body[<span class="str">"data"</span>]) > <span class="num">0</span>
+
+
+<span class="kw">def</span> <span class="fn">test_create_user</span>(api_context):
+    response = api_context.<span class="fn">post</span>(<span class="str">"/api/users"</span>, data={
+        <span class="str">"name"</span>: <span class="str">"QC Tester"</span>,
+        <span class="str">"job"</span>: <span class="str">"Automation Engineer"</span>
+    })
+    <span class="fn">assert</span> response.status == <span class="num">201</span>
+    user = response.<span class="fn">json</span>()
+    <span class="fn">assert</span> user[<span class="str">"name"</span>] == <span class="str">"QC Tester"</span>
+    <span class="fn">print</span>(<span class="str">f"Created user id: <span class="dec">{user['id']}</span>"</span>)
+
+
+<span class="cmt"># Kết hợp: tạo user qua API, verify qua UI</span>
+<span class="kw">def</span> <span class="fn">test_api_then_ui</span>(api_context, page):
+    <span class="cmt"># 1. Setup: tạo user qua API (nhanh)</span>
+    res = api_context.<span class="fn">post</span>(<span class="str">"/api/users"</span>, data={<span class="str">"name"</span>: <span class="str">"Test User"</span>})
+    user_id = res.<span class="fn">json</span>()[<span class="str">"id"</span>]
+
+    <span class="cmt"># 2. Verify qua UI</span>
+    page.<span class="fn">goto</span>(<span class="str">f"/users/<span class="dec">{user_id}</span>"</span>)
+    <span class="cmt"># assert user hiển thị đúng...</span></pre>
+                            </div>
+                        </div>
+                        <div class="theory-section">
+                            <div class="section-label">Bài tập thực hành</div>
+                            <div class="exercises">
+                                <div class="ex-item">
+                                    <input type="checkbox" class="ex-check" id="ex-31" onchange="onCheck(this)">
+                                    <label for="ex-31" style="display:contents;cursor:pointer">
+                                        <div class="ex-text">
+                                            <div class="ex-title">Test API CRUD với reqres.in</div>
+                                            <div class="ex-desc">Viết 4 test: GET users, GET single user (404 nếu không
+                                                tồn tại), POST tạo user, DELETE user. Assert status code và body.</div>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="ex-item">
+                                    <input type="checkbox" class="ex-check" id="ex-32" onchange="onCheck(this)">
+                                    <label for="ex-32" style="display:contents;cursor:pointer">
+                                        <div class="ex-text">
+                                            <div class="ex-title">API setup + UI verify</div>
+                                            <div class="ex-desc">Dùng API để setup trạng thái (thêm item vào cart qua
+                                                API), sau đó mở UI và verify item xuất hiện đúng.</div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-card">
+                        <div class="topic-header" onclick="toggleTopic(this)">
+                            <div class="topic-icon">⚡</div>
+                            <div class="topic-meta">
+                                <div class="topic-name">GitHub Actions CI/CD</div>
+                                <div class="topic-desc">workflow .yml · install dependencies · upload artifacts</div>
+                            </div>
+                            <div class="topic-toggle">▼</div>
+                            <span class="note-dot" id="note-dot-17"></span>
+                        </div>
+                        <div class="topic-body">
+                            <div class="theory-section">
+                                <div class="section-label">Lý thuyết</div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span class="code-lang text">YAML</span>
+                                        <span class="code-filename">.github/workflows/playwright.yml</span>
+                                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                                    </div>
+                                    <pre>name: Playwright Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        run: pytest tests/ -v --alluredir=allure-results
+
+      - name: Upload Allure results
+        if: always()   <span class="cmt"># upload kể cả khi test fail</span>
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-results
+          path: allure-results/
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshots
+          path: screenshots/</pre>
+                                </div>
+                            </div>
+                            <div class="theory-section">
+                                <div class="section-label">Bài tập thực hành</div>
+                                <div class="exercises">
+                                    <div class="ex-item">
+                                        <input type="checkbox" class="ex-check" id="ex-33" onchange="onCheck(this)">
+                                        <label for="ex-33" style="display:contents;cursor:pointer">
+                                            <div class="ex-text">
+                                                <div class="ex-title">Push project lên GitHub, bật Actions</div>
+                                                <div class="ex-desc">Tạo file workflow, push code, xem Actions chạy.
+                                                    Kiểm tra kết quả trên tab Actions của repo.</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="ex-item">
+                                        <input type="checkbox" class="ex-check" id="ex-34" onchange="onCheck(this)">
+                                        <label for="ex-34" style="display:contents;cursor:pointer">
+                                            <div class="ex-text">
+                                                <div class="ex-title">Upload report artifact</div>
+                                                <div class="ex-desc">Cấu hình upload Allure results sau khi chạy.
+                                                    Download artifact, mở report local bằng <code>allure open</code>.
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div class="note-area" id="note-area-topic-12">
+                                        <textarea class="note-textarea" id="note-text-topic-12"
+                                            placeholder="Ghi chú của bạn về topic này... (tự động lưu)"></textarea>
+                                        <div class="note-footer">
+                                            <button class="note-clear-btn" onclick="clearNote('topic-12')">Xoá ghi
+                                                chú</button>
+                                            <span class="note-saved-msg" id="note-saved-topic-12">✓ Đã lưu</span>
+                                        </div>
+                                    </div>
+                                    <button class="note-toggle-btn" id="note-btn-topic-12"
+                                        onclick="toggleNote('topic-12')">📝 Ghi chú</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WEEK 12 -->
+                    <div class="week-block" id="p3-w12">
+                        <div class="week-label">Tuần 12 · Best Practices & Code Quality</div>
+
+                        <div class="topic-card">
+                            <div class="topic-header" onclick="toggleTopic(this)">
+                                <div class="topic-icon">🏆</div>
+                                <div class="topic-meta">
+                                    <div class="topic-name">Best Practices — Viết test như senior</div>
+                                    <div class="topic-desc">Test isolation · naming · no sleep · project structure chuẩn
+                                    </div>
+                                </div>
+                                <div class="topic-toggle">▼</div>
+                                <span class="note-dot" id="note-dot-18"></span>
+                            </div>
+                            <div class="topic-body">
+                                <div class="theory-section">
+                                    <div class="section-label">Những điều KHÔNG BAO GIỜ làm</div>
+                                    <div class="tip-box danger">
+                                        <span class="tip-icon">❌</span>
+                                        <div class="tip-content">
+                                            <strong>Danh sách đen:</strong><br>
+                                            • <code>time.sleep()</code> — dùng <code>expect().to_be_visible()</code>
+                                            thay thế<br>
+                                            • Locator fragile như <code>//div[3]/span[1]</code><br>
+                                            • Test phụ thuộc nhau (test B phải chạy sau test A)<br>
+                                            • Credentials hardcode trong test file — dùng <code>.env</code><br>
+                                            • Bắt <code>except Exception: pass</code> — che giấu lỗi thật
+                                        </div>
+                                    </div>
+
+                                    <div class="tip-box success">
+                                        <span class="tip-icon">✅</span>
+                                        <div class="tip-content">
+                                            <strong>Checklist test chất lượng:</strong><br>
+                                            • Mỗi test độc lập, chạy được riêng lẻ<br>
+                                            • Tên test rõ ràng:
+                                            <code>test_login_with_invalid_password_shows_error</code><br>
+                                            • Dùng <code>@pytest.fixture</code> cho setup/teardown<br>
+                                            • Một test chỉ kiểm tra một điều (Single responsibility)<br>
+                                            • Comment giải thích <em>tại sao</em> chứ không phải <em>làm gì</em>
+                                        </div>
+                                    </div>
+
+                                    <div class="code-block">
+                                        <div class="code-header">
+                                            <span class="code-lang python">Python</span>
+                                            <span class="code-filename">pytest.ini</span>
+                                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                                        </div>
+                                        <pre>[pytest]
+testpaths = tests
+addopts = -v --tb=short
+markers =
+    smoke: Các test quan trọng nhất, chạy nhanh
+    regression: Full regression suite
+    api: Test API thuần
+    ui: Test UI thuần</pre>
+                                    </div>
+
+                                    <div class="note-area" id="note-area-topic-13">
+                                        <textarea class="note-textarea" id="note-text-topic-13"
+                                            placeholder="Ghi chú của bạn về topic này... (tự động lưu)"></textarea>
+                                        <div class="note-footer">
+                                            <button class="note-clear-btn" onclick="clearNote('topic-13')">Xoá ghi
+                                                chú</button>
+                                            <span class="note-saved-msg" id="note-saved-topic-13">✓ Đã lưu</span>
+                                        </div>
+                                    </div>
+                                    <button class="note-toggle-btn" id="note-btn-topic-13"
+                                        onclick="toggleNote('topic-13')">📝 Ghi chú</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MILESTONE 3 - CAPSTONE -->
+                    <div class="milestone-card p3" id="p3-milestone">
+                        <div class="milestone-label">Bài Tập Lớn · Phase 3 — Capstone Project</div>
+                        <div class="milestone-title">🎓 Full Automation Framework — Portfolio Project</div>
+                        <div class="milestone-desc">Xây dựng framework hoàn chỉnh cho 1 ứng dụng web thực tế (hoặc
+                            staging env công ty). Đây là portfolio để apply vị trí <strong>Automation Tester</strong>.
+                        </div>
+                        <ul class="checklist">
+                            <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check"
+                                    id="ml-13" onclick="event.stopPropagation()"> <span>Cấu trúc thư mục chuẩn:
+                                    <code>pages/</code>, <code>tests/</code>, <code>test_data/</code></span></li>
+                            <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check"
+                                    id="ml-14" onclick="event.stopPropagation()"> <span>Page Object Model cho tất cả các
+                                    trang</span></li>
+                            <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check"
+                                    id="ml-15" onclick="event.stopPropagation()"> <span>Test data từ JSON/CSV, cấu hình
+                                    từ <code>.env</code></span></li>
+                            <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check"
+                                    id="ml-16" onclick="event.stopPropagation()"> <span>Allure Report với steps,
+                                    screenshots đính kèm</span></li>
+                            <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check"
+                                    id="ml-17" onclick="event.stopPropagation()"> <span>CI/CD GitHub Actions: auto-run
+                                    trên push</span></li>
+                            <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check"
+                                    id="ml-18" onclick="event.stopPropagation()"> <span>API + UI tests kết hợp (API
+                                    setup, UI verify)</span></li>
+                            <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check"
+                                    id="ml-19" onclick="event.stopPropagation()"> <span>Ít nhất 20 test cases có
+                                    meaningful assertions</span></li>
+                            <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check"
+                                    id="ml-20" onclick="event.stopPropagation()"> <span><code>README.md</code> đầy đủ:
+                                    setup, run, view report</span></li>
+                        </ul>
+                    </div>
+                </div>

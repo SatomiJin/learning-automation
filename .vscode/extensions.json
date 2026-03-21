@@ -1,0 +1,34 @@
+{
+    "recommendations": [
+        // Python development
+        "ms-python.python",
+        "ms-python.pylint",
+        "ms-python.black-formatter",
+        "ms-python.flake8",
+        "ms-python.mypy-type-checker",
+
+        // Testing
+        "ms-python.pytest-adapter",
+        "hbenl.vscode-test-explorer",
+
+        // Playwright
+        "ms-playwright.playwright",
+
+        // Web development
+        "ms-vscode.vscode-html-css-js",
+        "ritwickdey.liveserver",
+
+        // Git
+        "ms-vscode.vscode-git-graph",
+        "mhutchie.git-graph",
+
+        // General
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "ms-vscode.vscode-markdown-preview-enhanced",
+
+        // Code quality
+        "ms-vscode.vscode-eslint",
+        "esbenp.prettier-vscode"
+    ]
+}

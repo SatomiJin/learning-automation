@@ -1,0 +1,1249 @@
+<div class="phase-block" id="phase2" data-phase="2">
+    <div class="phase-tag p2">Phase 2 · Tuần 5–8</div>
+    <div class="phase-title">Playwright Cơ Bản</div>
+    <div class="phase-subtitle">Browser automation — từ cài đặt đến
+        viết test với pytest</div>
+    <div class="phase-progress-wrap p2" id="prog-phase2">
+        <div class="phase-progress-header">
+            <span class="phase-progress-title">Tiến độ Phase
+                2</span>
+            <span class="phase-progress-pct" style="color:var(--p2)" id="pct-phase2">0%</span>
+        </div>
+        <div class="phase-bar-track">
+            <div class="phase-bar-fill" id="bar-phase2"></div>
+        </div>
+        <div class="phase-progress-tasks" id="tasks-phase2">0 / 0
+            nhiệm vụ hoàn thành</div>
+    </div>
+
+    <!-- WEEK 5 -->
+    <div class="week-block" id="p2-w5">
+        <div class="week-label">Tuần 5 · Cài đặt & Locators</div>
+
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🚀</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Cài đặt & First Script
+                    </div>
+                    <div class="topic-desc">pip install · codegen ·
+                        sync API · project structure</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot" id="note-dot-8"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Cài đặt</div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang bash">Bash</span>
+                            <span class="code-filename">Terminal</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><span class="cmt"># Cài Playwright và browser binaries</span>
+pip install playwright
+playwright install
+
+<span class="cmt"># Cài thêm pytest-playwright (dùng ở tuần 8)</span>
+pip install pytest-playwright
+
+<span class="cmt"># Dùng codegen để ghi lại thao tác — rất hữu ích!</span>
+playwright codegen https://www.saucedemo.com</pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang python">Python</span>
+                            <span class="code-filename">first_script.py</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><span class="imp">from</span> playwright.sync_api <span class="imp">import</span> sync_playwright
+
+<span class="kw">with</span> <span class="fn">sync_playwright</span>() <span class="kw">as</span> p:
+    <span class="cmt"># Khởi động browser (có thể dùng firefox, webkit)</span>
+    browser = p.chromium.<span class="fn">launch</span>(headless=<span class="kw">False</span>)  <span class="cmt"># False = hiện cửa sổ</span>
+    page    = browser.<span class="fn">new_page</span>()
+
+    <span class="cmt"># Điều hướng</span>
+    page.<span class="fn">goto</span>(<span class="str">"https://www.saucedemo.com"</span>)
+
+    <span class="cmt"># Tương tác</span>
+    page.locator(<span class="str">"#user-name"</span>).<span class="fn">fill</span>(<span class="str">"standard_user"</span>)
+    page.locator(<span class="str">"#password"</span>).<span class="fn">fill</span>(<span class="str">"secret_sauce"</span>)
+    page.locator(<span class="str">"#login-button"</span>).<span class="fn">click</span>()
+
+    <span class="cmt"># Chụp screenshot</span>
+    page.<span class="fn">screenshot</span>(path=<span class="str">"after_login.png"</span>)
+
+    <span class="fn">print</span>(<span class="str">f"URL hiện tại: <span class="dec">{page.url}</span>"</span>)
+    browser.<span class="fn">close</span>()</pre>
+                    </div>
+
+                    <div class="tip-box info">
+                        <span class="tip-icon">💡</span>
+                        <div class="tip-content"><strong>Sync vs
+                                Async:</strong> Dùng
+                            <code>sync_playwright</code> khi học và
+                            viết test với pytest.
+                            <code>async_playwright</code> dành cho
+                            ứng dụng async phức tạp — chưa cần quan
+                            tâm lúc này.
+                        </div>
+                    </div>
+                    <div class="theory-section">
+                        <div class="section-label">Bài tập thực hành
+                        </div>
+                        <div class="exercises">
+                            <div class="ex-item">
+                                <input type="checkbox" class="ex-check" id="ex-15" onchange="onCheck(this)">
+                                <label for="ex-15" style="display:contents;cursor:pointer">
+                                    <div class="ex-text">
+                                        <div class="ex-title">Chạy
+                                            script mở Google</div>
+                                        <div class="ex-desc">Mở
+                                            <code>google.com</code>,
+                                            gõ "playwright python"
+                                            vào ô tìm kiếm, nhấn
+                                            Enter, chụp screenshot
+                                            kết quả.
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="ex-item">
+                                <input type="checkbox" class="ex-check" id="ex-16" onchange="onCheck(this)">
+                                <label for="ex-16" style="display:contents;cursor:pointer">
+                                    <div class="ex-text">
+                                        <div class="ex-title">Dùng
+                                            codegen</div>
+                                        <div class="ex-desc">Chạy
+                                            <code>playwright codegen saucedemo.com</code>,
+                                            thực hiện login → thêm
+                                            sản phẩm vào cart. Đọc
+                                            code được generate và
+                                            hiểu từng dòng.
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topic-card">
+                    <div class="topic-header" onclick="toggleTopic(this)">
+                        <div class="topic-icon">🔍</div>
+                        <div class="topic-meta">
+                            <div class="topic-name">Locators — Tìm
+                                Element</div>
+                            <div class="topic-desc">CSS · XPath ·
+                                getByRole · getByText · getByLabel
+                            </div>
+                        </div>
+                        <div class="topic-toggle">▼</div>
+                        <span class="note-dot" id="note-dot-9"></span>
+                    </div>
+                    <div class="topic-body">
+                        <div class="theory-section">
+                            <div class="section-label">Lý thuyết —
+                                Thứ tự ưu tiên locator</div>
+                            <div class="tip-box success">
+                                <span class="tip-icon">✅</span>
+                                <div class="tip-content">
+                                    <strong>Playwright khuyến
+                                        nghị:</strong> Ưu tiên dùng
+                                    <strong>role-based
+                                        locators</strong>
+                                    (<code>getByRole</code>,
+                                    <code>getByLabel</code>,
+                                    <code>getByText</code>) thay vì
+                                    CSS/XPath vì chúng bền hơn khi
+                                    UI thay đổi.
+                                </div>
+                            </div>
+
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-lang python">Python</span>
+                                    <span class="code-filename">locators.py</span>
+                                    <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><span class="cmt">## CSS Selector (quen thuộc với web dev)</span>
+page.locator(<span class="str">"#user-name"</span>)                <span class="cmt"># id</span>
+page.locator(<span class="str">".btn-primary"</span>)              <span class="cmt"># class</span>
+page.locator(<span class="str">"input[type='submit']"</span>)       <span class="cmt"># attribute</span>
+page.locator(<span class="str">"form > .login-wrapper input"</span>) <span class="cmt"># descendant</span>
+
+<span class="cmt">## XPath (mạnh nhưng dễ vỡ)</span>
+page.locator(<span class="str">"xpath=//button[@class='login-button']"</span>)
+page.locator(<span class="str">"xpath=//span[text()='Add to cart']"</span>)
+
+<span class="cmt">## Playwright-native locators (KHUYẾN NGHỊ DÙNG)</span>
+page.<span class="fn">get_by_role</span>(<span class="str">"button"</span>, name=<span class="str">"Login"</span>)          <span class="cmt"># theo ARIA role</span>
+page.<span class="fn">get_by_label</span>(<span class="str">"Username"</span>)                    <span class="cmt"># theo &lt;label&gt;</span>
+page.<span class="fn">get_by_placeholder</span>(<span class="str">"Enter email"</span>)           <span class="cmt"># theo placeholder</span>
+page.<span class="fn">get_by_text</span>(<span class="str">"Add to cart"</span>)                   <span class="cmt"># theo text</span>
+page.<span class="fn">get_by_test_id</span>(<span class="str">"checkout-button"</span>)           <span class="cmt"># data-testid attr</span>
+
+<span class="cmt">## Chaining — tìm bên trong element</span>
+product_card = page.locator(<span class="str">".inventory_item"</span>).<span class="fn">first</span>
+product_card.<span class="fn">get_by_role</span>(<span class="str">"button"</span>).<span class="fn">click</span>()
+
+<span class="cmt">## nth, first, last — chọn trong danh sách</span>
+page.locator(<span class="str">".product-name"</span>).nth(<span class="num">0</span>)    <span class="cmt"># phần tử đầu tiên</span>
+page.locator(<span class="str">".product-name"</span>).<span class="fn">first</span>    <span class="cmt"># tương đương nth(0)</span>
+page.locator(<span class="str">".product-name"</span>).<span class="fn">last</span>     <span class="cmt"># phần tử cuối</span></pre>
+                            </div>
+
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Locator</th>
+                                        <th>Độ bền</th>
+                                        <th>Dùng khi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>getByRole</code>
+                                        </td>
+                                        <td>⭐⭐⭐⭐⭐</td>
+                                        <td>Button, link, heading,
+                                            input có accessible name
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>getByLabel</code>
+                                        </td>
+                                        <td>⭐⭐⭐⭐⭐</td>
+                                        <td>Form field có
+                                            &lt;label&gt;</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>getByText</code>
+                                        </td>
+                                        <td>⭐⭐⭐⭐</td>
+                                        <td>Text content ổn định
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>getByTestId</code>
+                                        </td>
+                                        <td>⭐⭐⭐⭐⭐</td>
+                                        <td>Dev đã thêm data-testid
+                                            (chuẩn nhất)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>CSS selector</td>
+                                        <td>⭐⭐⭐</td>
+                                        <td>Khi không có lựa chọn
+                                            tốt hơn</td>
+                                    </tr>
+                                    <tr>
+                                        <td>XPath</td>
+                                        <td>⭐⭐</td>
+                                        <td>Chỉ dùng khi bắt buộc
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="theory-section">
+                            <div class="section-label">Bài tập thực
+                                hành</div>
+                            <div class="exercises">
+                                <div class="ex-item">
+                                    <input type="checkbox" class="ex-check" id="ex-17" onchange="onCheck(this)">
+                                    <label for="ex-17" style="display:contents;cursor:pointer">
+                                        <div class="ex-text">
+                                            <div class="ex-title">In
+                                                tên tất cả sản phẩm
+                                            </div>
+                                            <div class="ex-desc">
+                                                Trên
+                                                <code>saucedemo.com</code>
+                                                sau khi login, dùng
+                                                locator lấy tất cả
+                                                <code>.inventory_item_name</code>,
+                                                in ra danh sách và
+                                                đếm số lượng.
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="ex-item">
+                                    <input type="checkbox" class="ex-check" id="ex-18" onchange="onCheck(this)">
+                                    <label for="ex-18" style="display:contents;cursor:pointer">
+                                        <div class="ex-text">
+                                            <div class="ex-title">So
+                                                sánh CSS vs Role
+                                                locator</div>
+                                            <div class="ex-desc">
+                                                Click nút "Add to
+                                                cart" bằng CSS
+                                                selector. Sau đó
+                                                viết lại bằng
+                                                <code>get_by_role</code>.
+                                                So sánh code nào đọc
+                                                dễ hơn.
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="note-area" id="note-area-topic-6">
+                                    <textarea class="note-textarea" id="note-text-topic-6"
+                                        placeholder="Ghi chú của bạn về topic này... (tự động lưu)"></textarea>
+                                    <div class="note-footer">
+                                        <button class="note-clear-btn" onclick="clearNote('topic-6')">Xoá
+                                            ghi chú</button>
+                                        <span class="note-saved-msg" id="note-saved-topic-6">✓
+                                            Đã lưu</span>
+                                    </div>
+                                </div>
+                                <button class="note-toggle-btn" id="note-btn-topic-6" onclick="toggleNote('topic-6')">📝
+                                    Ghi chú</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WEEK 6 -->
+                <div class="week-block" id="p2-w6">
+                    <div class="week-label">Tuần 6 · Actions &
+                        Assertions</div>
+
+                    <div class="topic-card">
+                        <div class="topic-header" onclick="toggleTopic(this)">
+                            <div class="topic-icon">🖱️</div>
+                            <div class="topic-meta">
+                                <div class="topic-name">Actions —
+                                    Tương tác với Page</div>
+                                <div class="topic-desc">click · fill
+                                    · select · hover · keyboard ·
+                                    drag</div>
+                            </div>
+                            <div class="topic-toggle">▼</div>
+                            <span class="note-dot" id="note-dot-10"></span>
+                        </div>
+                        <div class="topic-body">
+                            <div class="theory-section">
+                                <div class="section-label">Lý thuyết
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span class="code-lang python">Python</span>
+                                        <span class="code-filename">actions.py</span>
+                                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                                    </div>
+                                    <pre><span class="cmt">## Text input</span>
+page.locator(<span class="str">"#email"</span>).<span class="fn">fill</span>(<span class="str">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="176372646357726f767a677b723974787a">[email&#160;protected]</a>"</span>)   <span class="cmt"># xoá + gõ</span>
+page.locator(<span class="str">"#email"</span>).<span class="fn">clear</span>()                     <span class="cmt"># xoá trắng</span>
+page.locator(<span class="str">"#email"</span>).<span class="fn">type</span>(<span class="str">"abc"</span>, delay=<span class="num">50</span>)       <span class="cmt"># gõ chậm từng ký tự</span>
+
+<span class="cmt">## Click</span>
+page.locator(<span class="str">"button"</span>).<span class="fn">click</span>()
+page.locator(<span class="str">"#item"</span>).<span class="fn">dblclick</span>()                   <span class="cmt"># double click</span>
+page.locator(<span class="str">"#item"</span>).<span class="fn">click</span>(button=<span class="str">"right"</span>)        <span class="cmt"># right click</span>
+
+<span class="cmt">## Dropdown</span>
+page.locator(<span class="str">"select#sort"</span>).<span class="fn">select_option</span>(<span class="str">"lohi"</span>)   <span class="cmt"># theo value</span>
+page.locator(<span class="str">"select#sort"</span>).<span class="fn">select_option</span>(label=<span class="str">"Price (low to high)"</span>)
+
+<span class="cmt">## Checkbox & Radio</span>
+page.locator(<span class="str">"#agree"</span>).<span class="fn">check</span>()
+page.locator(<span class="str">"#agree"</span>).<span class="fn">uncheck</span>()
+<span class="fn">print</span>(page.locator(<span class="str">"#agree"</span>).<span class="fn">is_checked</span>())
+
+<span class="cmt">## Keyboard shortcuts</span>
+page.locator(<span class="str">"#search"</span>).<span class="fn">press</span>(<span class="str">"Enter"</span>)
+page.<span class="fn">keyboard</span>.<span class="fn">press</span>(<span class="str">"Control+A"</span>)
+
+<span class="cmt">## Hover</span>
+page.locator(<span class="str">".menu-item"</span>).<span class="fn">hover</span>()
+
+<span class="cmt">## Upload file</span>
+page.locator(<span class="str">"input[type='file']"</span>).<span class="fn">set_input_files</span>(<span class="str">"./data/test.pdf"</span>)</pre>
+                                </div>
+                            </div>
+                            <div class="theory-section">
+                                <div class="section-label">Bài tập
+                                    thực hành</div>
+                                <div class="exercises">
+                                    <div class="ex-item">
+                                        <input type="checkbox" class="ex-check" id="ex-19" onchange="onCheck(this)">
+                                        <label for="ex-19" style="display:contents;cursor:pointer">
+                                            <div class="ex-text">
+                                                <div class="ex-title">
+                                                    Điền và submit
+                                                    form đăng ký
+                                                </div>
+                                                <div class="ex-desc">
+                                                    Trên bất kỳ demo
+                                                    site nào (ví dụ
+                                                    <code>demoqa.com/register</code>),
+                                                    tự động điền đầy
+                                                    đủ form, submit
+                                                    và kiểm tra
+                                                    redirect.
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="ex-item">
+                                        <input type="checkbox" class="ex-check" id="ex-20" onchange="onCheck(this)">
+                                        <label for="ex-20" style="display:contents;cursor:pointer">
+                                            <div class="ex-text">
+                                                <div class="ex-title">
+                                                    Thêm sản phẩm
+                                                    vào giỏ hàng
+                                                </div>
+                                                <div class="ex-desc">
+                                                    Trên Sauce Demo:
+                                                    thêm 3 sản phẩm,
+                                                    vào cart kiểm
+                                                    tra badge số
+                                                    lượng, xoá 1 sản
+                                                    phẩm, kiểm tra
+                                                    lại badge.</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="topic-card">
+                            <div class="topic-header" onclick="toggleTopic(this)">
+                                <div class="topic-icon">✅</div>
+                                <div class="topic-meta">
+                                    <div class="topic-name">
+                                        Assertions với expect()
+                                    </div>
+                                    <div class="topic-desc">
+                                        to_be_visible · to_have_text
+                                        · to_have_url ·
+                                        to_be_enabled</div>
+                                </div>
+                                <div class="topic-toggle">▼</div>
+                                <span class="note-dot" id="note-dot-11"></span>
+                            </div>
+                            <div class="topic-body">
+                                <div class="theory-section">
+                                    <div class="section-label">Lý
+                                        thuyết</div>
+                                    <p><strong>Assertion</strong> là
+                                        trái tim của mọi test case —
+                                        đây là nơi bạn xác nhận rằng
+                                        ứng dụng đang hoạt động
+                                        đúng. Playwright cung cấp
+                                        <code>expect()</code> với
+                                        <strong>auto-retry</strong>
+                                        tích hợp sẵn.
+                                    </p>
+                                    <div class="code-block">
+                                        <div class="code-header">
+                                            <span class="code-lang python">Python</span>
+                                            <span class="code-filename">assertions.py</span>
+                                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                                        </div>
+                                        <pre><span class="imp">from</span> playwright.sync_api <span class="imp">import</span> expect
+
+<span class="cmt">## Page assertions</span>
+<span class="fn">expect</span>(page).<span class="fn">to_have_url</span>(<span class="str">"https://example.com/dashboard"</span>)
+<span class="fn">expect</span>(page).<span class="fn">to_have_title</span>(<span class="str">"Dashboard"</span>)
+
+<span class="cmt">## Locator assertions — TỰ RETRY cho đến khi pass hoặc timeout</span>
+<span class="fn">expect</span>(page.locator(<span class="str">"h1"</span>)).<span class="fn">to_be_visible</span>()
+<span class="fn">expect</span>(page.locator(<span class="str">".error-msg"</span>)).<span class="fn">to_have_text</span>(<span class="str">"Invalid credentials"</span>)
+<span class="fn">expect</span>(page.locator(<span class="str">"#submit"</span>)).<span class="fn">to_be_enabled</span>()
+<span class="fn">expect</span>(page.locator(<span class="str">"#submit"</span>)).<span class="fn">to_be_disabled</span>()
+<span class="fn">expect</span>(page.locator(<span class="str">"input#email"</span>)).<span class="fn">to_have_value</span>(<span class="str">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="661203151226031e070b160a034805090b">[email&#160;protected]</a>"</span>)
+<span class="fn">expect</span>(page.locator(<span class="str">".cart-badge"</span>)).<span class="fn">to_have_text</span>(<span class="str">"3"</span>)
+<span class="fn">expect</span>(page.locator(<span class="str">"#agree"</span>)).<span class="fn">to_be_checked</span>()
+
+<span class="cmt">## NOT — phủ định assertion</span>
+<span class="fn">expect</span>(page.locator(<span class="str">".error"</span>)).<span class="fn">not_to_be_visible</span>()
+
+<span class="cmt">## Custom timeout</span>
+<span class="fn">expect</span>(page.locator(<span class="str">".spinner"</span>)).not_to_be_visible(timeout=<span class="num">10_000</span>)  <span class="cmt"># 10s</span>
+
+<span class="cmt">## Soft assertion — ghi nhớ lỗi, không dừng test ngay</span>
+<span class="imp">from</span> playwright.sync_api <span class="imp">import</span> expect
+expect.<span class="fn">soft</span>(page.locator(<span class="str">"h1"</span>)).<span class="fn">to_have_text</span>(<span class="str">"Welcome"</span>)
+expect.<span class="fn">soft</span>(page.locator(<span class="str">".subtitle"</span>)).<span class="fn">to_be_visible</span>()
+page.context.tracing.<span class="fn">stop</span>()  <span class="cmt"># báo lỗi cuối cùng</span></pre>
+                                    </div>
+                                    <div class="tip-box warning">
+                                        <span class="tip-icon">⚠️</span>
+                                        <div class="tip-content">
+                                            <strong>Tránh
+                                                dùng</strong>
+                                            <code>assert element.is_visible()</code>
+                                            — cách này không có
+                                            retry. Luôn dùng
+                                            <code>expect(locator).to_be_visible()</code>
+                                            để test ổn định hơn.
+                                        </div>
+                                    </div>
+                                    <div class="theory-section">
+                                        <div class="section-label">
+                                            Bài tập thực hành</div>
+                                        <div class="exercises">
+                                            <div class="ex-item">
+                                                <input type="checkbox" class="ex-check" id="ex-21"
+                                                    onchange="onCheck(this)">
+                                                <label for="ex-21" style="display:contents;cursor:pointer">
+                                                    <div class="ex-text">
+                                                        <div class="ex-title">
+                                                            Assertions
+                                                            cho flow
+                                                            login
+                                                        </div>
+                                                        <div class="ex-desc">
+                                                            Viết 2
+                                                            test:
+                                                            (1)
+                                                            login
+                                                            đúng →
+                                                            assert
+                                                            URL và
+                                                            welcome
+                                                            message.
+                                                            (2)
+                                                            login
+                                                            sai →
+                                                            assert
+                                                            thông
+                                                            báo lỗi
+                                                            hiển thị
+                                                            đúng
+                                                            text.
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="ex-item">
+                                                <input type="checkbox" class="ex-check" id="ex-22"
+                                                    onchange="onCheck(this)">
+                                                <label for="ex-22" style="display:contents;cursor:pointer">
+                                                    <div class="ex-text">
+                                                        <div class="ex-title">
+                                                            Kiểm tra
+                                                            toast
+                                                            message
+                                                        </div>
+                                                        <div class="ex-desc">
+                                                            Sau khi
+                                                            submit
+                                                            form,
+                                                            assert
+                                                            toast
+                                                            notification
+                                                            xuất
+                                                            hiện với
+                                                            đúng
+                                                            text,
+                                                            sau đó
+                                                            tự động
+                                                            biến mất
+                                                            (assert
+                                                            <code>not_to_be_visible</code>).
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            </div>
+
+                                            <div class="note-area" id="note-area-topic-7">
+                                                <textarea class="note-textarea" id="note-text-topic-7"
+                                                    placeholder="Ghi chú của bạn về topic này... (tự động lưu)"></textarea>
+                                                <div class="note-footer">
+                                                    <button class="note-clear-btn" onclick="clearNote('topic-7')">Xoá
+                                                        ghi
+                                                        chú</button>
+                                                    <span class="note-saved-msg" id="note-saved-topic-7">✓
+                                                        Đã
+                                                        lưu</span>
+                                                </div>
+                                            </div>
+                                            <button class="note-toggle-btn" id="note-btn-topic-7"
+                                                onclick="toggleNote('topic-7')">📝
+                                                Ghi chú</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- WEEK 7 -->
+                            <div class="week-block" id="p2-w7">
+                                <div class="week-label">Tuần 7 ·
+                                    Waits, Network & Screenshots
+                                </div>
+
+                                <div class="topic-card">
+                                    <div class="topic-header" onclick="toggleTopic(this)">
+                                        <div class="topic-icon">⏱️
+                                        </div>
+                                        <div class="topic-meta">
+                                            <div class="topic-name">
+                                                Waits & Network
+                                                handling</div>
+                                            <div class="topic-desc">
+                                                Auto-waiting ·
+                                                wait_for_load_state
+                                                · wait_for_response
+                                                · page.route()</div>
+                                        </div>
+                                        <div class="topic-toggle">▼
+                                        </div>
+                                        <span class="note-dot" id="note-dot-12"></span>
+                                    </div>
+                                    <div class="topic-body">
+                                        <div class="theory-section">
+                                            <div class="section-label">
+                                                Lý thuyết —
+                                                Auto-waiting là gì?
+                                            </div>
+                                            <p>Playwright <strong>tự
+                                                    động
+                                                    chờ</strong>
+                                                element trước khi
+                                                thực hiện action.
+                                                Khi bạn
+                                                <code>click()</code>,
+                                                Playwright chờ
+                                                element: visible,
+                                                stable (không đang
+                                                animate), enabled.
+                                                Đây là lý do
+                                                Playwright ổn định
+                                                hơn Selenium.
+                                            </p>
+                                            <div class="code-block">
+                                                <div class="code-header">
+                                                    <span class="code-lang python">Python</span>
+                                                    <span class="code-filename">waits.py</span>
+                                                    <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                                                </div>
+                                                <pre><span class="cmt">## TUYỆT ĐỐI TRÁNH — time.sleep() cứng nhắc</span>
+<span class="imp">import</span> time
+time.<span class="fn">sleep</span>(<span class="num">3</span>)  <span class="cmt"># ❌ KHÔNG BAO GIỜ làm thế này!</span>
+
+<span class="cmt">## ĐÚNG — chờ theo trạng thái trang</span>
+page.<span class="fn">wait_for_load_state</span>(<span class="str">"networkidle"</span>)  <span class="cmt"># chờ hết request</span>
+page.<span class="fn">wait_for_load_state</span>(<span class="str">"domcontentloaded"</span>)
+page.<span class="fn">wait_for_load_state</span>(<span class="str">"load"</span>)
+
+<span class="cmt">## Chờ element xuất hiện</span>
+page.locator(<span class="str">".result-list"</span>).<span class="fn">wait_for</span>(state=<span class="str">"visible"</span>)
+page.locator(<span class="str">".spinner"</span>).<span class="fn">wait_for</span>(state=<span class="str">"hidden"</span>)  <span class="cmt"># chờ spinner biến mất</span>
+
+<span class="cmt">## Chờ navigation sau khi click</span>
+<span class="kw">with</span> page.<span class="fn">expect_navigation</span>():
+    page.<span class="fn">get_by_role</span>(<span class="str">"button"</span>, name=<span class="str">"Submit"</span>).<span class="fn">click</span>()
+
+<span class="cmt">## Mock API — rất hữu ích để test error states!</span>
+<span class="kw">def</span> <span class="fn">mock_error</span>(route):
+    route.<span class="fn">fulfill</span>(status=<span class="num">500</span>, body=<span class="str">'{"error": "Server down"}'</span>)
+
+page.<span class="fn">route</span>(<span class="str">"**/api/products"</span>, mock_error)
+page.<span class="fn">goto</span>(<span class="str">"/products"</span>)
+<span class="cmt"># Page sẽ nhận response 500, test UI xử lý lỗi</span>
+
+<span class="cmt">## Intercept response — kiểm tra API call</span>
+<span class="kw">with</span> page.<span class="fn">expect_response</span>(<span class="str">"**/api/login"</span>) <span class="kw">as</span> response_info:
+    page.<span class="fn">get_by_role</span>(<span class="str">"button"</span>, name=<span class="str">"Login"</span>).<span class="fn">click</span>()
+response = response_info.<span class="fn">value</span>
+<span class="fn">print</span>(response.status)  <span class="cmt"># 200</span></pre>
+                                            </div>
+                                        </div>
+                                        <div class="theory-section">
+                                            <div class="section-label">
+                                                Bài tập thực hành
+                                            </div>
+                                            <div class="exercises">
+                                                <div class="ex-item">
+                                                    <input type="checkbox" class="ex-check" id="ex-23"
+                                                        onchange="onCheck(this)">
+                                                    <label for="ex-23" style="display:contents;cursor:pointer">
+                                                        <div class="ex-text">
+                                                            <div class="ex-title">
+                                                                Test
+                                                                trang
+                                                                lazy
+                                                                loading
+                                                            </div>
+                                                            <div class="ex-desc">
+                                                                Dùng
+                                                                <code>wait_for</code>
+                                                                chờ
+                                                                element
+                                                                xuất
+                                                                hiện
+                                                                sau
+                                                                scroll
+                                                                hoặc
+                                                                sau
+                                                                khi
+                                                                nhấn
+                                                                "Load
+                                                                more".
+                                                                Assert
+                                                                số
+                                                                lượng
+                                                                item
+                                                                sau
+                                                                khi
+                                                                load.
+                                                            </div>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                                <div class="ex-item">
+                                                    <input type="checkbox" class="ex-check" id="ex-24"
+                                                        onchange="onCheck(this)">
+                                                    <label for="ex-24" style="display:contents;cursor:pointer">
+                                                        <div class="ex-text">
+                                                            <div class="ex-title">
+                                                                Mock
+                                                                API
+                                                                trả
+                                                                về
+                                                                lỗi
+                                                            </div>
+                                                            <div class="ex-desc">
+                                                                Dùng
+                                                                <code>page.route()</code>
+                                                                mock
+                                                                response
+                                                                500
+                                                                cho
+                                                                một
+                                                                API.
+                                                                Kiểm
+                                                                tra
+                                                                UI
+                                                                hiển
+                                                                thị
+                                                                đúng
+                                                                thông
+                                                                báo
+                                                                lỗi
+                                                                thay
+                                                                vì
+                                                                crash.
+                                                            </div>
+                                                        </div>
+                                                    </label>
+                                                </div>
+
+                                                <div class="note-area" id="note-area-topic-8">
+                                                    <textarea class="note-textarea" id="note-text-topic-8"
+                                                        placeholder="Ghi chú của bạn về topic này... (tự động lưu)"></textarea>
+                                                    <div class="note-footer">
+                                                        <button class="note-clear-btn"
+                                                            onclick="clearNote('topic-8')">Xoá
+                                                            ghi
+                                                            chú</button>
+                                                        <span class="note-saved-msg" id="note-saved-topic-8">✓
+                                                            Đã
+                                                            lưu</span>
+                                                    </div>
+                                                </div>
+                                                <button class="note-toggle-btn" id="note-btn-topic-8"
+                                                    onclick="toggleNote('topic-8')">📝
+                                                    Ghi chú</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="topic-card">
+                                    <div class="topic-header" onclick="toggleTopic(this)">
+                                        <div class="topic-icon">📸
+                                        </div>
+                                        <div class="topic-meta">
+                                            <div class="topic-name">
+                                                Screenshots,
+                                                Dialogs, iFrames &
+                                                Multi-tab</div>
+                                            <div class="topic-desc">
+                                                screenshot · video ·
+                                                page.on("dialog") ·
+                                                frames · new_page
+                                            </div>
+                                        </div>
+                                        <div class="topic-toggle">▼
+                                        </div>
+                                        <span class="note-dot" id="note-dot-screenshots"></span>
+                                    </div>
+                                    <div class="topic-body">
+                                        <div class="theory-section">
+                                            <div class="section-label">
+                                                Lý thuyết</div>
+                                            <p>Playwright xử lý được
+                                                các tình huống phức
+                                                tạp thường gặp trong
+                                                ứng dụng thực tế:
+                                                popup alert/confirm,
+                                                nội dung trong
+                                                iframe, và trang mở
+                                                tab mới. Đây là các
+                                                kỹ năng <strong>bắt
+                                                    buộc</strong>
+                                                khi test ứng dụng
+                                                production.</p>
+
+                                            <div class="code-block">
+                                                <div class="code-header">
+                                                    <span class="code-lang python">Python</span>
+                                                    <span class="code-filename">screenshots_dialogs.py</span>
+                                                    <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                                                </div>
+                                                <pre><span class="cmt">## SCREENSHOTS ##</span>
+<span class="cmt"># Chụp toàn bộ trang</span>
+page.<span class="fn">screenshot</span>(path=<span class="str">"full_page.png"</span>, full_page=<span class="kw">True</span>)
+
+<span class="cmt"># Chụp một element cụ thể</span>
+page.locator(<span class="str">".invoice-table"</span>).<span class="fn">screenshot</span>(path=<span class="str">"invoice.png"</span>)
+
+<span class="cmt"># Bật video recording cho toàn bộ session</span>
+context = browser.<span class="fn">new_context</span>(record_video_dir=<span class="str">"./videos"</span>)
+page = context.<span class="fn">new_page</span>()
+<span class="cmt"># ... chạy test ...
+# Video được lưu khi context.close()</span>
+context.<span class="fn">close</span>()
+
+<span class="cmt">## DIALOGS (alert / confirm / prompt) ##</span>
+<span class="cmt"># Playwright auto-dismiss dialogs — cần handle thủ công</span>
+<span class="kw">def</span> <span class="fn">handle_dialog</span>(dialog):
+    <span class="fn">print</span>(<span class="str">f"Dialog type: <span class="dec">{dialog.type}</span>, message: <span class="dec">{dialog.message}</span>"</span>)
+    <span class="kw">if</span> dialog.type == <span class="str">"confirm"</span>:
+        dialog.<span class="fn">accept</span>()    <span class="cmt"># nhấn OK</span>
+    <span class="kw">else</span>:
+        dialog.<span class="fn">dismiss</span>()   <span class="cmt"># nhấn Cancel/close</span>
+
+page.<span class="fn">on</span>(<span class="str">"dialog"</span>, handle_dialog)
+page.<span class="fn">get_by_role</span>(<span class="str">"button"</span>, name=<span class="str">"Delete"</span>).<span class="fn">click</span>()
+<span class="cmt"># dialog.accept() tự động được gọi</span>
+
+<span class="cmt">## iFRAMES ##</span>
+<span class="cmt"># Lấy frame theo URL hoặc name</span>
+frame = page.<span class="fn">frame</span>(url=<span class="str">"**/payment-iframe"</span>)
+frame = page.<span class="fn">frame_locator</span>(<span class="str">"iframe[name='payment']"</span>)
+
+<span class="cmt"># Tương tác bên trong frame — giống page bình thường</span>
+frame.<span class="fn">get_by_label</span>(<span class="str">"Card number"</span>).<span class="fn">fill</span>(<span class="str">"4111111111111111"</span>)
+frame.<span class="fn">get_by_role</span>(<span class="str">"button"</span>, name=<span class="str">"Pay"</span>).<span class="fn">click</span>()
+
+<span class="cmt">## MULTI-TAB ##</span>
+<span class="cmt"># Bắt sự kiện khi trang mở tab mới</span>
+<span class="kw">with</span> context.<span class="fn">expect_page</span>() <span class="kw">as</span> new_page_info:
+    page.<span class="fn">get_by_role</span>(<span class="str">"link"</span>, name=<span class="str">"Open in new tab"</span>).<span class="fn">click</span>()
+new_tab = new_page_info.<span class="fn">value</span>
+new_tab.<span class="fn">wait_for_load_state</span>()
+<span class="fn">expect</span>(new_tab).<span class="fn">to_have_url</span>(<span class="str">"https://example.com/detail"</span>)</pre>
+                                            </div>
+
+                                            <div class="tip-box warning">
+                                                <span class="tip-icon">⚠️</span>
+                                                <div class="tip-content">
+                                                    <strong>Lưu ý
+                                                        dialog:</strong>
+                                                    Nếu không đăng
+                                                    ký
+                                                    <code>page.on("dialog")</code>,
+                                                    Playwright sẽ tự
+                                                    dismiss tất cả
+                                                    dialogs. Đăng ký
+                                                    handler
+                                                    <strong>trước</strong>
+                                                    khi trigger
+                                                    action gây ra
+                                                    dialog.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="theory-section">
+                                            <div class="section-label">
+                                                Bài tập thực hành
+                                            </div>
+                                            <div class="exercises">
+                                                <div class="ex-item">
+                                                    <input type="checkbox" class="ex-check" id="ex-screenshots-1"
+                                                        onchange="onCheck(this)">
+                                                    <label for="ex-screenshots-1"
+                                                        style="display:contents;cursor:pointer">
+                                                        <div class="ex-text">
+                                                            <div class="ex-title">
+                                                                Chụp
+                                                                screenshot
+                                                                khi
+                                                                test
+                                                                fail
+                                                            </div>
+                                                            <div class="ex-desc">
+                                                                Trong
+                                                                <code>conftest.py</code>,
+                                                                thêm
+                                                                fixture
+                                                                <code>autouse=True</code>
+                                                                dùng
+                                                                <code>request.node.rep_call.failed</code>
+                                                                để
+                                                                chụp
+                                                                screenshot
+                                                                và
+                                                                lưu
+                                                                theo
+                                                                tên
+                                                                test.
+                                                            </div>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                                <div class="ex-item">
+                                                    <input type="checkbox" class="ex-check" id="ex-screenshots-2"
+                                                        onchange="onCheck(this)">
+                                                    <label for="ex-screenshots-2"
+                                                        style="display:contents;cursor:pointer">
+                                                        <div class="ex-text">
+                                                            <div class="ex-title">
+                                                                Xử
+                                                                lý
+                                                                confirm
+                                                                dialog
+                                                                tự
+                                                                động
+                                                            </div>
+                                                            <div class="ex-desc">
+                                                                Trên
+                                                                trang
+                                                                có
+                                                                confirm
+                                                                dialog
+                                                                (ví
+                                                                dụ
+                                                                delete
+                                                                item),
+                                                                đăng
+                                                                ký
+                                                                handler
+                                                                để
+                                                                tự
+                                                                động
+                                                                accept/dismiss,
+                                                                test
+                                                                flow
+                                                                không
+                                                                bị
+                                                                block.
+                                                            </div>
+                                                        </div>
+                                                    </label>
+                                                </div>
+
+                                                <div class="note-area" id="note-area-topic-screenshots">
+                                                    <textarea class="note-textarea" id="note-text-topic-screenshots"
+                                                        placeholder="Ghi chú của bạn về topic này... (tự động lưu)"></textarea>
+                                                    <div class="note-footer">
+                                                        <button class="note-clear-btn"
+                                                            onclick="clearNote('topic-screenshots')">Xoá
+                                                            ghi
+                                                            chú</button>
+                                                        <span class="note-saved-msg" id="note-saved-topic-screenshots">✓
+                                                            Đã
+                                                            lưu</span>
+                                                    </div>
+                                                </div>
+                                                <button class="note-toggle-btn" id="note-btn-topic-screenshots"
+                                                    onclick="toggleNote('topic-screenshots')">📝
+                                                    Ghi chú</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- WEEK 8 -->
+                                <div class="week-block" id="p2-w8">
+                                    <div class="week-label">Tuần 8 · pytest Framework</div>
+
+                                    <div class="topic-card">
+                                        <div class="topic-header" onclick="toggleTopic(this)">
+                                            <div class="topic-icon">🧪</div>
+                                            <div class="topic-meta">
+                                                <div class="topic-name">pytest Basics & Fixtures</div>
+                                                <div class="topic-desc">test_*.py · conftest.py · fixtures · parametrize
+                                                    · markers</div>
+                                            </div>
+                                            <div class="topic-toggle">▼</div>
+                                            <span class="note-dot" id="note-dot-13"></span>
+                                        </div>
+                                        <div class="topic-body">
+                                            <div class="theory-section">
+                                                <div class="section-label">Lý thuyết — pytest là gì?</div>
+                                                <p><strong>pytest</strong> là framework testing phổ biến nhất cho
+                                                    Python. Nó cung cấp:
+                                                    <strong>auto-discovery</strong> test functions, fixtures để
+                                                    setup/cleanup, parametrize để test
+                                                    nhiều data, và reporting đẹp mắt.
+                                                </p>
+
+                                                <div class="code-block">
+                                                    <div class="code-header">
+                                                        <span class="code-lang python">Python</span>
+                                                        <span class="code-filename">test_example.py</span>
+                                                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                                                    </div>
+                                                    <pre><span class="imp">import</span> pytest
+<span class="imp">from</span> playwright.sync_api <span class="imp">import</span> Page
+
+<span class="kw">def</span> <span class="fn">test_login_success</span>(page: <span class="cls">Page</span>):
+    page.<span class="fn">goto</span>(<span class="str">"https://saucedemo.com"</span>)
+    page.locator(<span class="str">"#user-name"</span>).<span class="fn">fill</span>(<span class="str">"standard_user"</span>)
+    page.locator(<span class="str">"#password"</span>).<span class="fn">fill</span>(<span class="str">"secret_sauce"</span>)
+    page.locator(<span class="str">"#login-button"</span>).<span class="fn">click</span>()
+    <span class="fn">expect</span>(page).<span class="fn">to_have_url</span>(<span class="str">re.compile</span>(<span class="str">r".*/inventory.html"</span>))
+
+<span class="kw">def</span> <span class="fn">test_login_fail</span>(page: <span class="cls">Page</span>):
+    page.<span class="fn">goto</span>(<span class="str">"https://saucedemo.com"</span>)
+    page.locator(<span class="str">"#user-name"</span>).<span class="fn">fill</span>(<span class="str">"invalid_user"</span>)
+    page.locator(<span class="str">"#password"</span>).<span class="fn">fill</span>(<span class="str">"wrong_password"</span>)
+    page.locator(<span class="str">"#login-button"</span>).<span class="fn">click</span>()
+    <span class="fn">expect</span>(page.locator(<span class="str">".error-message"</span>)).<span class="fn">to_be_visible</span>()</pre>
+                                                </div>
+
+                                                <div class="code-block">
+                                                    <div class="code-header">
+                                                        <span class="code-lang python">Python</span>
+                                                        <span class="code-filename">conftest.py</span>
+                                                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                                                    </div>
+                                                    <pre><span class="imp">import</span> pytest
+<span class="imp">from</span> playwright.sync_api <span class="imp">import</span> Playwright, Browser, BrowserContext
+
+<span class="dec">@pytest.fixture(scope="session")</span>
+<span class="kw">def</span> <span class="fn">browser</span>(playwright: <span class="cls">Playwright</span>) -> <span class="cls">Browser</span>:
+    browser = playwright.chromium.<span class="fn">launch</span>(headless=<span class="kw">False</span>)
+    <span class="kw">yield</span> browser
+    browser.<span class="fn">close</span>()
+
+<span class="dec">@pytest.fixture</span>
+<span class="kw">def</span> <span class="fn">page</span>(browser: <span class="cls">Browser</span>) -> <span class="cls">Page</span>:
+    context = browser.<span class="fn">new_context</span>()
+    page = context.<span class="fn">new_page</span>()
+    <span class="kw">yield</span> page
+    context.<span class="fn">close</span>()</pre>
+                                                </div>
+
+                                                <div class="code-block">
+                                                    <div class="code-header">
+                                                        <span class="code-lang python">Python</span>
+                                                        <span class="code-filename">test_parametrize.py</span>
+                                                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                                                    </div>
+                                                    <pre><span class="dec">@pytest.mark.parametrize("username,password,expected", [</span>
+    (<span class="str">"standard_user"</span>, <span class="str">"secret_sauce"</span>, <span class="str">"success"</span>),
+    (<span class="str">"locked_out_user"</span>, <span class="str">"secret_sauce"</span>, <span class="str">"locked"</span>),
+    (<span class="str">"problem_user"</span>, <span class="str">"secret_sauce"</span>, <span class="str">"problem"</span>),
+])
+<span class="kw">def</span> <span class="fn">test_login_scenarios</span>(page: <span class="cls">Page</span>, username, password, expected):
+    page.<span class="fn">goto</span>(<span class="str">"https://saucedemo.com"</span>)
+    page.locator(<span class="str">"#user-name"</span>).<span class="fn">fill</span>(username)
+    page.locator(<span class="str">"#password"</span>).<span class="fn">fill</span>(password)
+    page.locator(<span class="str">"#login-button"</span>).<span class="fn">click</span>()
+
+    <span class="kw">if</span> expected == <span class="str">"success"</span>:
+        <span class="fn">expect</span>(page).<span class="fn">to_have_url</span>(<span class="str">re.compile</span>(<span class="str">r".*/inventory.html"</span>))
+    <span class="kw">elif</span> expected == <span class="str">"locked"</span>:
+        <span class="fn">expect</span>(page.locator(<span class="str">".error"</span>)).<span class="fn">to_contain_text</span>(<span class="str">"locked out"</span>)
+    <span class="kw">elif</span> expected == <span class="str">"problem"</span>:
+        <span class="cmt"># Test specific behavior for problem user</span>
+        <span class="fn">expect</span>(page.locator(<span class="str">".inventory_item"</span>)).<span class="fn">to_have_count</span>(<span class="num">6</span>)</pre>
+                                                </div>
+                                            </div>
+
+                                            <div class="theory-section">
+                                                <div class="section-label">Bài tập thực hành</div>
+                                                <div class="exercises">
+                                                    <div class="ex-item">
+                                                        <input type="checkbox" class="ex-check" id="ex-25"
+                                                            onchange="onCheck(this)">
+                                                        <label for="ex-25" style="display:contents;cursor:pointer">
+                                                            <div class="ex-text">
+                                                                <div class="ex-title">Setup pytest với Playwright</div>
+                                                                <div class="ex-desc">Cài pytest-playwright, tạo
+                                                                    conftest.py với browser fixture, viết test đầu tiên
+                                                                    chạy được với <code>pytest test_example.py</code>.
+                                                                </div>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                    <div class="ex-item">
+                                                        <input type="checkbox" class="ex-check" id="ex-26"
+                                                            onchange="onCheck(this)">
+                                                        <label for="ex-26" style="display:contents;cursor:pointer">
+                                                            <div class="ex-text">
+                                                                <div class="ex-title">Parametrize login scenarios</div>
+                                                                <div class="ex-desc">Dùng @pytest.mark.parametrize test
+                                                                    3 scenarios: valid login, invalid password, locked
+                                                                    user. Assert đúng behavior cho từng case.</div>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="topic-card">
+                                        <div class="topic-header" onclick="toggleTopic(this)">
+                                            <div class="topic-icon">📊</div>
+                                            <div class="topic-meta">
+                                                <div class="topic-name">Test Organization & Reporting</div>
+                                                <div class="topic-desc">pytest.ini · markers · html report · parallel
+                                                    execution</div>
+                                            </div>
+                                            <div class="topic-toggle">▼</div>
+                                            <span class="note-dot" id="note-dot-14"></span>
+                                        </div>
+                                        <div class="topic-body">
+                                            <div class="theory-section">
+                                                <div class="section-label">Lý thuyết — Tổ chức test project</div>
+                                                <p>Project testing production cần cấu trúc rõ ràng để dễ maintain và
+                                                    scale. pytest cung cấp nhiều tính năng để tổ chức test hiệu quả.</p>
+
+                                                <div class="code-block">
+                                                    <div class="code-header">
+                                                        <span class="code-lang text">pytest.ini</span>
+                                                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                                                    </div>
+                                                    <pre><span class="cmt">[tool:pytest]</span>
+addopts =
+    --browser chromium
+    --headed
+    --slowmo 500
+    --video retain-on-failure
+    --screenshot only-on-failure
+    --html=reports/report.html
+    --self-contained-html
+markers =
+    smoke: quick smoke tests
+    regression: full regression suite
+    slow: tests that take >30 seconds
+    api: API-only tests
+    ui: UI-only tests</pre>
+                                                </div>
+
+                                                <div class="code-block">
+                                                    <div class="code-header">
+                                                        <span class="code-lang python">Python</span>
+                                                        <span class="code-filename">test_login.py</span>
+                                                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                                                    </div>
+                                                    <pre><span class="imp">import</span> pytest
+
+<span class="dec">@pytest.mark.smoke</span>
+<span class="kw">def</span> <span class="fn">test_login_basic</span>(page):
+    <span class="cmt"># Quick smoke test</span>
+    <span class="kw">pass</span>
+
+<span class="dec">@pytest.mark.regression</span>
+<span class="dec">@pytest.mark.slow</span>
+<span class="kw">def</span> <span class="fn">test_login_comprehensive</span>(page):
+    <span class="cmt"># Full regression test</span>
+    <span class="kw">pass</span>
+
+<span class="dec">@pytest.mark.parametrize("browser_name", ["chromium", "firefox", "webkit"])</span>
+<span class="kw">def</span> <span class="fn">test_cross_browser</span>(page, browser_name):
+    <span class="cmt"># Test across different browsers</span>
+    <span class="kw">pass</span></pre>
+                                                </div>
+
+                                                <div class="tip-box info">
+                                                    <span class="tip-icon">💡</span>
+                                                    <div class="tip-content"><strong>Chạy test selective:</strong>
+                                                        <code>pytest -m smoke</code> (chỉ smoke tests),
+                                                        <code>pytest -k "login and not slow"</code> (filter theo tên),
+                                                        <code>pytest --maxfail=3</code> (stop sau 3 fails)
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="theory-section">
+                                                <div class="section-label">Bài tập thực hành</div>
+                                                <div class="exercises">
+                                                    <div class="ex-item">
+                                                        <input type="checkbox" class="ex-check" id="ex-27"
+                                                            onchange="onCheck(this)">
+                                                        <label for="ex-27" style="display:contents;cursor:pointer">
+                                                            <div class="ex-text">
+                                                                <div class="ex-title">Setup pytest configuration</div>
+                                                                <div class="ex-desc">Tạo pytest.ini với markers (smoke,
+                                                                    regression), cấu hình HTML report, screenshot on
+                                                                    failure. Chạy test và xem report.</div>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                    <div class="ex-item">
+                                                        <input type="checkbox" class="ex-check" id="ex-28"
+                                                            onchange="onCheck(this)">
+                                                        <label for="ex-28" style="display:contents;cursor:pointer">
+                                                            <div class="ex-text">
+                                                                <div class="ex-title">Organize tests with markers</div>
+                                                                <div class="ex-desc">Thêm markers cho các test groups,
+                                                                    chạy selective tests với <code>-m</code> flag. Tạo
+                                                                    test suite cho smoke vs regression.</div>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- MILESTONE 2 -->
+                                <div class="milestone-card p2" id="p2-milestone">
+                                    <div class="milestone-label">Bài Tập Lớn · Phase 2</div>
+                                    <div class="milestone-title">E-commerce Test Suite</div>
+                                    <div class="milestone-desc">Xây dựng test suite hoàn chỉnh cho website e-commerce
+                                        (SauceDemo hoặc bất kỳ site nào). Áp dụng toàn bộ kiến thức Playwright từ cơ bản
+                                        đến advanced.</div>
+                                    <ul class="checklist">
+                                        <li onclick="toggleMilestone(this)"><input type="checkbox"
+                                                class="milestone-check" id="ml-7" onclick="event.stopPropagation()">
+                                            <span>Setup project với pytest-playwright, cấu trúc thư mục chuẩn</span>
+                                        </li>
+                                        <li onclick="toggleMilestone(this)"><input type="checkbox"
+                                                class="milestone-check" id="ml-8" onclick="event.stopPropagation()">
+                                            <span>Page Object Model cho Login, Inventory, Cart, Checkout pages</span>
+                                        </li>
+                                        <li onclick="toggleMilestone(this)"><input type="checkbox"
+                                                class="milestone-check" id="ml-9" onclick="event.stopPropagation()">
+                                            <span>Test login scenarios (success, fail, locked user) với
+                                                parametrize</span></li>
+                                        <li onclick="toggleMilestone(this)"><input type="checkbox"
+                                                class="milestone-check" id="ml-10" onclick="event.stopPropagation()">
+                                            <span>Test shopping flow: browse → add to cart → checkout → complete</span>
+                                        </li>
+                                        <li onclick="toggleMilestone(this)"><input type="checkbox"
+                                                class="milestone-check" id="ml-11" onclick="event.stopPropagation()">
+                                            <span>Handle dialogs, screenshots, network mocking cho error cases</span>
+                                        </li>
+                                        <li onclick="toggleMilestone(this)"><input type="checkbox"
+                                                class="milestone-check" id="ml-12" onclick="event.stopPropagation()">
+                                            <span>pytest markers, HTML report, parallel execution</span></li>
+                                        <li onclick="toggleMilestone(this)"><input type="checkbox"
+                                                class="milestone-check" id="ml-13" onclick="event.stopPropagation()">
+                                            <span>Ít nhất 15 test cases với meaningful assertions</span></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                            </main>
+                        </div>
+
+                        <script src="script.js"></script>

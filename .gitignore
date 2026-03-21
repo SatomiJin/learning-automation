@@ -1,0 +1,94 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs - Ignore IDE specific files but keep shared config
+.idea/
+*.swp
+*.swo
+*~
+
+# VS Code - Keep shared config but ignore user-specific settings
+.vscode/settings.json  # User-specific settings
+.vscode/launch.json    # User-specific debug configs
+# Keep: extensions.json, tasks.json (shared team config)
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# pytest
+.pytest_cache/
+.cache
+htmlcov/
+.coverage
+coverage.xml
+*.cover
+.hypothesis/
+
+# Allure Reports
+allure-results/
+allure-report/
+
+# Screenshots & Traces
+screenshots/
+traces/
+videos/
+
+# Test Data (sensitive)
+test_data/secrets.json
+test_data/credentials.json
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Node modules (if any)
+node_modules/
+
+# Browser binaries (Playwright downloads these)
+.ms-playwright/

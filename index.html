@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lộ Trình Automation Test — Playwright & Python</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div class="layout">
+        <!-- SIDEBAR -->
+        <nav class="sidebar">
+            <div class="sidebar-logo">
+                <div class="brand">🎯 Auto QC</div>
+                <div class="sub">Playwright + Python · 3 tháng</div>
+            </div>
+
+            <!-- TOOLBAR -->
+            <div class="toolbar">
+                <div class="search-wrap">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Tìm kiếm nội dung..."
+                        oninput="onSearch(this.value)">
+                    <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
+                </div>
+                <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Đổi theme">🌙</button>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Phase 1 — Python</div>
+                <a class="nav-item active" href="#p1-w1"><span class="nav-dot"></span>Tuần 1 · Syntax & Types</a>
+                <a class="nav-item active" href="#p1-w2"><span class="nav-dot"></span>Tuần 2 · Collections</a>
+                <a class="nav-item active" href="#p1-w3"><span class="nav-dot"></span>Tuần 3 · File & Exceptions</a>
+                <a class="nav-item active" href="#p1-w4"><span class="nav-dot"></span>Tuần 4 · OOP</a>
+                <a class="nav-item active" href="#p1-milestone"><span class="nav-dot"></span>Bài tập lớn Phase 1</a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Phase 2 — Playwright</div>
+                <a class="nav-item p2-active" href="#p2-w5"><span class="nav-dot"></span>Tuần 5 · Setup & Locators</a>
+                <a class="nav-item p2-active" href="#p2-w6"><span class="nav-dot"></span>Tuần 6 · Actions &
+                    Assertions</a>
+                <a class="nav-item p2-active" href="#p2-w7"><span class="nav-dot"></span>Tuần 7 · Waits & Network</a>
+                <a class="nav-item p2-active" href="#p2-w8"><span class="nav-dot"></span>Tuần 8 · pytest</a>
+                <a class="nav-item p2-active" href="#p2-milestone"><span class="nav-dot"></span>Bài tập lớn Phase 2</a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Phase 3 — Advanced</div>
+                <a class="nav-item p3-active" href="#p3-w9"><span class="nav-dot"></span>Tuần 9 · POM</a>
+                <a class="nav-item p3-active" href="#p3-w10"><span class="nav-dot"></span>Tuần 10 · Reporting</a>
+                <a class="nav-item p3-active" href="#p3-w11"><span class="nav-dot"></span>Tuần 11 · API & CI/CD</a>
+                <a class="nav-item p3-active" href="#p3-w12"><span class="nav-dot"></span>Tuần 12 · Best Practices</a>
+                <a class="nav-item p3-active" href="#p3-milestone"><span class="nav-dot"></span>Capstone Project</a>
+            </div>
+
+            <div class="toc-progress">
+                <div class="progress-label">Tiến độ đọc</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- MAIN -->
+        <main class="main">
+            <!-- HERO -->
+            <div class="hero">
+                <div class="hero-badge">📚 Study Guide</div>
+                <h1>Lộ Trình <span>Automation Test</span><br>Playwright + Python</h1>
+                <p>Dành cho QC chưa biết Python. Từ cú pháp cơ bản đến framework hoàn chỉnh sẵn sàng apply vị trí
+                    Automation Tester.</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-num" style="color:var(--p1)">3</div>
+                        <div class="stat-label">Tháng</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num" style="color:var(--p2)">12</div>
+                        <div class="stat-label">Tuần học</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num" style="color:var(--p3)">3</div>
+                        <div class="stat-label">Bài tập lớn</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num" style="color:var(--text)" id="heroTotalTasks">0</div>
+                        <div class="stat-label">Nhiệm vụ</div>
+                    </div>
+                </div>
+                <div class="overall-progress">
+                    <div class="overall-progress-label">Tiến độ hoàn thành tổng thể <span id="overallPct">0%</span>
+                    </div>
+                    <div class="overall-bar-track">
+                        <div class="overall-bar-fill" id="overallBarFill"></div>
+                    </div>
+                    <div class="overall-phases">
+                        <div class="overall-phase-stat p1s">Phase 1 <b id="p1pct">0%</b></div>
+                        <div class="overall-phase-stat p2s">Phase 2 <b id="p2pct">0%</b></div>
+                        <div class="overall-phase-stat p3s">Phase 3 <b id="p3pct">0%</b></div>
+                        <div class="overall-phase-stat" style="margin-left:auto" id="doneBadge"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="search-no-results" id="noResults">😕 Không tìm thấy kết quả nào cho "<span
+                        id="noResultsTerm"></span>"</div>
+
+                <!-- PHASE PLACEHOLDERS -->
+                <div id="phase1-placeholder" class="phase-placeholder"></div>
+                <div id="phase2-placeholder" class="phase-placeholder"></div>
+                <div id="phase3-placeholder" class="phase-placeholder"></div>
+        </main>
+
+        <script src="script.js"></script>
+</body>
+
+</html>
