@@ -379,8 +379,6 @@ function updateAllProgress() {
 /* ── Bootstrap ── */
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
-  initCheckboxes();
-  initNotes();
   loadPhases();
 });
 
@@ -419,4 +417,8 @@ async function loadPhases() {
       }
     }
   }
+
+  // Khởi tạo checkbox và notes sau khi phase nội dung được tải xong
+  initCheckboxes();
+  initNotes();
 }
