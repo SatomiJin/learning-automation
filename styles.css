@@ -480,6 +480,10 @@ strong {
   overflow: hidden;
   margin: 0.75rem 0;
 }
+.html.light .code-block {
+  background: #1f2233; /* dark hơn theme sáng */
+  border-color: rgba(255, 255, 255, 0.15);
+}
 .code-header {
   display: flex;
   align-items: center;
