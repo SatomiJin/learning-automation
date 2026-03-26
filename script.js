@@ -319,11 +319,37 @@ function toggleMilestone(li) {
 }
 
 function calcPhaseProgress(phaseNum) {
+  // Primary: count trong phase block (nếu tồn tại)
   const phaseEl = document.querySelector(`[data-phase="${phaseNum}"]`);
-  if (!phaseEl) return { done: 0, total: 0 };
-  const all = phaseEl.querySelectorAll(".ex-check, .milestone-check");
-  const done = [...all].filter((cb) => cb.checked).length;
-  return { done, total: all.length };
+  let checkEls = [];
+
+  if (phaseEl) {
+    checkEls = [...phaseEl.querySelectorAll(".ex-check, .milestone-check")];
+  }
+
+  // Fallback: nếu phase block thiếu tuần, đảm bảo lấy theo week id pattern
+  if (!checkEls.length) {
+    checkEls = [
+      ...document.querySelectorAll(
+        `.week-block[id^="p${phaseNum}-"] .ex-check, .week-block[id^="p${phaseNum}-"] .milestone-check`,
+      ),
+    ];
+  }
+
+  // Nếu phaseEl có nhưng vẫn thiếu, thêm check từ tuần tương ứng luôn
+  if (phaseEl) {
+    const extra = [
+      ...document.querySelectorAll(
+        `.week-block[id^="p${phaseNum}-"] .ex-check, .week-block[id^="p${phaseNum}-"] .milestone-check`,
+      ),
+    ];
+    extra.forEach((el) => {
+      if (!checkEls.includes(el)) checkEls.push(el);
+    });
+  }
+
+  const done = checkEls.filter((cb) => cb.checked).length;
+  return { done, total: checkEls.length };
 }
 
 function updateAllProgress() {
