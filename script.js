@@ -41,7 +41,7 @@ document.querySelectorAll(".nav-item[href]").forEach((link) => {
 function updateActiveNavItem() {
   const navItems = document.querySelectorAll(".nav-item[href]");
   let currentSection = null;
-  let closestDistance = Infinity;
+  let maxTop = -Infinity;
 
   navItems.forEach((item) => {
     const sectionId = item.getAttribute("href").slice(1);
@@ -49,14 +49,11 @@ function updateActiveNavItem() {
     if (!section) return;
 
     const rect = section.getBoundingClientRect();
-    const distanceFromTop = Math.abs(rect.top);
 
-    // Find the section closest to the top of the viewport
-    if (
-      rect.top <= window.innerHeight / 2 &&
-      distanceFromTop < closestDistance
-    ) {
-      closestDistance = distanceFromTop;
+    // Tìm section đang visible (rect.bottom > 0) và có rect.top lớn nhất
+    // rect.top lớn nhất = gần top của viewport nhất = section đang hiển thị
+    if (rect.bottom > 0 && rect.top > maxTop) {
+      maxTop = rect.top;
       currentSection = item;
     }
   });
