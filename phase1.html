@@ -649,6 +649,88 @@ results = [
             <div class="topic-body">
                 <div class="theory-section">
                     <div class="section-label">Lý thuyết</div>
+                    <p><strong>PYTHON EXCEPTION HANDLING - CHEAT SHEET</strong></p>
+                    <ol>
+                        <li><strong>Exception là gì?</strong><br>
+                            Exception là lỗi xảy ra khi chương trình đang chạy (runtime error).
+                            Ví dụ:<br>
+                            - File không tồn tại<br>
+                            - JSON sai format<br>
+                            - Chia cho 0<br>
+                            - Truy cập key không tồn tại<br>
+                            Nếu không xử lý exception, chương trình will dừng ngay lập tức.
+                        </li>
+                        <li><strong>Cấu trúc try / except</strong><br>
+                            <pre><code>try:
+    # code có thể gây lỗi
+except ErrorType:
+    # xử lý lỗi
+</code></pre>
+                        </li>
+                        <li><strong>Bắt nhiều loại lỗi</strong><br>
+                            <pre><code>try:
+    with open("config.json") as f:
+        config = json.load(f)
+except FileNotFoundError:
+    print("File không tồn tại")
+except json.JSONDecodeError:
+    print("JSON sai format")
+</code></pre>
+                        </li>
+                        <li><strong>finally</strong><br>
+                            <code>finally</code> luôn chạy dù có lỗi hay không.
+                            <pre><code>try:
+    ...
+except Exception:
+    ...
+finally:
+    print("Luôn chạy")
+</code></pre>
+                            Ứng dụng: đóng file, đóng database connection, cleanup resource.
+                        </li>
+                        <li><strong>Custom Exception</strong><br>
+                            <pre><code>class TestDataError(Exception):
+    pass
+</code></pre>
+                            Mục đích: mô tả lỗi rõ ràng, dễ debug, dễ log trong project lớn.
+                        </li>
+                        <li><strong>raise (ném lỗi)</strong><br>
+                            <pre><code>raise TestDataError("Thiếu username")
+</code></pre>
+                            Ý nghĩa: phát hiện dữ liệu sai -> ném lỗi -> dừng xử lý.
+                        </li>
+                        <li><strong>Ví dụ validate dữ liệu</strong><br>
+                            <pre><code>class TestDataError(Exception):
+    pass
+
+def load_test_user(data):
+    if "username" not in data:
+        raise TestDataError("Thiếu username")
+    return data["username"]
+</code></pre>
+                        </li>
+                        <li><strong>Bắt Custom Exception</strong><br>
+                            <pre><code>try:
+    user = load_test_user(data)
+except TestDataError as e:
+    print("Lỗi dữ liệu:", e)
+</code></pre>
+                        </li>
+                        <li><strong>Best Practices</strong><br>
+                            ✔ Bắt lỗi cụ thể: <code>except FileNotFoundError</code><br>
+                            ✘ Không nên bắt lỗi chung: <code>except:</code><br>
+                            ✔ Dùng custom exception cho validation<br>
+                            ✔ Không lạm dụng exception cho logic bình thường
+                        </li>
+                        <li><strong>Tóm tắt</strong><br>
+                            try: chứa code có thể gây lỗi<br>
+                            except: bắt lỗi<br>
+                            finally: luôn chạy<br>
+                            raise: ném lỗi<br>
+                            Exception: lớp lỗi gốc<br>
+                            Custom Exception: loại lỗi tự tạo
+                        </li>
+                    </ol>
                     <div class="code-block">
                         <div class="code-header">
                             <span class="code-lang python">Python</span>
