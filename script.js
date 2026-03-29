@@ -34,11 +34,55 @@ document.querySelectorAll(".nav-item[href]").forEach((link) => {
 /* ══════════════════════════════════════
    4. READ PROGRESS BAR (scroll)
 ══════════════════════════════════════ */
+function updateActiveNavItem() {
+  const navItems = document.querySelectorAll(".nav-item[href]");
+  let currentSection = null;
+  let closestDistance = Infinity;
+
+  navItems.forEach((item) => {
+    const sectionId = item.getAttribute("href").slice(1);
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+
+    const rect = section.getBoundingClientRect();
+    const distanceFromTop = Math.abs(rect.top);
+
+    // Find the section closest to the top of the viewport
+    if (
+      rect.top <= window.innerHeight / 2 &&
+      distanceFromTop < closestDistance
+    ) {
+      closestDistance = distanceFromTop;
+      currentSection = item;
+    }
+  });
+
+  // Remove active classes from all nav items
+  navItems.forEach((item) => {
+    item.classList.remove("active", "p2-active", "p3-active");
+  });
+
+  // Add appropriate active class to current section's nav item
+  if (currentSection) {
+    const sectionId = currentSection.getAttribute("href").slice(1);
+    if (sectionId.startsWith("p1-")) {
+      currentSection.classList.add("active");
+    } else if (sectionId.startsWith("p2-")) {
+      currentSection.classList.add("p2-active");
+    } else if (sectionId.startsWith("p3-")) {
+      currentSection.classList.add("p3-active");
+    }
+  }
+}
+
 window.addEventListener("scroll", () => {
   const docH = document.documentElement.scrollHeight - window.innerHeight;
   const pct = Math.round((window.scrollY / docH) * 100);
   const el = document.getElementById("progressFill");
   if (el) el.style.width = pct + "%";
+
+  // Update active nav item based on scroll position
+  updateActiveNavItem();
 });
 
 /* ══════════════════════════════════════
@@ -447,4 +491,7 @@ async function loadPhases() {
   // Khởi tạo checkbox và notes sau khi phase nội dung được tải xong
   initCheckboxes();
   initNotes();
+
+  // Highlight the current section in sidebar after content is loaded
+  setTimeout(updateActiveNavItem, 100);
 }

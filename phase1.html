@@ -551,6 +551,33 @@ results = [
     data = json.<span class="fn">load</span>(f)    <span class="cmt"># trả về list/dict Python</span>
     <span class="fn">print</span>(data[<span class="num">0</span>][<span class="str">"status"</span>])</pre>
                 </div>
+                <div class="tip-box info">
+                    <span class="tip-icon">💡</span>
+                    <div class="tip-content"><strong>Giải thích: Ghi JSON ra file</strong><br>
+                        <code>open("report.json", "w", encoding="utf-8")</code> mở hoặc tạo file report.json ở chế độ
+                        ghi (write). Nếu file đã tồn tại, nội dung cũ sẽ bị ghi đè.<br>
+                        <code>with ... as f</code> sử dụng context manager để đảm bảo file được tự động đóng sau khi
+                        hoàn thành thao tác.<br>
+                        <code>json.dump()</code> dùng để chuyển đổi dữ liệu Python (dictionary, list, v.v.) sang định
+                        dạng JSON và ghi trực tiếp vào file.<br>
+                        <code>results</code> là dữ liệu cần ghi vào file.<br>
+                        <code>indent=2</code> giúp định dạng JSON dễ đọc hơn bằng cách thụt lề 2 khoảng trắng.<br>
+                        <code>ensure_ascii=False</code> cho phép ghi các ký tự Unicode (ví dụ tiếng Việt) thay vì chuyển
+                        chúng thành mã escape.
+                    </div>
+                </div>
+                <div class="tip-box info">
+                    <span class="tip-icon">💡</span>
+                    <div class="tip-content"><strong>Giải thích: Đọc JSON từ file</strong><br>
+                        <code>open("report.json", "r")</code> mở file report.json ở chế độ đọc (read).<br>
+                        <code>with ... as f</code> sử dụng context manager để đảm bảo file được tự động đóng sau khi
+                        hoàn tất việc đọc.<br>
+                        <code>json.load(f)</code> đọc nội dung JSON từ file và chuyển đổi thành cấu trúc dữ liệu Python,
+                        thường là list hoặc dictionary.<br>
+                        <code>data[0]["status"]</code> truy cập vào phần tử đầu tiên của danh sách và lấy giá trị của
+                        key "status".
+                    </div>
+                </div>
                 <div class="tip-box success">
                     <span class="tip-icon">✅</span>
                     <div class="tip-content"><strong>Best practice:</strong>
