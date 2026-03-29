@@ -93,15 +93,40 @@ function updateActiveNavItem() {
   }
 }
 
-window.addEventListener("scroll", () => {
-  const docH = document.documentElement.scrollHeight - window.innerHeight;
-  const pct = Math.round((window.scrollY / docH) * 100);
-  const el = document.getElementById("progressFill");
-  if (el) el.style.width = pct + "%";
+const scrollContainer = document.querySelector(".main") || window;
 
-  // Update active nav item based on scroll position
+function getScrollInfo() {
+  if (scrollContainer === window) {
+    const docH = document.documentElement.scrollHeight;
+    const winH = window.innerHeight;
+    const scrollY = window.scrollY;
+    return { scrollTop: scrollY, scrollHeight: docH, clientHeight: winH };
+  }
+  return {
+    scrollTop: scrollContainer.scrollTop,
+    scrollHeight: scrollContainer.scrollHeight,
+    clientHeight: scrollContainer.clientHeight,
+  };
+}
+
+function updateProgressBar() {
+  const info = getScrollInfo();
+  const docH = info.scrollHeight - info.clientHeight;
+  const pct = docH > 0 ? Math.round((info.scrollTop / docH) * 100) : 0;
+  const el = document.getElementById("progressFill");
+  if (el) el.style.width = `${pct}%`;
+}
+
+function onScrollHandler() {
+  updateProgressBar();
   updateActiveNavItem();
-});
+}
+
+if (scrollContainer === window) {
+  window.addEventListener("scroll", onScrollHandler);
+} else {
+  scrollContainer.addEventListener("scroll", onScrollHandler);
+}
 
 /* ══════════════════════════════════════
    5. THEME TOGGLE (Light / Dark)
@@ -510,6 +535,9 @@ async function loadPhases() {
   initCheckboxes();
   initNotes();
 
-  // Highlight the current section in sidebar after content is loaded
-  setTimeout(updateActiveNavItem, 100);
+  // Highlight the current section in sidebar và update progress bar sau khi nội dung được load
+  setTimeout(() => {
+    updateActiveNavItem();
+    updateProgressBar();
+  }, 100);
 }
