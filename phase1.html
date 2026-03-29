@@ -488,7 +488,7 @@ tc2 = <span class="fn">create_test_case</span>(<span class="str">"Checkout"</spa
     </div>
 </div>
 <!-- WEEK 3 -->
-<div class="week-block" id="p1-w3">
+<!-- <div class="week-block" id="p1-w3">
     <div class="week-label">Tuần 3 · File I/O, JSON & Exceptions</div>
 
     <div class="topic-card">
@@ -649,26 +649,43 @@ results = [
             <div class="topic-body">
                 <div class="theory-section">
                     <div class="section-label">Lý thuyết</div>
-                    <p><strong>PYTHON EXCEPTION HANDLING - CHEAT SHEET</strong></p>
-                    <ol>
-                        <li><strong>Exception là gì?</strong><br>
-                            Exception là lỗi xảy ra khi chương trình đang chạy (runtime error).
-                            Ví dụ:<br>
-                            - File không tồn tại<br>
-                            - JSON sai format<br>
-                            - Chia cho 0<br>
-                            - Truy cập key không tồn tại<br>
-                            Nếu không xử lý exception, chương trình will dừng ngay lập tức.
-                        </li>
-                        <li><strong>Cấu trúc try / except</strong><br>
-                            <pre><code>try:
+                    <div class="tip-box info">
+                        <div class="panel-title"><strong>PYTHON EXCEPTION HANDLING - CHEAT SHEET</strong></div>
+                        <h4>1. Exception là gì?</h4>
+                        <p>Exception là lỗi xảy ra khi chương trình đang chạy (runtime error). Nếu không xử lý, chương
+                            trình sẽ dừng.</p>
+                        <ul>
+                            <li>File không tồn tại</li>
+                            <li>JSON sai format</li>
+                            <li>Chia cho 0</li>
+                            <li>Truy cập key không tồn tại</li>
+                        </ul>
+
+                        <h4>2. Cấu trúc try / except</h4>
+                        <p>Dùng để bắt và xử lý lỗi.</p>
+                        <pre><code>try:
     # code có thể gây lỗi
 except ErrorType:
     # xử lý lỗi
 </code></pre>
-                        </li>
-                        <li><strong>Bắt nhiều loại lỗi</strong><br>
-                            <pre><code>try:
+                        <p><strong>Ví dụ:</strong></p>
+                        <pre><code>try:
+    open("config.json")
+except FileNotFoundError:
+    print("File không tồn tại")
+</code></pre>
+                        <p><strong>Flow:</strong></p>
+                        <ul>
+                            <li>try chạy</li>
+                            <li>↓</li>
+                            <li>có lỗi</li>
+                            <li>↓</li>
+                            <li>except xử lý</li>
+                        </ul>
+
+                        <h4>3. Bắt nhiều loại lỗi</h4>
+                        <p>Một try có thể có nhiều except.</p>
+                        <pre><code>try:
     with open("config.json") as f:
         config = json.load(f)
 except FileNotFoundError:
@@ -676,61 +693,176 @@ except FileNotFoundError:
 except json.JSONDecodeError:
     print("JSON sai format")
 </code></pre>
-                        </li>
-                        <li><strong>finally</strong><br>
-                            <code>finally</code> luôn chạy dù có lỗi hay không.
-                            <pre><code>try:
-    ...
-except Exception:
-    ...
-finally:
+                        <p><strong>Ý nghĩa:</strong></p>
+                        <table class="data-table">
+                            <tr>
+                                <th>Lỗi</th>
+                                <th>Khi xảy ra</th>
+                            </tr>
+                            <tr>
+                                <td>FileNotFoundError</td>
+                                <td>File không tồn tại</td>
+                            </tr>
+                            <tr>
+                                <td>JSONDecodeError</td>
+                                <td>JSON sai cấu trúc</td>
+                            </tr>
+                        </table>
+
+                        <h4>4. finally</h4>
+                        <p><code>finally</code> luôn chạy dù có lỗi hay không.</p>
+                        <pre><code>finally:
     print("Luôn chạy")
 </code></pre>
-                            Ứng dụng: đóng file, đóng database connection, cleanup resource.
-                        </li>
-                        <li><strong>Custom Exception</strong><br>
-                            <pre><code>class TestDataError(Exception):
+                        <p><strong>Flow:</strong></p>
+                        <ul>
+                            <li>try chạy</li>
+                            <li>↓</li>
+                            <li>có hoặc không lỗi</li>
+                            <li>↓</li>
+                            <li>finally luôn chạy</li>
+                        </ul>
+                        <p><strong>Ứng dụng:</strong></p>
+                        <ul>
+                            <li>đóng file</li>
+                            <li>đóng database</li>
+                            <li>cleanup resource</li>
+                        </ul>
+
+                        <h4>5. Custom Exception</h4>
+                        <p>Python cho phép tự tạo loại lỗi riêng.</p>
+                        <pre><code>class TestDataError(Exception):
     pass
 </code></pre>
-                            Mục đích: mô tả lỗi rõ ràng, dễ debug, dễ log trong project lớn.
-                        </li>
-                        <li><strong>raise (ném lỗi)</strong><br>
-                            <pre><code>raise TestDataError("Thiếu username")
+                        <p><strong>Ở đây:</strong></p>
+                        <pre><code>TestDataError
+     ↓
+kế thừa
+     ↓
+Exception
 </code></pre>
-                            Ý nghĩa: phát hiện dữ liệu sai -> ném lỗi -> dừng xử lý.
-                        </li>
-                        <li><strong>Ví dụ validate dữ liệu</strong><br>
-                            <pre><code>class TestDataError(Exception):
+                        <p><strong>Ý nghĩa:</strong> → tạo loại lỗi chuyên biệt cho project</p>
+
+                        <h4>6. raise (ném lỗi)</h4>
+                        <p><code>raise</code> dùng để tự tạo exception.</p>
+                        <pre><code>raise TestDataError("Thiếu username")
+</code></pre>
+                        <p><strong>Ý nghĩa:</strong></p>
+                        <ul>
+                            <li>phát hiện dữ liệu sai</li>
+                            <li>↓</li>
+                            <li>raise error</li>
+                            <li>↓</li>
+                            <li>chương trình báo lỗi</li>
+                        </ul>
+
+                        <h4>7. Ví dụ trong code của cậu</h4>
+                        <pre><code>def load_test_user(data):
+    if "username" not in data:
+        raise TestDataError(f"Thiếu field 'username' trong: {data}")
+
+    return data["username"]
+</code></pre>
+                        <p><strong>Logic:</strong></p>
+                        <ul>
+                            <li>check username</li>
+                            <li>↓</li>
+                            <li>nếu không tồn tại</li>
+                            <li>↓</li>
+                            <li>raise TestDataError</li>
+                            <li>↓</li>
+                            <li>dừng hàm</li>
+                        </ul>
+                        <p><strong>Nếu hợp lệ:</strong> return username</p>
+
+                        <h4>8. Cách bắt Custom Exception</h4>
+                        <pre><code>try:
+    user = load_test_user(data)
+except TestDataError as e:
+    print("Lỗi dữ liệu:", e)
+</code></pre>
+                        <p><strong>Output:</strong> Lỗi dữ liệu: Thiếu field username</p>
+
+                        <h4>9. Best Practices</h4>
+                        <p><strong>1️⃣ Bắt lỗi cụ thể</strong></p>
+                        <p>✅ Đúng: <code>except FileNotFoundError</code></p>
+                        <p>❌ Không nên: <code>except:</code></p>
+                        <p><strong>2️⃣ Dùng Custom Exception cho validation</strong></p>
+                        <p><strong>Ví dụ:</strong></p>
+                        <ul>
+                            <li>ValidationError</li>
+                            <li>TestDataError</li>
+                            <li>APIError</li>
+                            <li>AuthError</li>
+                        </ul>
+                        <p><strong>3️⃣ Không lạm dụng exception</strong></p>
+                        <p>❌ Sai:</p>
+                        <pre><code>try:
+    username = data["username"]
+except:
+</code></pre>
+                        <p>✅ Đúng:</p>
+                        <pre><code>if "username" not in data:
+</code></pre>
+
+                        <h4>10. Ví dụ hoàn chỉnh</h4>
+                        <pre><code>import json
+
+class TestDataError(Exception):
     pass
 
 def load_test_user(data):
     if "username" not in data:
         raise TestDataError("Thiếu username")
+
     return data["username"]
+
+try:
+    with open("config.json") as f:
+        config = json.load(f)
+except FileNotFoundError:
+    print("File không tồn tại")
+    config = {"url": "http://localhost"}
+except json.JSONDecodeError as e:
+    print("JSON lỗi:", e)
+finally:
+    print("Chương trình kết thúc")
 </code></pre>
-                        </li>
-                        <li><strong>Bắt Custom Exception</strong><br>
-                            <pre><code>try:
-    user = load_test_user(data)
-except TestDataError as e:
-    print("Lỗi dữ liệu:", e)
-</code></pre>
-                        </li>
-                        <li><strong>Best Practices</strong><br>
-                            ✔ Bắt lỗi cụ thể: <code>except FileNotFoundError</code><br>
-                            ✘ Không nên bắt lỗi chung: <code>except:</code><br>
-                            ✔ Dùng custom exception cho validation<br>
-                            ✔ Không lạm dụng exception cho logic bình thường
-                        </li>
-                        <li><strong>Tóm tắt</strong><br>
-                            try: chứa code có thể gây lỗi<br>
-                            except: bắt lỗi<br>
-                            finally: luôn chạy<br>
-                            raise: ném lỗi<br>
-                            Exception: lớp lỗi gốc<br>
-                            Custom Exception: loại lỗi tự tạo
-                        </li>
-                    </ol>
+
+                        <h4>11. Tóm tắt nhanh (cheat sheet)</h4>
+                        <table class="data-table">
+                            <tr>
+                                <th>Khái niệm</th>
+                                <th>Ý nghĩa</th>
+                            </tr>
+                            <tr>
+                                <td>try</td>
+                                <td>chứa code có thể gây lỗi</td>
+                            </tr>
+                            <tr>
+                                <td>except</td>
+                                <td>bắt lỗi</td>
+                            </tr>
+                            <tr>
+                                <td>finally</td>
+                                <td>luôn chạy</td>
+                            </tr>
+                            <tr>
+                                <td>raise</td>
+                                <td>ném lỗi</td>
+                            </tr>
+                            <tr>
+                                <td>Exception</td>
+                                <td>lớp lỗi gốc</td>
+                            </tr>
+                            <tr>
+                                <td>Custom Exception</td>
+                                <td>tạo loại lỗi riêng</td>
+                            </tr>
+                        </table>
+
+
+                    </div>
                     <div class="code-block">
                         <div class="code-header">
                             <span class="code-lang python">Python</span>
@@ -812,9 +944,470 @@ except TestDataError as e:
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
-<!-- WEEK 4 -->
+<!-- WEEK 3 -->
+<diexcep class="week-block" id="p1-w3">
+    <div class="week-label">Tuần 3 · File I/O, JSON & Exceptions</div>
+
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">📄</div>
+            <div class="topic-meta">
+                <div class="topic-name">File I/O · CSV · JSON</div>
+                <div class="topic-desc">open() · read/write · csv module · json
+                    module</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot" id="note-dot-5"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Lý thuyết</div>
+                <p>Trong automation testing, bạn sẽ <strong>liên tục đọc test
+                        data từ file</strong> (CSV/JSON) và ghi kết quả ra file
+                    báo cáo. Đây là kỹ năng cốt lõi.</p>
+                <div class="tip-box info">
+                    <span class="tip-icon">💡</span>
+                    <div class="tip-content"><strong>Giải thích
+                            <code>with open("test_data.csv", "r", encoding="utf-8") as f:</code></strong><br>
+                        Dùng để mở file <code>test_data.csv</code> ở chế độ đọc trong Python.<br>
+                        <code>"r"</code> chỉ định read mode (chỉ đọc dữ liệu từ file).<br>
+                        <code>encoding="utf-8"</code> xác định bảng mã ký tự UTF-8 để đọc đúng các ký tự, đặc biệt là
+                        tiếng Việt.<br>
+                        <code>as f</code> tạo một biến đại diện cho file object để thao tác với file trong khối lệnh bên
+                        dưới.<br>
+                        <code>with</code> là context manager, giúp tự động đóng file sau khi khối lệnh kết thúc, tránh
+                        quên <code>close()</code> và giúp quản lý tài nguyên an toàn hơn.
+                    </div>
+                </div>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang python">Python</span>
+                        <span class="code-filename">file_io.py</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><span class="imp">import</span> csv
+<span class="imp">import</span> json
+
+<span class="cmt">## ĐỌC CSV ##</span>
+<span class="cmt"># test_data.csv có dạng: username,password,expected</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"test_data.csv"</span>, <span class="str">"r"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> f:
+    reader = csv.<span class="fn">DictReader</span>(f)  <span class="cmt"># mỗi row là dict</span>
+    <span class="kw">for</span> row <span class="kw">in</span> reader:
+        <span class="fn">print</span>(row[<span class="str">"username"</span>], row[<span class="str">"expected"</span>])
+
+<span class="cmt">## GHI JSON ##</span>
+results = [
+    {<span class="str">"id"</span>: <span class="str">"TC001"</span>, <span class="str">"status"</span>: <span class="str">"PASS"</span>, <span class="str">"duration"</span>: <span class="num">1.23</span>},
+    {<span class="str">"id"</span>: <span class="str">"TC002"</span>, <span class="str">"status"</span>: <span class="str">"FAIL"</span>, <span class="str">"duration"</span>: <span class="num">2.01</span>},
+]
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"report.json"</span>, <span class="str">"w"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> f:
+    json.<span class="fn">dump</span>(results, f, indent=<span class="num">2</span>, ensure_ascii=<span class="kw">False</span>)
+
+<span class="cmt">## ĐỌC JSON ##</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"report.json"</span>, <span class="str">"r"</span>) <span class="kw">as</span> f:
+    data = json.<span class="fn">load</span>(f)    <span class="cmt"># trả về list/dict Python</span>
+    <span class="fn">print</span>(data[<span class="num">0</span>][<span class="str">"status"</span>])</pre>
+                </div>
+                <div class="tip-box info">
+                    <span class="tip-icon">💡</span>
+                    <div class="tip-content"><strong>Giải thích: Ghi JSON ra file</strong><br>
+                        <code>open("report.json", "w", encoding="utf-8")</code> mở hoặc tạo file report.json ở chế độ
+                        ghi (write). Nếu file đã tồn tại, nội dung cũ sẽ bị ghi đè.<br>
+                        <code>with ... as f</code> sử dụng context manager để đảm bảo file được tự động đóng sau khi
+                        hoàn thành thao tác.<br>
+                        <code>json.dump()</code> dùng để chuyển đổi dữ liệu Python (dictionary, list, v.v.) sang định
+                        dạng JSON và ghi trực tiếp vào file.<br>
+                        <code>results</code> là dữ liệu cần ghi vào file.<br>
+                        <code>indent=2</code> giúp định dạng JSON dễ đọc hơn bằng cách thụt lề 2 khoảng trắng.<br>
+                        <code>ensure_ascii=False</code> cho phép ghi các ký tự Unicode (ví dụ tiếng Việt) thay vì chuyển
+                        chúng thành mã escape.
+                    </div>
+                </div>
+                <div class="tip-box info">
+                    <span class="tip-icon">💡</span>
+                    <div class="tip-content"><strong>Giải thích: Đọc JSON từ file</strong><br>
+                        <code>open("report.json", "r")</code> mở file report.json ở chế độ đọc (read).<br>
+                        <code>with ... as f</code> sử dụng context manager để đảm bảo file được tự động đóng sau khi
+                        hoàn tất việc đọc.<br>
+                        <code>json.load(f)</code> đọc nội dung JSON từ file và chuyển đổi thành cấu trúc dữ liệu Python,
+                        thường là list hoặc dictionary.<br>
+                        <code>data[0]["status"]</code> truy cập vào phần tử đầu tiên của danh sách và lấy giá trị của
+                        key "status".
+                    </div>
+                </div>
+                <div class="tip-box success">
+                    <span class="tip-icon">✅</span>
+                    <div class="tip-content"><strong>Best practice:</strong>
+                        Luôn dùng <code>with open(...)</code> thay vì
+                        <code>f = open()</code>. <code>with</code> tự đóng file
+                        khi xong, kể cả khi có lỗi xảy ra.
+                    </div>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ex-9" onchange="onCheck(this)">
+                        <label for="ex-9" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Đọc test data từ CSV</div>
+                                <div class="ex-desc">Tạo file
+                                    <code>test_data.csv</code> có 5 bộ
+                                    username/password/expected. Đọc file, in ra
+                                    mỗi bộ theo format:
+                                    <code>[TC1] user: admin | expected: success</code>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ex-10" onchange="onCheck(this)">
+                        <label for="ex-10" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Ghi kết quả test ra JSON
+                                </div>
+                                <div class="ex-desc">Mô phỏng kết quả 5 test
+                                    case (tạo list dict), ghi ra
+                                    <code>report.json</code> với indent=2. Đọc
+                                    lại và in tổng PASS/FAIL.
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note-area" id="note-area-topic-5">
+                <textarea class="note-textarea" id="note-text-topic-5" placeholder="Ghi chú của bạn về topic này..."
+                    oninput="autoSaveNote('topic-5')"></textarea>
+                <div class="note-footer">
+                    <button class="note-clear-btn" onclick="clearNote('topic-5')">Xoá ghi
+                        chú</button>
+                    <span class="note-saved-msg" id="note-saved-topic-5">✓ Đã
+                        lưu</span>
+                </div>
+            </div>
+            <button class="note-toggle-btn" id="note-btn-topic-5" onclick="toggleNote('topic-5')">📝 Ghi
+                chú</button>
+        </div>
+
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">⚠️</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Exceptions & Error handling</div>
+                    <div class="topic-desc">try/except/finally · raise · custom exceptions</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot" id="note-dot-6"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Lý thuyết</div>
+
+                    <!-- WHAT IS EXCEPTION -->
+                    <p><strong>Exception</strong> là lỗi xảy ra khi chương trình đang chạy (runtime error). Nếu không xử
+                        lý, chương trình sẽ dừng ngay lập tức.</p>
+
+                    <!-- COMMON ERRORS GRID -->
+                    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:0.6rem; margin:1rem 0 1.4rem;">
+                        <div
+                            style="background:var(--redl); border:1px solid rgba(240,110,110,0.2); border-radius:8px; padding:0.65rem 0.9rem; display:flex; align-items:center; gap:0.6rem;">
+                            <span style="font-size:16px;">📁</span>
+                            <div>
+                                <div
+                                    style="font-size:11px; font-weight:700; color:var(--red); text-transform:uppercase; letter-spacing:0.05em;">
+                                    FileNotFoundError</div>
+                                <div style="font-size:12px; color:var(--text2); margin-top:2px;">File không tồn tại
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            style="background:var(--redl); border:1px solid rgba(240,110,110,0.2); border-radius:8px; padding:0.65rem 0.9rem; display:flex; align-items:center; gap:0.6rem;">
+                            <span style="font-size:16px;">📋</span>
+                            <div>
+                                <div
+                                    style="font-size:11px; font-weight:700; color:var(--red); text-transform:uppercase; letter-spacing:0.05em;">
+                                    JSONDecodeError</div>
+                                <div style="font-size:12px; color:var(--text2); margin-top:2px;">JSON sai format</div>
+                            </div>
+                        </div>
+                        <div
+                            style="background:var(--redl); border:1px solid rgba(240,110,110,0.2); border-radius:8px; padding:0.65rem 0.9rem; display:flex; align-items:center; gap:0.6rem;">
+                            <span style="font-size:16px;">➗</span>
+                            <div>
+                                <div
+                                    style="font-size:11px; font-weight:700; color:var(--red); text-transform:uppercase; letter-spacing:0.05em;">
+                                    ZeroDivisionError</div>
+                                <div style="font-size:12px; color:var(--text2); margin-top:2px;">Chia cho 0</div>
+                            </div>
+                        </div>
+                        <div
+                            style="background:var(--redl); border:1px solid rgba(240,110,110,0.2); border-radius:8px; padding:0.65rem 0.9rem; display:flex; align-items:center; gap:0.6rem;">
+                            <span style="font-size:16px;">🔑</span>
+                            <div>
+                                <div
+                                    style="font-size:11px; font-weight:700; color:var(--red); text-transform:uppercase; letter-spacing:0.05em;">
+                                    KeyError</div>
+                                <div style="font-size:12px; color:var(--text2); margin-top:2px;">Truy cập key không tồn
+                                    tại</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TRY/EXCEPT FLOW DIAGRAM -->
+                    <div style="margin:1.4rem 0;">
+                        <div
+                            style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text3); margin-bottom:0.75rem;">
+                            Cấu trúc &amp; Flow</div>
+                        <div
+                            style="display:grid; grid-template-columns:1fr auto 1fr; gap:0; align-items:stretch; border:1px solid var(--border2); border-radius:10px; overflow:hidden;">
+                            <!-- try block -->
+                            <div style="padding:1rem 1.1rem; background:var(--bg3);">
+                                <div
+                                    style="font-size:11px; font-weight:700; color:var(--p1); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.5rem;">
+                                    try</div>
+                                <div style="font-size:12px; color:var(--text2); line-height:1.6;">Code có thể gây lỗi
+                                    chạy tại đây</div>
+                            </div>
+                            <!-- arrow divider -->
+                            <div
+                                style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--bg2); padding:0 0.75rem; gap:0.4rem; border-left:1px solid var(--border); border-right:1px solid var(--border);">
+                                <div
+                                    style="font-size:10px; color:var(--text3); writing-mode:vertical-rl; text-orientation:mixed; transform:rotate(180deg); letter-spacing:0.05em;">
+                                    LỖI?</div>
+                            </div>
+                            <!-- except/finally blocks -->
+                            <div style="display:flex; flex-direction:column;">
+                                <div
+                                    style="padding:0.75rem 1.1rem; background:rgba(240,110,110,0.06); border-bottom:1px solid var(--border); flex:1;">
+                                    <div
+                                        style="font-size:11px; font-weight:700; color:var(--red); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.4rem;">
+                                        except</div>
+                                    <div style="font-size:12px; color:var(--text2); line-height:1.5;">Có lỗi → bắt &amp;
+                                        xử lý. Chạy một lần theo loại lỗi khớp.</div>
+                                </div>
+                                <div style="padding:0.75rem 1.1rem; background:var(--p2l); flex:1;">
+                                    <div
+                                        style="font-size:11px; font-weight:700; color:var(--p2); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.4rem;">
+                                        finally</div>
+                                    <div style="font-size:12px; color:var(--text2); line-height:1.5;">Luôn chạy — dù có
+                                        lỗi hay không. Dùng để cleanup.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SYNTAX CODE BLOCK -->
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang python">Python</span>
+                            <span class="code-filename">exceptions.py</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><span class="cmt"># try/except — bắt nhiều loại lỗi</span>
+<span class="kw">try</span>:
+    <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"config.json"</span>) <span class="kw">as</span> f:
+        config = json.<span class="fn">load</span>(f)
+<span class="kw">except</span> <span class="cls">FileNotFoundError</span>:
+    <span class="fn">print</span>(<span class="str">"File không tồn tại, dùng config mặc định"</span>)
+    config = {<span class="str">"url"</span>: <span class="str">"http://localhost"</span>}
+<span class="kw">except</span> json.<span class="cls">JSONDecodeError</span> <span class="kw">as</span> e:
+    <span class="fn">print</span>(<span class="str">f"JSON lỗi: <span class="dec">{e}</span>"</span>)
+<span class="kw">finally</span>:
+    <span class="fn">print</span>(<span class="str">"Luôn chạy dòng này dù có lỗi hay không"</span>)
+
+<span class="cmt"># Custom Exception — đặt tên lỗi rõ ràng</span>
+<span class="kw">class</span> <span class="cls">TestDataError</span>(<span class="cls">Exception</span>):
+    <span class="str">"""Lỗi khi dữ liệu test không hợp lệ"""</span>
+    <span class="kw">pass</span>
+
+<span class="kw">def</span> <span class="fn">load_test_user</span>(data):
+    <span class="kw">if</span> <span class="str">"username"</span> <span class="kw">not</span> <span class="kw">in</span> data:
+        <span class="kw">raise</span> <span class="cls">TestDataError</span>(<span class="str">f"Thiếu field 'username' trong: <span class="dec">{data}</span>"</span>)
+    <span class="kw">return</span> data[<span class="str">"username"</span>]</pre>
+                    </div>
+
+                    <!-- CUSTOM EXCEPTION SECTION -->
+                    <div style="margin:1.4rem 0 1rem;">
+                        <div
+                            style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text3); margin-bottom:0.75rem;">
+                            Custom Exception</div>
+                        <div style="display:flex; align-items:stretch; gap:0.75rem; flex-wrap:wrap;">
+                            <div
+                                style="flex:1; min-width:220px; background:var(--p1l); border:1px solid var(--p1b); border-radius:8px; padding:0.9rem 1rem;">
+                                <div
+                                    style="font-size:11px; font-weight:700; color:var(--p1); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.5rem;">
+                                    Kế thừa từ Exception</div>
+                                <code
+                                    style="font-size:12px; color:var(--text); background:var(--code-bg); padding:0.4rem 0.7rem; border-radius:5px; display:block; line-height:1.7;">class TestDataError(Exception):<br>&nbsp;&nbsp;&nbsp;&nbsp;pass</code>
+                            </div>
+                            <div
+                                style="flex:1; min-width:220px; background:var(--p3l); border:1px solid var(--note-border); border-radius:8px; padding:0.9rem 1rem;">
+                                <div
+                                    style="font-size:11px; font-weight:700; color:var(--p3); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.5rem;">
+                                    Ném lỗi với raise</div>
+                                <code
+                                    style="font-size:12px; color:var(--text); background:var(--code-bg); padding:0.4rem 0.7rem; border-radius:5px; display:block; line-height:1.7;">raise TestDataError("Thiếu username")</code>
+                            </div>
+                            <div
+                                style="flex:1; min-width:220px; background:var(--p2l); border:1px solid var(--p2b); border-radius:8px; padding:0.9rem 1rem;">
+                                <div
+                                    style="font-size:11px; font-weight:700; color:var(--p2); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.5rem;">
+                                    Bắt lỗi tùy chỉnh</div>
+                                <code
+                                    style="font-size:12px; color:var(--text); background:var(--code-bg); padding:0.4rem 0.7rem; border-radius:5px; display:block; line-height:1.7;">except TestDataError as e:<br>&nbsp;&nbsp;&nbsp;&nbsp;print("Lỗi:", e)</code>
+                            </div>
+                        </div>
+                        <div style="margin-top:0.75rem; font-size:13px; color:var(--text2);">Dùng custom exception khi
+                            muốn phân loại lỗi rõ ràng theo domain: <code>ValidationError</code>,
+                            <code>TestDataError</code>, <code>APIError</code>, <code>AuthError</code>…
+                        </div>
+                    </div>
+
+                    <!-- BEST PRACTICES -->
+                    <div style="margin:1.4rem 0 0.5rem;">
+                        <div
+                            style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text3); margin-bottom:0.75rem;">
+                            Best Practices</div>
+                        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+                            <div
+                                style="display:flex; gap:0.75rem; align-items:flex-start; padding:0.75rem 1rem; background:var(--bg3); border:1px solid var(--border); border-radius:8px;">
+                                <span style="font-size:13px; margin-top:2px; flex-shrink:0;">1️⃣</span>
+                                <div style="flex:1;">
+                                    <div style="font-size:13px; font-weight:600; margin-bottom:0.35rem;">Bắt lỗi cụ thể,
+                                        không dùng <code>except:</code> trống</div>
+                                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                                        <span
+                                            style="font-size:12px; background:var(--p2l); border:1px solid var(--p2b); color:var(--p2); padding:3px 8px; border-radius:5px;">✅
+                                            except FileNotFoundError</span>
+                                        <span
+                                            style="font-size:12px; background:var(--redl); border:1px solid rgba(240,110,110,0.2); color:var(--red); padding:3px 8px; border-radius:5px;">❌
+                                            except:</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                style="display:flex; gap:0.75rem; align-items:flex-start; padding:0.75rem 1rem; background:var(--bg3); border:1px solid var(--border); border-radius:8px;">
+                                <span style="font-size:13px; margin-top:2px; flex-shrink:0;">2️⃣</span>
+                                <div style="flex:1;">
+                                    <div style="font-size:13px; font-weight:600; margin-bottom:0.35rem;">Không lạm dụng
+                                        exception cho logic bình thường</div>
+                                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                                        <span
+                                            style="font-size:12px; background:var(--p2l); border:1px solid var(--p2b); color:var(--p2); padding:3px 8px; border-radius:5px;">✅
+                                            if "username" not in data:</span>
+                                        <span
+                                            style="font-size:12px; background:var(--redl); border:1px solid rgba(240,110,110,0.2); color:var(--red); padding:3px 8px; border-radius:5px;">❌
+                                            try/except để check key</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                style="display:flex; gap:0.75rem; align-items:flex-start; padding:0.75rem 1rem; background:var(--bg3); border:1px solid var(--border); border-radius:8px;">
+                                <span style="font-size:13px; margin-top:2px; flex-shrink:0;">3️⃣</span>
+                                <div style="flex:1;">
+                                    <div style="font-size:13px; font-weight:600; margin-bottom:0.35rem;">Dùng
+                                        <code>finally</code> để cleanup resource
+                                    </div>
+                                    <div style="font-size:12px; color:var(--text2);">đóng file · đóng database
+                                        connection · giải phóng lock</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- QUICK CHEAT SHEET TABLE -->
+                    <div style="margin:1.4rem 0 0.25rem;">
+                        <div
+                            style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text3); margin-bottom:0.75rem;">
+                            Tóm tắt nhanh</div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Keyword</th>
+                                    <th>Ý nghĩa</th>
+                                    <th>Khi nào chạy</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code style="color:var(--p1);">try</code></td>
+                                    <td>Chứa code có thể gây lỗi</td>
+                                    <td>Luôn chạy đầu tiên</td>
+                                </tr>
+                                <tr>
+                                    <td><code style="color:var(--red);">except</code></td>
+                                    <td>Bắt và xử lý lỗi</td>
+                                    <td>Chỉ khi có lỗi khớp</td>
+                                </tr>
+                                <tr>
+                                    <td><code style="color:var(--p2);">finally</code></td>
+                                    <td>Cleanup, đóng resource</td>
+                                    <td>Luôn luôn chạy</td>
+                                </tr>
+                                <tr>
+                                    <td><code style="color:var(--p3);">raise</code></td>
+                                    <td>Ném lỗi thủ công</td>
+                                    <td>Khi tự phát hiện lỗi</td>
+                                </tr>
+                                <tr>
+                                    <td><code style="color:var(--p1);">Exception</code></td>
+                                    <td>Lớp lỗi gốc của Python</td>
+                                    <td>Dùng để kế thừa</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ex-11" onchange="onCheck(this)">
+                            <label for="ex-11" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Xử lý lỗi đọc file</div>
+                                    <div class="ex-desc">Viết hàm <code>load_config(path)</code> đọc JSON, bắt
+                                        <code>FileNotFoundError</code> và <code>JSONDecodeError</code>, trả về dict mặc
+                                        định nếu lỗi.
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ex-12" onchange="onCheck(this)">
+                            <label for="ex-12" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Custom ValidationError</div>
+                                    <div class="ex-desc">Tạo class <code>ValidationError(Exception)</code>. Viết hàm
+                                        <code>validate_test_data(row)</code> kiểm tra các field bắt buộc, raise lỗi tùy
+                                        chỉnh nếu thiếu.
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="note-area" id="note-area-topic-6">
+                            <textarea class="note-textarea" id="note-text-topic-6"
+                                placeholder="Ghi chú của bạn về topic này... (tự động lưu)"></textarea>
+                            <div class="note-footer">
+                                <button class="note-clear-btn" onclick="clearNote('topic-6')">Xoá ghi chú</button>
+                                <span class="note-saved-msg" id="note-saved-topic-6">✓ Đã lưu</span>
+                            </div>
+                        </div>
+                        <button class="note-toggle-btn" id="note-btn-topic-6" onclick="toggleNote('topic-6')">📝 Ghi
+                            chú</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</diexcep <!-- WEEK 4 -->
 <div class="week-block" id="p1-w4">
     <div class="week-label">Tuần 4 · OOP — Lập Trình Hướng Đối Tượng
     </div>

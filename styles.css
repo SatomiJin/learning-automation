@@ -644,8 +644,7 @@ code:not(pre code) {
   border-radius: var(--radius);
   padding: 0.9rem 1.1rem;
   margin: 0.75rem 0;
-  display: flex;
-  gap: 10px;
+  display: block;
   font-size: 13px;
 }
 .tip-box.info {
@@ -888,13 +887,16 @@ code:not(pre code) {
   border-radius: var(--radius);
   padding: 0.9rem 1.1rem;
   margin: 0.75rem 0;
-  display: flex;
-  gap: 10px;
+  display: block;
   font-size: 13px;
 }
 .tip-box.info {
   background: rgba(124, 111, 247, 0.08);
   border-left: 3px solid var(--p1);
+  display: flex;
+  /* align-items: center; */
+  /* justify-content: center; */
+  flex-direction: column;
 }
 .tip-box.success {
   background: rgba(31, 200, 128, 0.07);
@@ -909,18 +911,24 @@ code:not(pre code) {
   border-left: 3px solid var(--red);
 }
 .tip-icon {
-  flex-shrink: 0;
+  display: inline-block;
   font-size: 14px;
-  margin-top: 1px;
+  margin-right: 8px;
+  vertical-align: middle;
 }
 .tip-content {
+  display: inline-block;
   color: var(--text2);
   line-height: 1.6;
+  vertical-align: middle;
 }
 .tip-content strong {
   color: var(--text);
 }
-
+.tip-content .sub-content {
+  margin-top: 0.5rem;
+  padding-left: 20px;
+}
 /* ── CHECKBOX ── */
 .ex-item {
   position: relative;
