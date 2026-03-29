@@ -41,8 +41,9 @@ document.querySelectorAll(".nav-item[href]").forEach((link) => {
 function updateActiveNavItem() {
   const navItems = document.querySelectorAll(".nav-item[href]");
   let currentSection = null;
-  let maxTop = -Infinity;
+  let maxVisibility = 0;
 
+  // Find section with largest visible area in viewport
   navItems.forEach((item) => {
     const sectionId = item.getAttribute("href").slice(1);
     const section = document.getElementById(sectionId);
@@ -50,11 +51,27 @@ function updateActiveNavItem() {
 
     const rect = section.getBoundingClientRect();
 
-    // Tìm section đang visible (rect.bottom > 0) và có rect.top lớn nhất
-    // rect.top lớn nhất = gần top của viewport nhất = section đang hiển thị
-    if (rect.bottom > 0 && rect.top > maxTop) {
-      maxTop = rect.top;
-      currentSection = item;
+    // Calculate how much of the section is visible
+    const viewportTop = 0;
+    const viewportBottom = window.innerHeight;
+
+    const elementTop = Math.max(rect.top, viewportTop);
+    const elementBottom = Math.min(rect.bottom, viewportBottom);
+
+    const visibleHeight = Math.max(0, elementBottom - elementTop);
+
+    // Pick section with most visible area, prioritize sections that start above viewport
+    if (visibleHeight > 0) {
+      let score = visibleHeight;
+      // If section header is above viewport, give it bonus (it's the one we're reading)
+      if (rect.top < 100 && rect.bottom > 100) {
+        score *= 1.5;
+      }
+
+      if (score > maxVisibility) {
+        maxVisibility = score;
+        currentSection = item;
+      }
     }
   });
 
