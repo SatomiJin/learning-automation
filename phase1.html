@@ -508,6 +508,20 @@ tc2 = <span class="fn">create_test_case</span>(<span class="str">"Checkout"</spa
                 <p>Trong automation testing, bạn sẽ <strong>liên tục đọc test
                         data từ file</strong> (CSV/JSON) và ghi kết quả ra file
                     báo cáo. Đây là kỹ năng cốt lõi.</p>
+                <div class="tip-box info">
+                    <span class="tip-icon">💡</span>
+                    <div class="tip-content"><strong>Giải thích
+                            <code>with open("test_data.csv", "r", encoding="utf-8") as f:</code></strong><br>
+                        Dùng để mở file <code>test_data.csv</code> ở chế độ đọc trong Python.<br>
+                        <code>"r"</code> chỉ định read mode (chỉ đọc dữ liệu từ file).<br>
+                        <code>encoding="utf-8"</code> xác định bảng mã ký tự UTF-8 để đọc đúng các ký tự, đặc biệt là
+                        tiếng Việt.<br>
+                        <code>as f</code> tạo một biến đại diện cho file object để thao tác với file trong khối lệnh bên
+                        dưới.<br>
+                        <code>with</code> là context manager, giúp tự động đóng file sau khi khối lệnh kết thúc, tránh
+                        quên <code>close()</code> và giúp quản lý tài nguyên an toàn hơn.
+                    </div>
+                </div>
                 <div class="code-block">
                     <div class="code-header">
                         <span class="code-lang python">Python</span>
