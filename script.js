@@ -27,7 +27,11 @@ document.querySelectorAll(".nav-item[href]").forEach((link) => {
   link.addEventListener("click", (e) => {
     e.preventDefault();
     const el = document.getElementById(link.getAttribute("href").slice(1));
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Update active nav item after scroll completes
+      setTimeout(updateActiveNavItem, 500);
+    }
   });
 });
 
