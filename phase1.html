@@ -1481,6 +1481,157 @@ tc1.<span class="fn">mark_pass</span>(<span class="num">1.5</span>)
         <span class="fn">print</span>(<span class="str">f"Suite: <span class="dec">{self.name}</span> — <span class="dec">{passed}</span>/<span class="dec">{total}</span> passed"</span>)</pre>
                 </div>
             </div>
+            <!-- THEORY BLOCK 2: self là gì -->
+            <div class="theory-section">
+                <div class="section-label">self là gì — giải thích thật đơn giản</div>
+                <p>Đây là câu hỏi mà hầu hết người mới đều thắc mắc. Python không tự biết method đang chạy cho
+                    <em>object nào</em> — nên bạn phải truyền object đó vào thủ công. Tên <code>self</code> chỉ là quy
+                    ước, bạn đặt tên khác cũng được (nhưng đừng làm vậy).
+                </p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang python">Python</span>
+                        <span class="code-filename">self_explained.py</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><span class="cmt"># Khi bạn gọi:</span>
+tc1.<span class="fn">mark_pass</span>(<span class="num">1.5</span>)
+
+<span class="cmt"># Python ngầm dịch thành:</span>
+<span class="cls">TestCase</span>.<span class="fn">mark_pass</span>(tc1, <span class="num">1.5</span>)
+<span class="cmt"># → self chính là tc1 bên trong method!</span>
+
+<span class="cmt"># Nếu không có self, method không biết</span>
+<span class="cmt"># đang chỉnh status của tc1 hay tc2:</span>
+tc1 = <span class="cls">TestCase</span>(<span class="str">"TC001"</span>, <span class="str">"Login"</span>, <span class="str">"auth"</span>)
+tc2 = <span class="cls">TestCase</span>(<span class="str">"TC002"</span>, <span class="str">"Logout"</span>, <span class="str">"auth"</span>)
+
+tc1.<span class="fn">mark_pass</span>()   <span class="cmt"># self = tc1  → chỉ tc1.status đổi</span>
+tc2.<span class="fn">mark_fail</span>()   <span class="cmt"># self = tc2  → chỉ tc2.status đổi</span>
+
+<span class="fn">print</span>(tc1.status)  <span class="cmt"># PASS</span>
+<span class="fn">print</span>(tc2.status)  <span class="cmt"># FAIL</span></pre>
+                </div>
+                <div class="tip-box info">
+                    <span class="tip-icon">💡</span>
+                    <div class="tip-content"><strong>Quy tắc nhớ:</strong> Mỗi method muốn truy cập data của chính
+                        object đó thì phải có <code>self</code> làm tham số đầu tiên. Không có <code>self</code> →
+                        method không biết mình đang làm việc với object nào.</div>
+                </div>
+            </div>
+
+            <!-- THEORY BLOCK 3: Class attribute vs Instance attribute -->
+            <div class="theory-section">
+                <div class="section-label">Class attribute vs Instance attribute</div>
+                <p>Hai loại attribute này hoạt động rất khác nhau — nhầm lẫn chỗ này sẽ gây bug khó tìm. <strong>Class
+                        attribute</strong> được chia sẻ chung cho tất cả object. <strong>Instance attribute</strong>
+                    thuộc riêng từng object, khai báo bên trong <code>__init__</code> qua <code>self</code>.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang python">Python</span>
+                        <span class="code-filename">class_vs_instance_attr.py</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><span class="kw">class</span> <span class="cls">TestCase</span>:
+    <span class="cmt"># Class attribute — dùng chung, khai báo ngoài __init__</span>
+    category = <span class="str">"functional"</span>
+    count    = <span class="num">0</span>   <span class="cmt"># đếm tổng số TC đã tạo</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="self">self</span>, tc_id, name):
+        <span class="cmt"># Instance attribute — riêng của từng object</span>
+        <span class="self">self</span>.tc_id  = tc_id
+        <span class="self">self</span>.name   = name
+        <span class="self">self</span>.status = <span class="str">"PENDING"</span>
+        <span class="cls">TestCase</span>.count += <span class="num">1</span>   <span class="cmt"># tăng bộ đếm chung</span>
+
+
+tc1 = <span class="cls">TestCase</span>(<span class="str">"TC001"</span>, <span class="str">"Login"</span>)
+tc2 = <span class="cls">TestCase</span>(<span class="str">"TC002"</span>, <span class="str">"Logout"</span>)
+
+<span class="cmt"># Class attribute — truy cập qua tên class hoặc object</span>
+<span class="fn">print</span>(<span class="cls">TestCase</span>.category)   <span class="cmt"># functional</span>
+<span class="fn">print</span>(tc1.category)        <span class="cmt"># functional (kế thừa từ class)</span>
+<span class="fn">print</span>(<span class="cls">TestCase</span>.count)      <span class="cmt"># 2  (tc1 + tc2)</span>
+
+<span class="cmt"># Instance attribute — riêng từng object</span>
+<span class="fn">print</span>(tc1.tc_id)            <span class="cmt"># TC001</span>
+<span class="fn">print</span>(tc2.tc_id)            <span class="cmt"># TC002</span>
+
+<span class="cmt"># ⚠️ Cẩn thận: gán qua object tạo instance attr mới,</span>
+<span class="cmt">#    không đổi class attr!</span>
+tc1.category = <span class="str">"regression"</span>   <span class="cmt"># tạo instance attr riêng cho tc1</span>
+<span class="fn">print</span>(tc1.category)            <span class="cmt"># regression (instance attr)</span>
+<span class="fn">print</span>(tc2.category)            <span class="cmt"># functional  (class attr gốc)</span>
+<span class="fn">print</span>(<span class="cls">TestCase</span>.category)      <span class="cmt"># functional  (không đổi)</span></pre>
+                </div>
+                <div class="tip-box warning">
+                    <span class="tip-icon">⚠️</span>
+                    <div class="tip-content"><strong>Dễ nhầm:</strong> Nếu class attribute là <strong>mutable</strong>
+                        (list, dict), tất cả object dùng chung <em>cùng một object</em> đó. Thay đổi từ một object → ảnh
+                        hưởng hết. Luôn khai báo list/dict mặc định bên trong <code>__init__</code> qua
+                        <code>self</code> để tránh lỗi này.
+                    </div>
+                </div>
+            </div>
+
+            <!-- THEORY BLOCK 4: Khi nào dùng kế thừa -->
+            <div class="theory-section">
+                <div class="section-label">Kế thừa — is-a hay has-a?</div>
+                <p>Kế thừa chỉ hợp lý khi có quan hệ <strong>"is-a"</strong> (là một loại của). Dùng sai sẽ khiến code
+                    khó hiểu và khó sửa. Kiểm tra nhanh: đọc câu <em>"A là một B"</em> — nếu câu đó nghe tự nhiên thì kế
+                    thừa đúng, nếu nghe gượng thì dùng composition (has-a) thay vào.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang python">Python</span>
+                        <span class="code-filename">inheritance_vs_composition.py</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><span class="cmt"># ✅ is-a → dùng kế thừa hợp lý</span>
+<span class="cmt"># "AutomatedTestCase là một loại TestCase" → đúng</span>
+<span class="kw">class</span> <span class="cls">AutomatedTestCase</span>(<span class="cls">TestCase</span>):
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="self">self</span>, tc_id, name, script_path):
+        <span class="fn">super</span>().<span class="fn">__init__</span>(tc_id, name)
+        <span class="self">self</span>.script_path = script_path
+
+    <span class="kw">def</span> <span class="fn">run</span>(<span class="self">self</span>):
+        <span class="fn">print</span>(<span class="str">f"Chạy script: <span class="dec">{self.script_path}</span>"</span>)
+        <span class="self">self</span>.<span class="fn">mark_pass</span>()   <span class="cmt"># dùng method kế thừa từ TestCase</span>
+
+
+<span class="cmt"># ❌ has-a → KHÔNG nên kế thừa</span>
+<span class="cmt"># "TestSuite là một loại TestCase" → nghe sai!</span>
+<span class="cmt"># TestSuite CHỨA nhiều TestCase → dùng composition</span>
+<span class="kw">class</span> <span class="cls">TestSuite</span>:   <span class="cmt"># không kế thừa TestCase</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="self">self</span>, name):
+        <span class="self">self</span>.name       = name
+        <span class="self">self</span>.test_cases = []   <span class="cmt"># has-a: chứa list TestCase</span>
+
+    <span class="kw">def</span> <span class="fn">add</span>(<span class="self">self</span>, tc: <span class="cls">TestCase</span>):
+        <span class="self">self</span>.test_cases.<span class="fn">append</span>(tc)
+
+    <span class="kw">def</span> <span class="fn">report</span>(<span class="self">self</span>):
+        total  = <span class="fn">len</span>(<span class="self">self</span>.test_cases)
+        passed = <span class="fn">sum</span>(<span class="num">1</span> <span class="kw">for</span> t <span class="kw">in</span> <span class="self">self</span>.test_cases <span class="kw">if</span> t.status == <span class="str">"PASS"</span>)
+        <span class="fn">print</span>(<span class="str">f"[<span class="dec">{self.name}</span>] <span class="dec">{passed}</span>/<span class="dec">{total}</span> passed"</span>)
+
+
+<span class="cmt"># Kết hợp: tạo suite, thêm các TC vào</span>
+suite = <span class="cls">TestSuite</span>(<span class="str">"Smoke Test"</span>)
+tc_auto = <span class="cls">AutomatedTestCase</span>(<span class="str">"TC001"</span>, <span class="str">"Login"</span>, <span class="str">"tests/login.py"</span>)
+tc_auto.<span class="fn">run</span>()
+suite.<span class="fn">add</span>(tc_auto)
+suite.<span class="fn">report</span>()   <span class="cmt"># [Smoke Test] 1/1 passed</span></pre>
+                </div>
+                <div class="tip-box info">
+                    <span class="tip-icon">💡</span>
+                    <div class="tip-content"><strong>Liên hệ POM:</strong> Trong Page Object Model sau này, mỗi page sẽ
+                        kế thừa từ một <code>BasePage</code> (vì "LoginPage <em>là một loại</em> BasePage").
+                        <code>BasePage</code> chứa các method dùng chung như <code>find_element()</code>,
+                        <code>click()</code>. Đây chính là is-a thực tế trong automation.
+                    </div>
+                </div>
+            </div>
+
             <div class="theory-section">
                 <div class="section-label">Bài tập thực hành</div>
                 <div class="exercises">
@@ -1513,6 +1664,22 @@ tc1.<span class="fn">mark_pass</span>(<span class="num">1.5</span>)
                                     <code>report()</code> in tổng kết,
                                     <code>export_json(path)</code> ghi
                                     kết quả ra file.
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ex-15" onchange="onCheck(this)">
+                        <label for="ex-15" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Class BugReport thực tế</div>
+                                <div class="ex-desc">Tạo class <code>BugReport</code> với <code>bug_id</code>,
+                                    <code>title</code>, <code>severity</code> (Low/Medium/High/Critical),
+                                    <code>status</code> (Open). Thêm method <code>escalate()</code> tự động tăng
+                                    severity lên một bậc, <code>resolve()</code> đổi status thành Closed, và
+                                    <code>to_dict()</code> trả về dict để export JSON. Tạo class attribute
+                                    <code>valid_severities</code> là list các mức hợp lệ.
                                 </div>
                             </div>
                         </label>
