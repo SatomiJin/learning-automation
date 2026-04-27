@@ -785,6 +785,93 @@ jobs:
                         </div>
                     </div>
 
+                    <div class="topic-card">
+                        <div class="topic-header" onclick="toggleTopic(this)">
+                            <div class="topic-icon">🔐</div>
+                            <div class="topic-meta">
+                                <div class="topic-name">Authentication State Reuse</div>
+                                <div class="topic-desc">storage_state · login một lần · tái sử dụng session an toàn</div>
+                            </div>
+                            <div class="topic-toggle">▼</div>
+                            <span class="note-dot" id="note-dot-auth-state"></span>
+                        </div>
+                        <div class="topic-body">
+                            <div class="theory-section">
+                                <div class="section-label">Kiến thức quan trọng</div>
+                                <p>Trong dự án thật, việc login qua UI ở mọi test rất chậm và dễ tạo flaky. Kỹ thuật nên học sớm là <strong>login một lần, lưu auth state, rồi dùng lại cho các test đã xác thực</strong>.</p>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span class="code-lang python">Python</span>
+                                        <span class="code-filename">conftest.py</span>
+                                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                                    </div>
+                                    <pre><span class="imp">import</span> pytest
+<span class="imp">from</span> pathlib <span class="imp">import</span> Path
+
+AUTH_STATE = <span class="cls">Path</span>(<span class="str">".auth/user.json"</span>)
+
+<span class="dec">@pytest.fixture(scope="session")</span>
+<span class="kw">def</span> <span class="fn">auth_state</span>(browser):
+    AUTH_STATE.parent.<span class="fn">mkdir</span>(exist_ok=<span class="kw">True</span>)
+    context = browser.<span class="fn">new_context</span>()
+    page = context.<span class="fn">new_page</span>()
+
+    page.<span class="fn">goto</span>(<span class="str">"https://www.saucedemo.com"</span>)
+    page.locator(<span class="str">"#user-name"</span>).<span class="fn">fill</span>(<span class="str">"standard_user"</span>)
+    page.locator(<span class="str">"#password"</span>).<span class="fn">fill</span>(<span class="str">"secret_sauce"</span>)
+    page.locator(<span class="str">"#login-button"</span>).<span class="fn">click</span>()
+
+    context.<span class="fn">storage_state</span>(path=<span class="fn">str</span>(AUTH_STATE))
+    context.<span class="fn">close</span>()
+    <span class="kw">return</span> AUTH_STATE
+
+<span class="dec">@pytest.fixture</span>
+<span class="kw">def</span> <span class="fn">authenticated_page</span>(browser, auth_state):
+    context = browser.<span class="fn">new_context</span>(storage_state=<span class="fn">str</span>(auth_state))
+    page = context.<span class="fn">new_page</span>()
+    <span class="kw">yield</span> page
+    context.<span class="fn">close</span>()</pre>
+                                </div>
+                                <div class="tip-box info">
+                                    <span class="tip-icon">💡</span>
+                                    <div class="tip-content"><strong>Khi nào nên dùng:</strong> các flow sau đăng nhập như cart, checkout, account settings, admin dashboard. Test login riêng vẫn nên giữ để verify auth flow thật.</div>
+                                </div>
+                                <div class="tip-box warning">
+                                    <span class="tip-icon">⚠️</span>
+                                    <div class="tip-content"><strong>Lưu ý:</strong> mỗi role nên có state riêng, state cũ có thể hết hạn, và test nào thay đổi permission/session mạnh thì không nên dùng chung state mù quáng.</div>
+                                </div>
+                            </div>
+                            <div class="theory-section">
+                                <div class="section-label">Bài tập thực hành</div>
+                                <div class="exercises">
+                                    <div class="ex-item">
+                                        <input type="checkbox" class="ex-check" id="ex-auth-state-1"
+                                            onchange="onCheck(this)">
+                                        <label for="ex-auth-state-1" style="display:contents;cursor:pointer">
+                                            <div class="ex-text">
+                                                <div class="ex-title">Tạo file auth state từ login UI</div>
+                                                <div class="ex-desc">Viết fixture session login một lần và lưu
+                                                    <code>.auth/user.json</code>. Dùng lại file này cho 2 test đã xác
+                                                    thực.</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="ex-item">
+                                        <input type="checkbox" class="ex-check" id="ex-auth-state-2"
+                                            onchange="onCheck(this)">
+                                        <label for="ex-auth-state-2" style="display:contents;cursor:pointer">
+                                            <div class="ex-text">
+                                                <div class="ex-title">Tách role state riêng</div>
+                                                <div class="ex-desc">Tạo ít nhất 2 state file: một cho standard user,
+                                                    một cho admin hoặc manager. So sánh test nào nên dùng state nào.</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- WEEK 12 -->
                     <div class="week-block" id="p3-w12">
                         <div class="week-label">Tuần 12 · Best Practices & Code Quality</div>

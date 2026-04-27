@@ -309,6 +309,77 @@ page.locator(<span class="str">".product-name"</span>).<span class="fn">last</sp
                     </div>
                 </div>
 
+                <div class="topic-card">
+                    <div class="topic-header" onclick="toggleTopic(this)">
+                        <div class="topic-icon">🎯</div>
+                        <div class="topic-meta">
+                            <div class="topic-name">Locator Contract — get_by_role, get_by_label, data-testid</div>
+                            <div class="topic-desc">selector bền vững · accessibility-first · phối hợp với dev</div>
+                        </div>
+                        <div class="topic-toggle">▼</div>
+                        <span class="note-dot" id="note-dot-locator-contract"></span>
+                    </div>
+                    <div class="topic-body">
+                        <div class="theory-section">
+                            <div class="section-label">Kiến thức quan trọng</div>
+                            <p>Biết nhiều selector chưa chắc giúp test bền. Điều quan trọng hơn là thống nhất <strong>selector contract</strong>: khi nào ưu tiên <code>get_by_role()</code>, khi nào dùng <code>get_by_label()</code>, và khi nào nên yêu cầu dev thêm <code>data-testid</code>.</p>
+
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-lang python">Python</span>
+                                    <span class="code-filename">locator_contract.py</span>
+                                    <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><span class="cmt">## Ưu tiên 1: role + accessible name</span>
+page.<span class="fn">get_by_role</span>(<span class="str">"button"</span>, name=<span class="str">"Login"</span>)
+
+<span class="cmt">## Ưu tiên 2: label cho form fields</span>
+page.<span class="fn">get_by_label</span>(<span class="str">"Username"</span>)
+
+<span class="cmt">## Ưu tiên 3: data-testid khi text/UI dễ đổi</span>
+page.<span class="fn">get_by_test_id</span>(<span class="str">"checkout-submit"</span>)
+
+<span class="cmt">## Chỉ fallback về CSS khi không còn cách ổn hơn</span>
+page.locator(<span class="str">".login-form button.submit"</span>)</pre>
+                            </div>
+
+                            <div class="tip-box success">
+                                <span class="tip-icon">✅</span>
+                                <div class="tip-content"><strong>Quy tắc team nên nhớ:</strong> selector phục vụ automation là một phần của UI contract. Nếu text thay đổi thường xuyên, component sinh động hoặc có nhiều nút giống nhau, hãy xin <code>data-testid</code> thay vì bám vào CSS dễ gãy.</div>
+                            </div>
+
+                            <div class="tip-box danger">
+                                <span class="tip-icon">❌</span>
+                                <div class="tip-content">Tránh XPath dài, selector theo vị trí như <code>div:nth-child(3)</code>, hoặc locator theo text quá chung như <code>"Save"</code> khi trên trang có nhiều nút giống nhau.</div>
+                            </div>
+                        </div>
+
+                        <div class="theory-section">
+                            <div class="section-label">Bài tập thực hành</div>
+                            <div class="exercises">
+                                <div class="ex-item">
+                                    <input type="checkbox" class="ex-check" id="ex-locator-contract-1" onchange="onCheck(this)">
+                                    <label for="ex-locator-contract-1" style="display:contents;cursor:pointer">
+                                        <div class="ex-text">
+                                            <div class="ex-title">Refactor 3 selector yếu</div>
+                                            <div class="ex-desc">Chọn 3 selector kiểu CSS/XPath dễ vỡ rồi viết lại bằng <code>get_by_role()</code>, <code>get_by_label()</code> hoặc <code>get_by_test_id()</code>.</div>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="ex-item">
+                                    <input type="checkbox" class="ex-check" id="ex-locator-contract-2" onchange="onCheck(this)">
+                                    <label for="ex-locator-contract-2" style="display:contents;cursor:pointer">
+                                        <div class="ex-text">
+                                            <div class="ex-title">Lập selector contract cho 1 form</div>
+                                            <div class="ex-desc">Chọn một màn hình có form, ghi rõ field nào dùng label được, field nào nên xin <code>data-testid</code>, và giải thích lý do.</div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- WEEK 6 -->
                 <div class="week-block" id="p2-w6">
                     <div class="week-label">Tuần 6 · Actions &

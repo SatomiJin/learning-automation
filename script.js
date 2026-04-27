@@ -1,3 +1,152 @@
+const TRACKS = {
+  python: {
+    pageTitle: "Lộ Trình Automation Test — Playwright & Python",
+    sidebarSub: "Playwright + Python · 4 tháng",
+    heroBadge: "📚 Study Guide · Python",
+    heroTitle: "Lộ Trình <span>Automation Test</span><br>Playwright + Python",
+    heroDesc:
+      "Dành cho QC chưa biết Python. Từ cú pháp cơ bản đến framework hoàn chỉnh sẵn sàng apply vị trí Automation Tester.",
+    stats: { months: 4, weeks: 16, milestones: 4 },
+    phases: [
+      { id: "phase1-placeholder", file: "phase1.html" },
+      { id: "phase2-placeholder", file: "phase2.html" },
+      { id: "phase3-placeholder", file: "phase3.html" },
+      { id: "phase4-placeholder", file: "phase4.html" },
+    ],
+    navTitles: {
+      p1: "Phase 1 — Python",
+      p2: "Phase 2 — Playwright",
+      p3: "Phase 3 — Advanced",
+      p4: "Phase 4 — Enterprise UI",
+    },
+    navLabels: {
+      "p1-w1": "Tuần 1 · Syntax & Types",
+      "p1-w2": "Tuần 2 · Collections",
+      "p1-w3": "Tuần 3 · File & Exceptions",
+      "p1-w4": "Tuần 4 · OOP",
+      "p1-milestone": "Bài tập lớn Phase 1",
+      "p2-w5": "Tuần 5 · Setup & Locators",
+      "p2-w6": "Tuần 6 · Actions & Assertions",
+      "p2-w7": "Tuần 7 · Waits & Network",
+      "p2-w8": "Tuần 8 · pytest",
+      "p2-milestone": "Bài tập lớn Phase 2",
+      "p3-w9": "Tuần 9 · POM",
+      "p3-w10": "Tuần 10 · Reporting",
+      "p3-w11": "Tuần 11 · API & CI/CD",
+      "p3-w12": "Tuần 12 · Best Practices",
+      "p3-milestone": "Capstone Project",
+      "p4-w13": "Tuần 13 · Angular DOM",
+      "p4-w14": "Tuần 14 · AntD & Material",
+      "p4-w15": "Tuần 15 · Table & Overlay",
+      "p4-w16": "Tuần 16 · Debug & Contracts",
+      "p4-milestone": "Enterprise Challenge",
+    },
+  },
+  typescript: {
+    pageTitle: "Lộ Trình Automation Test — Playwright & TypeScript",
+    sidebarSub: "Playwright + TypeScript · 4 tháng",
+    heroBadge: "📚 Study Guide · TypeScript",
+    heroTitle:
+      "Lộ Trình <span>Automation Test</span><br>Playwright + TypeScript",
+    heroDesc:
+      "Dành cho QC muốn đi theo hệ JavaScript/TypeScript. Từ type system cơ bản đến Playwright Test production-ready.",
+    stats: { months: 4, weeks: 16, milestones: 4 },
+    phases: [
+      { id: "phase1-placeholder", file: "ts-phase1.html" },
+      { id: "phase2-placeholder", file: "ts-phase2.html" },
+      { id: "phase3-placeholder", file: "ts-phase3.html" },
+      { id: "phase4-placeholder", file: "ts-phase4.html" },
+    ],
+    navTitles: {
+      p1: "Phase 1 — TypeScript",
+      p2: "Phase 2 — Playwright + TS",
+      p3: "Phase 3 — Advanced",
+      p4: "Phase 4 — Enterprise UI",
+    },
+    navLabels: {
+      "p1-w1": "Tuần 1 · Setup & Types",
+      "p1-w2": "Tuần 2 · Functions & Objects",
+      "p1-w3": "Tuần 3 · Async & Modules",
+      "p1-w4": "Tuần 4 · Classes & DOM",
+      "p1-milestone": "Bài tập lớn Phase 1",
+      "p2-w5": "Tuần 5 · Setup & Locators",
+      "p2-w6": "Tuần 6 · Actions & Assertions",
+      "p2-w7": "Tuần 7 · Waits & Network",
+      "p2-w8": "Tuần 8 · Playwright Test",
+      "p2-milestone": "Bài tập lớn Phase 2",
+      "p3-w9": "Tuần 9 · POM",
+      "p3-w10": "Tuần 10 · Reporting",
+      "p3-w11": "Tuần 11 · API & CI/CD",
+      "p3-w12": "Tuần 12 · Best Practices",
+      "p3-milestone": "Capstone Project",
+      "p4-w13": "Tuần 13 · Angular DOM",
+      "p4-w14": "Tuần 14 · AntD & Material",
+      "p4-w15": "Tuần 15 · Table & Overlay",
+      "p4-w16": "Tuần 16 · Debug & Contracts",
+      "p4-milestone": "Enterprise Challenge",
+    },
+  },
+};
+
+const TRACK_STORAGE_KEY = "aqc_learning_track_v1";
+let currentTrack = loadTrackPreference();
+
+function loadTrackPreference() {
+  const saved = localStorage.getItem(TRACK_STORAGE_KEY);
+  return saved && TRACKS[saved] ? saved : "python";
+}
+
+function saveTrackPreference(track) {
+  localStorage.setItem(TRACK_STORAGE_KEY, track);
+}
+
+function getNotesStorageKey() {
+  return `aqc_notes_${currentTrack}_v2`;
+}
+
+function getProgressStorageKey() {
+  return `aqc_progress_${currentTrack}_v2`;
+}
+
+function renderTrackUi() {
+  const track = TRACKS[currentTrack];
+  document.title = track.pageTitle;
+
+  const sidebarSub = document.getElementById("sidebarSub");
+  const heroBadge = document.getElementById("heroBadge");
+  const heroTitle = document.getElementById("heroTitle");
+  const heroDesc = document.getElementById("heroDesc");
+  const heroMonths = document.getElementById("heroMonths");
+  const heroWeeks = document.getElementById("heroWeeks");
+  const heroMilestones = document.getElementById("heroMilestones");
+
+  if (sidebarSub) sidebarSub.textContent = track.sidebarSub;
+  if (heroBadge) heroBadge.textContent = track.heroBadge;
+  if (heroTitle) heroTitle.innerHTML = track.heroTitle;
+  if (heroDesc) heroDesc.textContent = track.heroDesc;
+  if (heroMonths) heroMonths.textContent = String(track.stats.months);
+  if (heroWeeks) heroWeeks.textContent = String(track.stats.weeks);
+  if (heroMilestones) heroMilestones.textContent = String(track.stats.milestones);
+
+  ["python", "typescript"].forEach((name) => {
+    const btn = document.getElementById(`track-${name}`);
+    if (!btn) return;
+    const isActive = name === currentTrack;
+    btn.classList.toggle("active", isActive);
+    btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
+
+  ["p1", "p2", "p3", "p4"].forEach((phaseId) => {
+    const titleEl = document.getElementById(`nav-title-${phaseId}`);
+    if (titleEl) titleEl.textContent = track.navTitles[phaseId];
+  });
+
+  Object.entries(track.navLabels).forEach(([id, label]) => {
+    const labelEl = document.getElementById(`nav-label-${id}`);
+    if (labelEl) labelEl.textContent = label;
+  });
+}
+
 /* ══════════════════════════════════════
    1. TOPIC ACCORDION
 ══════════════════════════════════════ */
@@ -77,7 +226,7 @@ function updateActiveNavItem() {
 
   // Remove active classes from all nav items
   navItems.forEach((item) => {
-    item.classList.remove("active", "p2-active", "p3-active");
+    item.classList.remove("active", "p2-active", "p3-active", "p4-active");
   });
 
   // Add appropriate active class to current section's nav item
@@ -89,6 +238,8 @@ function updateActiveNavItem() {
       currentSection.classList.add("p2-active");
     } else if (sectionId.startsWith("p3-")) {
       currentSection.classList.add("p3-active");
+    } else if (sectionId.startsWith("p4-")) {
+      currentSection.classList.add("p4-active");
     }
   }
 }
@@ -263,23 +414,25 @@ function escHtml(s) {
 /* ══════════════════════════════════════
    7. NOTES SYSTEM
 ══════════════════════════════════════ */
-const NOTES_KEY = "aqc_notes_v1";
-
 function loadNotes() {
   try {
-    return JSON.parse(localStorage.getItem(NOTES_KEY)) || {};
+    return JSON.parse(localStorage.getItem(getNotesStorageKey())) || {};
   } catch {
     return {};
   }
 }
 function saveNotes(notes) {
-  localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+  localStorage.setItem(getNotesStorageKey(), JSON.stringify(notes));
+}
+
+function getNoteKeyFromTextarea(ta) {
+  return ta?.dataset.noteKey || ta?.id.replace("note-text-", "");
 }
 
 function initNotes() {
   const notes = loadNotes();
-  document.querySelectorAll('[id^="note-text-"]').forEach((ta) => {
-    const tid = ta.id.replace("note-text-", "");
+  document.querySelectorAll(".note-textarea").forEach((ta) => {
+    const tid = getNoteKeyFromTextarea(ta);
     const saved = notes[tid] || "";
     ta.value = saved;
     updateNoteDot(tid, saved);
@@ -297,7 +450,7 @@ function toggleNote(tid) {
 }
 
 function handleNoteInput(ta) {
-  const tid = ta.id.replace("note-text-", "");
+  const tid = getNoteKeyFromTextarea(ta);
   autoSaveNote(tid);
 }
 
@@ -337,7 +490,6 @@ function clearNote(tid) {
 }
 
 function updateNoteDot(tid, val) {
-  // Find dot: it's in same topic-card as the note-area
   const area = document.getElementById(`note-area-${tid}`);
   if (!area) return;
   const card = area.closest(".topic-card");
@@ -357,31 +509,41 @@ function updateNoteBtn(tid, val) {
 /* ══════════════════════════════════════
    8. CHECKBOX + PROGRESS SYSTEM
 ══════════════════════════════════════ */
-const STORE_KEY = "aqc_progress_v1";
-
 function loadState() {
   try {
-    return JSON.parse(localStorage.getItem(STORE_KEY)) || {};
+    return JSON.parse(localStorage.getItem(getProgressStorageKey())) || {};
   } catch {
     return {};
   }
 }
 function saveState(state) {
-  localStorage.setItem(STORE_KEY, JSON.stringify(state));
+  localStorage.setItem(getProgressStorageKey(), JSON.stringify(state));
+}
+
+function getProgressKey(cb) {
+  return cb.dataset.progressKey || cb.id;
 }
 
 function initCheckboxes() {
   const state = loadState();
   document.querySelectorAll(".ex-check").forEach((cb) => {
-    if (state[cb.id]) {
+    const key = getProgressKey(cb);
+    if (state[key]) {
       cb.checked = true;
       cb.closest(".ex-item").classList.add("done");
+    } else {
+      cb.checked = false;
+      cb.closest(".ex-item").classList.remove("done");
     }
   });
   document.querySelectorAll(".milestone-check").forEach((cb) => {
-    if (state[cb.id]) {
+    const key = getProgressKey(cb);
+    if (state[key]) {
       cb.checked = true;
       cb.closest("li").classList.add("done");
+    } else {
+      cb.checked = false;
+      cb.closest("li").classList.remove("done");
     }
   });
   updateAllProgress();
@@ -389,7 +551,7 @@ function initCheckboxes() {
 
 function onCheck(cb) {
   const state = loadState();
-  state[cb.id] = cb.checked;
+  state[getProgressKey(cb)] = cb.checked;
   saveState(state);
   cb.closest(".ex-item").classList.toggle("done", cb.checked);
   updateAllProgress();
@@ -399,7 +561,7 @@ function toggleMilestone(li) {
   const cb = li.querySelector(".milestone-check");
   cb.checked = !cb.checked;
   const state = loadState();
-  state[cb.id] = cb.checked;
+  state[getProgressKey(cb)] = cb.checked;
   saveState(state);
   li.classList.toggle("done", cb.checked);
   updateAllProgress();
@@ -442,7 +604,8 @@ function calcPhaseProgress(phaseNum) {
 function updateAllProgress() {
   let totalDone = 0,
     totalAll = 0;
-  [1, 2, 3].forEach((p) => {
+  const phaseNumbers = TRACKS[currentTrack].phases.map((_, index) => index + 1);
+  phaseNumbers.forEach((p) => {
     const { done, total } = calcPhaseProgress(p);
     totalDone += done;
     totalAll += total;
@@ -489,9 +652,102 @@ function updateAllProgress() {
   });
 }
 
+function normalizeExerciseIds() {
+  document.querySelectorAll(".ex-item").forEach((item, index) => {
+    const cb = item.querySelector(".ex-check");
+    if (!cb) return;
+
+    const oldId = cb.id || `ex-${index + 1}`;
+    const weekId =
+      cb.closest(".week-block")?.id ||
+      cb.closest(".milestone-card")?.id ||
+      `track-${currentTrack}`;
+    const newId = `${currentTrack}-${weekId}-exercise-${index + 1}`;
+
+    cb.id = newId;
+    cb.dataset.progressKey = newId;
+
+    const label = item.querySelector(`label[for="${oldId}"]`);
+    if (label) label.setAttribute("for", newId);
+  });
+
+  document.querySelectorAll(".milestone-check").forEach((cb, index) => {
+    const phaseId =
+      cb.closest(".milestone-card")?.id ||
+      cb.closest("[data-phase]")?.dataset.phase ||
+      "milestone";
+    const newId = `${currentTrack}-${phaseId}-milestone-${index + 1}`;
+    cb.id = newId;
+    cb.dataset.progressKey = newId;
+  });
+}
+
+function normalizeNoteIds() {
+  document.querySelectorAll(".note-area").forEach((area, index) => {
+    const uniqueKey = `${currentTrack}-note-${index + 1}`;
+    const textarea = area.querySelector(".note-textarea");
+    const savedMsg = area.querySelector(".note-saved-msg");
+    const clearBtn = area.querySelector(".note-clear-btn");
+    const toggleBtn =
+      area.parentElement?.querySelector(".note-toggle-btn") || null;
+    const dot = area.closest(".topic-card")?.querySelector(".note-dot");
+
+    area.id = `note-area-${uniqueKey}`;
+
+    if (textarea) {
+      textarea.id = `note-text-${uniqueKey}`;
+      textarea.dataset.noteKey = uniqueKey;
+      textarea.setAttribute("oninput", "handleNoteInput(this)");
+    }
+
+    if (savedMsg) savedMsg.id = `note-saved-${uniqueKey}`;
+    if (clearBtn) clearBtn.setAttribute("onclick", `clearNote('${uniqueKey}')`);
+    if (toggleBtn) {
+      toggleBtn.id = `note-btn-${uniqueKey}`;
+      toggleBtn.setAttribute("onclick", `toggleNote('${uniqueKey}')`);
+    }
+    if (dot) dot.id = `note-dot-${uniqueKey}`;
+  });
+}
+
+function normalizeInteractiveElements() {
+  normalizeExerciseIds();
+  normalizeNoteIds();
+}
+
+function clearSearchState() {
+  const inp = document.getElementById("searchInput");
+  if (inp) inp.value = "";
+  const clearBtn = document.getElementById("clearBtn");
+  if (clearBtn) clearBtn.classList.remove("show");
+}
+
+function resetPhasePlaceholders() {
+  document.querySelectorAll(".phase-placeholder").forEach((placeholder) => {
+    placeholder.innerHTML = "";
+    placeholder.classList.remove("loaded");
+  });
+}
+
+function switchTrack(track) {
+  if (!TRACKS[track] || track === currentTrack) return;
+  currentTrack = track;
+  saveTrackPreference(track);
+  clearSearchState();
+
+  if (scrollContainer !== window) {
+    scrollContainer.scrollTop = 0;
+  } else {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  loadPhases();
+}
+
 /* ── Bootstrap ── */
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
+  renderTrackUi();
   loadPhases();
 });
 
@@ -499,11 +755,10 @@ document.addEventListener("DOMContentLoaded", () => {
    9. DYNAMIC PHASE LOADING
 ══════════════════════════════════════ */
 async function loadPhases() {
-  const phases = [
-    { id: "phase1-placeholder", file: "phase1.html" },
-    { id: "phase2-placeholder", file: "phase2.html" },
-    { id: "phase3-placeholder", file: "phase3.html" },
-  ];
+  renderTrackUi();
+  resetPhasePlaceholders();
+
+  const phases = TRACKS[currentTrack].phases;
 
   for (const phase of phases) {
     try {
@@ -531,11 +786,11 @@ async function loadPhases() {
     }
   }
 
-  // Khởi tạo checkbox và notes sau khi phase nội dung được tải xong
+  normalizeInteractiveElements();
   initCheckboxes();
   initNotes();
+  runSearch(document.getElementById("searchInput")?.value.trim() || "");
 
-  // Highlight the current section in sidebar và update progress bar sau khi nội dung được load
   setTimeout(() => {
     updateActiveNavItem();
     updateProgressBar();

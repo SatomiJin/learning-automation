@@ -247,6 +247,99 @@ retries = <span class="num">0</span>
         </div>
     </div>
 
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">🛡️</div>
+            <div class="topic-meta">
+                <div class="topic-name">Virtualenv, Type Hints & Code Quality Basics</div>
+                <div class="topic-desc">venv · pip freeze · typing · ruff · mypy · lệnh chuẩn</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot" id="note-dot-python-quality"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Kiến thức quan trọng</div>
+                <p>Khi học Python để làm automation, rất nhiều bạn chỉ tập trung viết code chạy được mà quên mất môi trường và chất lượng code. Trong dự án thật, <strong>virtualenv</strong>, <strong>type hints</strong> và các lệnh check như <code>ruff</code>, <code>mypy</code> giúp bạn tránh lỗi môi trường và lỗi logic từ rất sớm.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang bash">Bash</span>
+                        <span class="code-filename">setup-python-env</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><span class="cmt"># Tạo môi trường ảo riêng cho project</span>
+python -m venv .venv
+
+<span class="cmt"># Windows PowerShell</span>
+.venv\Scripts\Activate.ps1
+
+<span class="cmt"># Cài package</span>
+pip install -r requirements.txt
+
+<span class="cmt"># Chốt lại dependency hiện tại</span>
+pip freeze &gt; requirements.txt</pre>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang python">Python</span>
+                        <span class="code-filename">type_hints_example.py</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><span class="imp">from</span> typing <span class="imp">import</span> Literal
+
+<span class="kw">def</span> <span class="fn">calc_pass_rate</span>(passed: <span class="fn">int</span>, total: <span class="fn">int</span>) -> <span class="fn">float</span>:
+    <span class="kw">return</span> passed / total
+
+<span class="kw">def</span> <span class="fn">mark_status</span>(status: Literal[<span class="str">"passed"</span>, <span class="str">"failed"</span>, <span class="str">"blocked"</span>]) -> <span class="fn">str</span>:
+    <span class="kw">return</span> <span class="str">f"Current status: <span class="dec">{status}</span>"</span></pre>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang bash">Bash</span>
+                        <span class="code-filename">quality-check</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><span class="cmt"># Format + lint + type check</span>
+ruff check .
+mypy .
+pytest -v</pre>
+                </div>
+
+                <div class="tip-box warning">
+                    <span class="tip-icon">⚠️</span>
+                    <div class="tip-content"><strong>Điểm rất nên tập sớm:</strong> dù Python là dynamic, hãy dùng type hints cho function quan trọng như parser dữ liệu, helper API, page methods và utils. Điều này là “bản Python” tương đương với việc bật strict mode ở TypeScript.</div>
+                </div>
+            </div>
+
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ex-python-quality-1" onchange="onCheck(this)">
+                        <label for="ex-python-quality-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Tạo virtualenv và cài dependency</div>
+                                <div class="ex-desc">Tạo <code>.venv</code>, activate môi trường và cài package từ <code>requirements.txt</code>. Ghi chú lại sự khác nhau giữa cài global và cài trong virtualenv.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ex-python-quality-2" onchange="onCheck(this)">
+                        <label for="ex-python-quality-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Thêm type hints cho 3 function</div>
+                                <div class="ex-desc">Chọn 3 hàm nhỏ trong project học của bạn, thêm type hints cho input/output rồi chạy <code>mypy</code> để xem cảnh báo gì xuất hiện.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- WEEK 2 -->
     <div class="week-block" id="p1-w2">
         <div class="week-label">Tuần 2 · Collections & Functions</div>

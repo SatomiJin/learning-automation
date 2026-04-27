@@ -1,0 +1,371 @@
+<div class="phase-block p1" id="phase1" data-phase="1">
+    <div class="phase-tag p1">Phase 1 · Tuần 1–4</div>
+    <div class="phase-title">TypeScript Cơ Bản</div>
+    <div class="phase-subtitle">Từ JavaScript foundation đến type-safe automation mindset</div>
+    <div class="phase-progress-wrap p1" id="prog-phase1">
+        <div class="phase-progress-header">
+            <span class="phase-progress-title">Tiến độ Phase 1</span>
+            <span class="phase-progress-pct" style="color:var(--p1)" id="pct-phase1">0%</span>
+        </div>
+        <div class="phase-bar-track">
+            <div class="phase-bar-fill" id="bar-phase1"></div>
+        </div>
+        <div class="phase-progress-tasks" id="tasks-phase1">0 / 0 nhiệm vụ hoàn thành</div>
+    </div>
+
+    <div class="week-block" id="p1-w1">
+        <div class="week-label">Tuần 1 · Setup & Types</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🧩</div>
+                <div class="topic-meta">
+                    <div class="topic-name">TypeScript Setup, Primitive Types, Union Types</div>
+                    <div class="topic-desc">node · npm · tsconfig · string/number/boolean · union</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Lý thuyết</div>
+                    <p>TypeScript giúp bạn viết test code ít bug hơn nhờ kiểm tra kiểu dữ liệu ngay từ lúc code. Với QA học automation, đây là lợi thế lớn khi làm việc với API response, test data và Page Object.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang bash">Bash</span>
+                            <span class="code-filename">setup</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>npm init -y
+npm install -D typescript ts-node @types/node
+npx tsc --init</pre>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">TypeScript</span>
+                            <span class="code-filename">types.ts</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>type TestStatus = "passed" | "failed" | "blocked";
+
+const tcId: string = "TC-001";
+const retryCount: number = 2;
+const isCritical: boolean = true;
+
+function printSummary(id: string, status: TestStatus) {
+  console.log(`${id} => ${status}`);
+}</pre>
+                    </div>
+                    <div class="tip-box info">
+                        <span class="tip-icon">💡</span>
+                        <div class="tip-content"><strong>Union type</strong> rất hợp cho status, environment, browser name hay severity vì nó chặn ngay các giá trị sai.</div>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts-ex-1" onchange="onCheck(this)">
+                            <label for="ts-ex-1" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Setup dự án TypeScript đầu tiên</div>
+                                    <div class="ex-desc">Tạo <code>package.json</code>, <code>tsconfig.json</code> và chạy thử một file <code>.ts</code> bằng <code>ts-node</code>.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts-ex-2" onchange="onCheck(this)">
+                            <label for="ts-ex-2" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Mô hình hoá trạng thái test bằng union type</div>
+                                    <div class="ex-desc">Tạo type cho <code>passed</code>, <code>failed</code>, <code>blocked</code>, rồi viết function in summary cho test case.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="note-area">
+                            <textarea class="note-textarea" placeholder="Ghi chú của bạn về topic này..."></textarea>
+                            <div class="note-footer">
+                                <button class="note-clear-btn">Xoá ghi chú</button>
+                                <span class="note-saved-msg">✓ Đã lưu</span>
+                            </div>
+                        </div>
+                        <button class="note-toggle-btn">📝 Ghi chú</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">🛡️</div>
+            <div class="topic-meta">
+                <div class="topic-name">tsconfig Strict Mode & NPM Scripts</div>
+                <div class="topic-desc">strict typing · noImplicitAny · typecheck script · clean workflow</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Kiến thức quan trọng</div>
+                <p>Nếu học TypeScript để làm automation mà tắt <code>strict</code>, bạn sẽ mất đi nửa giá trị của ngôn ngữ này. Rất nhiều bug trong test data, API response hoặc helper function sẽ bị bỏ sót đến lúc runtime.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">JSON</span>
+                        <span class="code-filename">tsconfig.json</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "strict": true,
+    "noImplicitAny": true,
+    "noUncheckedIndexedAccess": true
+  }
+}</pre>
+                </div>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">JSON</span>
+                        <span class="code-filename">package.json</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>{
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed"
+  }
+}</pre>
+                </div>
+                <div class="tip-box warning">
+                    <span class="tip-icon">⚠️</span>
+                    <div class="tip-content"><strong>Dấu hiệu nên bật strict ngay:</strong> helper nhận object nhưng không rõ shape, API response bị truy cập sai field, hoặc test data thiếu key mà code vẫn compile.</div>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-strict-1" onchange="onCheck(this)">
+                        <label for="ts-ex-strict-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Bật strict mode và sửa compile errors</div>
+                                <div class="ex-desc">Tạo một file TS có vài biến chưa typed rõ ràng, bật <code>strict</code> rồi sửa cho compile pass.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-strict-2" onchange="onCheck(this)">
+                        <label for="ts-ex-strict-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Tạo scripts chuẩn cho dev workflow</div>
+                                <div class="ex-desc">Thêm các script <code>typecheck</code>, <code>test</code> và <code>test:headed</code> vào <code>package.json</code>, rồi chạy thử từng script.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="week-block" id="p1-w2">
+        <div class="week-label">Tuần 2 · Functions & Objects</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">📦</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Object Types, Interfaces, Arrays, Function Signatures</div>
+                    <div class="topic-desc">interface · optional fields · readonly · map/filter</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Lý thuyết</div>
+                    <p>Khi làm automation, bạn sẽ thường thao tác với object kiểu user, order, product, API response. TypeScript giúp định nghĩa trước cấu trúc của chúng bằng <code>interface</code>.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">TypeScript</span>
+                            <span class="code-filename">models.ts</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>interface LoginUser {
+  username: string;
+  password: string;
+  role?: "admin" | "standard";
+}
+
+const users: LoginUser[] = [
+  { username: "standard_user", password: "secret_sauce" },
+  { username: "admin_user", password: "secret_sauce", role: "admin" },
+];
+
+function getAdminUsers(items: LoginUser[]) {
+  return items.filter((user) => user.role === "admin");
+}</pre>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts-ex-3" onchange="onCheck(this)">
+                            <label for="ts-ex-3" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Tạo interface cho test user</div>
+                                    <div class="ex-desc">Định nghĩa object user, rồi viết hàm lọc ra các user có role admin.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts-ex-4" onchange="onCheck(this)">
+                            <label for="ts-ex-4" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Dùng map để tạo summary list</div>
+                                    <div class="ex-desc">Từ mảng test cases, tạo ra mảng string dạng <code>TC-001 - passed</code>.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="week-block" id="p1-w3">
+        <div class="week-label">Tuần 3 · Async & Modules</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">⏳</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Async/Await, Promise Flow, Import/Export</div>
+                    <div class="topic-desc">fetch data · await · reusable utilities</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Lý thuyết</div>
+                    <p>Playwright dùng bất đồng bộ rất nhiều. Nếu hiểu chắc <code>async/await</code> từ đầu, bạn sẽ đọc test flow và debug timing issue dễ hơn hẳn.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">TypeScript</span>
+                            <span class="code-filename">api.ts</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>export async function loadUsers() {
+  const response = await fetch("https://reqres.in/api/users?page=1");
+  const body = await response.json();
+  return body.data;
+}
+
+export async function printFirstUser() {
+  const users = await loadUsers();
+  console.log(users[0]);
+}</pre>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts-ex-5" onchange="onCheck(this)">
+                            <label for="ts-ex-5" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Tách code sang utility module</div>
+                                    <div class="ex-desc">Tạo file riêng chứa hàm load dữ liệu, rồi import vào file main để chạy thử.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts-ex-6" onchange="onCheck(this)">
+                            <label for="ts-ex-6" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Viết hàm async in API data</div>
+                                    <div class="ex-desc">Gọi một public API, parse JSON và in ra ít nhất 2 field có meaning.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="week-block" id="p1-w4">
+        <div class="week-label">Tuần 4 · Classes & DOM Thinking</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🏗️</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Classes, Encapsulation, DOM Basics for Testers</div>
+                    <div class="topic-desc">class syntax · constructor · querySelector mindset</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Lý thuyết</div>
+                    <p>Phase này chuẩn bị tư duy cho Page Object Model. Nếu bạn quen với <code>class</code>, method và DOM query, việc lên Playwright sẽ mượt hơn nhiều.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">TypeScript</span>
+                            <span class="code-filename">page-object.ts</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>class LoginWidget {
+  constructor(private rootSelector: string) {}
+
+  getSubmitSelector() {
+    return `${this.rootSelector} button[type="submit"]`;
+  }
+}
+
+const loginWidget = new LoginWidget("#login-form");
+console.log(loginWidget.getSubmitSelector());</pre>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts-ex-7" onchange="onCheck(this)">
+                            <label for="ts-ex-7" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Viết class cho login widget</div>
+                                    <div class="ex-desc">Tạo class lưu selector root và các method trả về selector cho username, password, submit button.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts-ex-8" onchange="onCheck(this)">
+                            <label for="ts-ex-8" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Phân tích DOM của trang login</div>
+                                    <div class="ex-desc">Mở DevTools và liệt kê 5 selector mà bạn sẽ cần nếu viết test cho login page.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="milestone-card p1" id="p1-milestone">
+    <div class="milestone-label">Bài Tập Lớn · Phase 1</div>
+    <div class="milestone-title">Mini Test Data Toolkit bằng TypeScript</div>
+    <div class="milestone-desc">Xây một CLI nhỏ đọc test data JSON, validate kiểu dữ liệu, lọc status và in summary gọn gàng.</div>
+    <ul class="checklist">
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts-ml-1" onclick="event.stopPropagation()"><span>Định nghĩa type cho test case và test suite</span></li>
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts-ml-2" onclick="event.stopPropagation()"><span>Đọc JSON data và validate field bắt buộc</span></li>
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts-ml-3" onclick="event.stopPropagation()"><span>Filter theo status, severity hoặc module</span></li>
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts-ml-4" onclick="event.stopPropagation()"><span>In báo cáo summary cho terminal</span></li>
+    </ul>
+</div>

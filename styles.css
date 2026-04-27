@@ -16,6 +16,9 @@
   --p3: #f5a623;
   --p3l: rgba(245, 166, 35, 0.1);
   --p3b: rgba(245, 166, 35, 0.22);
+  --p4: #38bdf8;
+  --p4l: rgba(56, 189, 248, 0.1);
+  --p4b: rgba(56, 189, 248, 0.22);
   --red: #f06e6e;
   --redl: rgba(240, 110, 110, 0.1);
   --code-bg: #0a0c12;
@@ -45,6 +48,9 @@ html.light {
   --p3: #c27d0e;
   --p3l: rgba(194, 125, 14, 0.18);
   --p3b: rgba(194, 125, 14, 0.2);
+  --p4: #0f88c8;
+  --p4l: rgba(15, 136, 200, 0.16);
+  --p4b: rgba(15, 136, 200, 0.2);
   --code-bg: #f0f2f8;
   --note-bg: rgba(194, 125, 14, 0.07);
   --note-border: rgba(194, 125, 14, 0.25);
@@ -190,6 +196,13 @@ body {
 .nav-item.p3-active .nav-dot {
   background: var(--p3);
 }
+.nav-item.p4-active {
+  background: var(--p4l);
+  color: var(--p4);
+}
+.nav-item.p4-active .nav-dot {
+  background: var(--p4);
+}
 
 /* MAIN */
 .main {
@@ -247,7 +260,41 @@ body {
   color: var(--text2);
   max-width: 580px;
   line-height: 1.7;
-  margin-bottom: 2rem;
+  margin-bottom: 1.1rem;
+}
+.track-switch {
+  display: inline-flex;
+  gap: 10px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 0.65rem;
+}
+.track-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text2);
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.18s ease;
+}
+.track-btn:hover {
+  color: var(--text);
+  border-color: var(--border2);
+}
+.track-btn.active {
+  background: var(--p1l);
+  border-color: var(--p1b);
+  color: var(--p1);
+}
+.track-hint {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 1.6rem;
 }
 .hero-stats {
   display: flex;
@@ -303,6 +350,11 @@ body {
   background: var(--p3l);
   color: var(--p3);
   border: 1px solid var(--p3b);
+}
+.phase-tag.p4 {
+  background: var(--p4l);
+  color: var(--p4);
+  border: 1px solid var(--p4b);
 }
 
 .phase-title {
@@ -398,6 +450,9 @@ body {
 }
 .p3 .topic-icon {
   background: var(--p3l);
+}
+.p4 .topic-icon {
+  background: var(--p4l);
 }
 
 .topic-meta {
@@ -626,6 +681,10 @@ code:not(pre code) {
   background: var(--p3l);
   color: var(--p3);
 }
+.p4 .ex-num {
+  background: var(--p4l);
+  color: var(--p4);
+}
 .ex-text {
 }
 .ex-title {
@@ -739,6 +798,14 @@ code:not(pre code) {
   );
   border: 1px solid var(--p3b);
 }
+.milestone-card.p4 {
+  background: linear-gradient(
+    135deg,
+    rgba(56, 189, 248, 0.1),
+    rgba(56, 189, 248, 0.03)
+  );
+  border: 1px solid var(--p4b);
+}
 .milestone-label {
   font-size: 10px;
   font-weight: 700;
@@ -754,6 +821,9 @@ code:not(pre code) {
 }
 .p3 .milestone-label {
   color: var(--p3);
+}
+.p4 .milestone-label {
+  color: var(--p4);
 }
 .milestone-title {
   font-size: 18px;
@@ -791,6 +861,9 @@ code:not(pre code) {
 }
 .p3 .checklist li::before {
   color: var(--p3);
+}
+.p4 .checklist li::before {
+  color: var(--p4);
 }
 
 /* DIVIDER */
@@ -854,6 +927,14 @@ code:not(pre code) {
   }
   .hero h1 {
     font-size: 26px;
+  }
+  .track-switch {
+    width: 100%;
+    display: flex;
+  }
+  .track-btn {
+    flex: 1;
+    justify-content: center;
   }
   .content {
     padding: 2rem 1.5rem;
@@ -1023,6 +1104,9 @@ code:not(pre code) {
 .p3 .milestone-check:checked {
   background: var(--p3);
 }
+.p4 .milestone-check:checked {
+  background: var(--p4);
+}
 .checklist li.done span {
   text-decoration: line-through;
   opacity: 0.55;
@@ -1071,6 +1155,9 @@ code:not(pre code) {
 }
 .p3 .phase-bar-fill {
   background: var(--p3);
+}
+.p4 .phase-bar-fill {
+  background: var(--p4);
 }
 .phase-progress-tasks {
   font-size: 11px;
@@ -1128,6 +1215,9 @@ code:not(pre code) {
 }
 .overall-phase-stat.p3s b {
   color: var(--p3);
+}
+.overall-phase-stat.p4s b {
+  color: var(--p4);
 }
 
 /* ── SIDEBAR PROGRESS DOTS per week ── */

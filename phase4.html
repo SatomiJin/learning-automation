@@ -1,0 +1,269 @@
+<div class="phase-block p4" id="phase4" data-phase="4">
+    <div class="phase-tag p4">Phase 4 · Tuần 13–16</div>
+    <div class="phase-title">QC Automation Với Angular & Enterprise UI</div>
+    <div class="phase-subtitle">Thực chiến với Angular source, Angular Material, Ant Design và các control động khó test</div>
+    <div class="phase-progress-wrap p4" id="prog-phase4">
+        <div class="phase-progress-header">
+            <span class="phase-progress-title">Tiến độ Phase 4</span>
+            <span class="phase-progress-pct" style="color:var(--p4)" id="pct-phase4">0%</span>
+        </div>
+        <div class="phase-bar-track">
+            <div class="phase-bar-fill" id="bar-phase4"></div>
+        </div>
+        <div class="phase-progress-tasks" id="tasks-phase4">0 / 0 nhiệm vụ hoàn thành</div>
+    </div>
+
+    <div class="week-block" id="p4-w13">
+        <div class="week-label">Tuần 13 · Angular DOM Reality</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🧱</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Angular Source: class và id có thể dynamic</div>
+                    <div class="topic-desc">_ngcontent · ng-star-inserted · generated ids · selector traps</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Kiến thức thực chiến</div>
+                    <p>Trong Angular app thật, nhiều <code>id</code>, <code>class</code> hoặc attribute như <code>_ngcontent-*</code>, <code>ng-star-inserted</code>, <code>cdk-*</code> được generate động. Nếu test bám vào các giá trị này, test sẽ flaky hoặc vỡ ngay khi UI refactor nhẹ.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang python">Python</span>
+                            <span class="code-filename">selector_strategy.py</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><span class="cmt"># ❌ Đừng bám vào generated class/id</span>
+page.locator(<span class="str">".ng-star-inserted .ant-select-selection-item"</span>)
+page.locator(<span class="str">"#mat-select-12"</span>)
+
+<span class="cmt"># ✅ Ưu tiên container ổn định + accessible selector</span>
+user_form = page.locator(<span class="str">"[data-testid='user-form']"</span>)
+user_form.get_by_label(<span class="str">"Department"</span>).click()
+page.get_by_role(<span class="str">"option"</span>, name=<span class="str">"Finance"</span>).click()</pre>
+                    </div>
+                    <div class="tip-box warning">
+                        <span class="tip-icon">⚠️</span>
+                        <div class="tip-content"><strong>Nguyên tắc vàng:</strong> đừng hỏi “selector nào chạy được”, hãy hỏi “selector nào sẽ còn sống sau 3 sprint nữa”.</div>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="p4-ex-1" onchange="onCheck(this)">
+                            <label for="p4-ex-1" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Phân loại selector ổn định vs không ổn định</div>
+                                    <div class="ex-desc">Mở DevTools một màn Angular thật, liệt kê 5 selector không nên dùng và 5 selector có thể dùng lâu dài.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="p4-ex-2" onchange="onCheck(this)">
+                            <label for="p4-ex-2" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Refactor locator dynamic sang semantic</div>
+                                    <div class="ex-desc">Lấy 3 locator đang bám <code>mat-select-*</code> hoặc class generated, rồi viết lại bằng <code>get_by_role</code>, <code>get_by_label</code> hoặc <code>data-testid</code>.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="week-block" id="p4-w14">
+        <div class="week-label">Tuần 14 · AntD & Material Controls</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🧰</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Select, Search Select, Date Picker, Dialog</div>
+                    <div class="topic-desc">AntD overlay · mat-select · autocomplete · custom input behavior</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Kiến thức thực chiến</div>
+                    <p>Ant Design và Angular Material thường không dùng <code>&lt;select&gt;</code> HTML thuần. Chúng render dropdown qua overlay hoặc portal, nên test phải click đúng control, chờ list xuất hiện rồi chọn <code>option</code> từ DOM mới được render.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang python">Python</span>
+                            <span class="code-filename">antd_select.py</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><span class="cmt"># Ant Design searchable select</span>
+page.get_by_label(<span class="str">"Assignee"</span>).click()
+page.locator(<span class="str">".ant-select-selection-search input"</span>).fill(<span class="str">"linh"</span>)
+page.get_by_role(<span class="str">"option"</span>, name=<span class="str">"Linh Nguyen"</span>).click()
+
+<span class="cmt"># Angular Material select</span>
+page.get_by_label(<span class="str">"Status"</span>).click()
+page.get_by_role(<span class="str">"option"</span>, name=<span class="str">"Approved"</span>).click()</pre>
+                    </div>
+                    <div class="tip-box info">
+                        <span class="tip-icon">💡</span>
+                        <div class="tip-content">Nếu click rồi không thấy option, hãy nghĩ tới <strong>overlay render ngoài component gốc</strong> chứ đừng vội tăng <code>sleep</code>.</div>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="p4-ex-3" onchange="onCheck(this)">
+                            <label for="p4-ex-3" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Handle search select</div>
+                                    <div class="ex-desc">Viết flow chọn giá trị trong một searchable select kiểu Ant Design bằng cách mở dropdown, nhập text tìm kiếm và chọn option.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="p4-ex-4" onchange="onCheck(this)">
+                            <label for="p4-ex-4" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Handle dialog + confirm action</div>
+                                    <div class="ex-desc">Mô phỏng flow mở dialog Material/AntD, xác nhận thao tác và assert dialog biến mất sau khi action hoàn tất.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="week-block" id="p4-w15">
+        <div class="week-label">Tuần 15 · Table, Overlay, Virtual Scroll</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">📊</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Data Table, Pagination, Sticky Header, Virtual List</div>
+                    <div class="topic-desc">ant-table · mat-table · business key assertions · lazy rendering</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Kiến thức thực chiến</div>
+                    <p>Enterprise app rất hay có table lớn, filter nhiều tầng, sticky header và virtual scroll. Khi đó, item bạn cần có thể chưa render trong DOM dù “về mặt business” nó đã có trên màn hình danh sách.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang python">Python</span>
+                            <span class="code-filename">table_waits.py</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><span class="cmt"># Chờ API trả dữ liệu xong rồi mới assert table</span>
+with page.expect_response(<span class="str">"**/api/orders*"</span>) <span class="kw">as</span> response_info:
+    page.get_by_role(<span class="str">"button"</span>, name=<span class="str">"Search"</span>).click()
+
+response = response_info.value
+<span class="fn">assert</span> response.ok
+
+table = page.locator(<span class="str">"[data-testid='orders-table']"</span>)
+<span class="fn">expect</span>(table).to_contain_text(<span class="str">"ORD-10025"</span>)</pre>
+                    </div>
+                    <div class="tip-box danger">
+                        <span class="tip-icon">❌</span>
+                        <div class="tip-content">Đừng assert row theo <code>nth(3)</code> nếu table có sort, filter, pagination hoặc virtual scroll. Hãy assert theo nội dung business key như mã đơn, email hoặc trạng thái.</div>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="p4-ex-5" onchange="onCheck(this)">
+                            <label for="p4-ex-5" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Assert table theo business key</div>
+                                    <div class="ex-desc">Chọn một table thật và viết assertion dựa trên mã record hoặc text duy nhất thay vì vị trí hàng/cột.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="p4-ex-6" onchange="onCheck(this)">
+                            <label for="p4-ex-6" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Handle virtual scroll</div>
+                                    <div class="ex-desc">Mô tả hoặc thử một flow phải scroll container để row mục tiêu được render rồi mới thao tác tiếp.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="week-block" id="p4-w16">
+        <div class="week-label">Tuần 16 · Debugging & Dev Contract</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🤝</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Đọc Source, Yêu Cầu Test Hooks, Chống Flaky Dài Hạn</div>
+                    <div class="topic-desc">component tree · data-testid request · loading states · source reading</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Kiến thức thực chiến</div>
+                    <p>QC automation làm tốt không chỉ là “viết selector chạy được”, mà còn biết khi nào nên đọc source component, khi nào nên push back dev để thêm <code>data-testid</code>, <code>aria-label</code> hoặc tách loading state rõ ràng hơn.</p>
+                    <div class="tip-box success">
+                        <span class="tip-icon">✅</span>
+                        <div class="tip-content"><strong>Checklist khi test enterprise UI khó:</strong> xác định business key, hiểu control render ở đâu, biết API nào nuôi data, xem loading state, và thống nhất test hooks với dev nếu DOM không semantic.</div>
+                    </div>
+                    <div class="tip-box warning">
+                        <span class="tip-icon">⚠️</span>
+                        <div class="tip-content">Nếu một control buộc bạn phải bám vào class generated hoặc XPath quá dài, rất có thể đây là dấu hiệu nên đề xuất thay đổi source thay vì cố viết test “mẹo”.</div>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="p4-ex-7" onchange="onCheck(this)">
+                            <label for="p4-ex-7" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Viết test hook request cho dev</div>
+                                    <div class="ex-desc">Chọn 1 control khó test và viết đề xuất ngắn cho dev: cần thêm <code>data-testid</code>, <code>aria-label</code> hay state loading nào để test ổn định hơn.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="p4-ex-8" onchange="onCheck(this)">
+                            <label for="p4-ex-8" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Debug một flow flaky</div>
+                                    <div class="ex-desc">Chọn 1 flow khó, ghi lại: control render ở đâu, API nào liên quan, loading state nào cần chờ, và selector contract tối ưu cho flow đó.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="milestone-card p4" id="p4-milestone">
+    <div class="milestone-label">Bài Tập Lớn · Phase 4</div>
+    <div class="milestone-title">Enterprise UI Challenge</div>
+    <div class="milestone-desc">Thiết kế một mini test suite cho màn enterprise thật có Angular hoặc Ant Design: form nhiều control động, table lớn, dialog, overlay và search select.</div>
+    <ul class="checklist">
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="p4-ml-1" onclick="event.stopPropagation()"><span>Viết selector contract cho 1 màn enterprise thực tế</span></li>
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="p4-ml-2" onclick="event.stopPropagation()"><span>Automate ít nhất 1 AntD select hoặc Angular Material select</span></li>
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="p4-ml-3" onclick="event.stopPropagation()"><span>Handle table/filter/search dựa trên business key thay vì nth-child</span></li>
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="p4-ml-4" onclick="event.stopPropagation()"><span>Đưa ra ít nhất 3 đề xuất test hooks cho dev để suite bền hơn</span></li>
+    </ul>
+</div>

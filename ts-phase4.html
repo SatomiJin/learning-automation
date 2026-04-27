@@ -1,0 +1,251 @@
+<div class="phase-block p4" id="phase4" data-phase="4">
+    <div class="phase-tag p4">Phase 4 · Tuần 13–16</div>
+    <div class="phase-title">QC Automation Với Angular & Enterprise UI</div>
+    <div class="phase-subtitle">Thực chiến với Angular source, Ant Design, Angular Material và các pattern DOM động trong app doanh nghiệp</div>
+    <div class="phase-progress-wrap p4" id="prog-phase4">
+        <div class="phase-progress-header">
+            <span class="phase-progress-title">Tiến độ Phase 4</span>
+            <span class="phase-progress-pct" style="color:var(--p4)" id="pct-phase4">0%</span>
+        </div>
+        <div class="phase-bar-track">
+            <div class="phase-bar-fill" id="bar-phase4"></div>
+        </div>
+        <div class="phase-progress-tasks" id="tasks-phase4">0 / 0 nhiệm vụ hoàn thành</div>
+    </div>
+
+    <div class="week-block" id="p4-w13">
+        <div class="week-label">Tuần 13 · Angular DOM Reality</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🧱</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Generated DOM, Dynamic Attributes, Source Reading</div>
+                    <div class="topic-desc">_ngcontent · cdk ids · semantic container · source inspection</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Kiến thức thực chiến</div>
+                    <p>Trong Angular app thật, DOM render ra thường không phản ánh “business structure” một cách sạch sẽ. IDs như <code>mat-input-4</code>, classes kiểu <code>ng-star-inserted</code> hay <code>cdk-overlay-pane</code> thường không bền. Vì vậy, đọc source component và tìm semantic container là kỹ năng rất đáng học.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">TypeScript</span>
+                            <span class="code-filename">angular-locator.ts</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>// ❌ Selector bám generated DOM
+page.locator(".ng-star-inserted .mat-mdc-select-trigger");
+
+// ✅ Bám vào contract ổn định
+const panel = page.locator("[data-testid='user-search-panel']");
+await panel.getByLabel("Department").click();
+await page.getByRole("option", { name: "Finance" }).click();</pre>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts4-ex-1" onchange="onCheck(this)">
+                            <label for="ts4-ex-1" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Tìm 5 selector không nên dùng</div>
+                                    <div class="ex-desc">Mở một màn Angular thật và liệt kê 5 selector bám generated DOM mà bạn sẽ loại bỏ khỏi suite.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts4-ex-2" onchange="onCheck(this)">
+                            <label for="ts4-ex-2" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Tìm semantic container đúng</div>
+                                    <div class="ex-desc">Chọn một business section như filter panel hoặc result table và xác định selector container ổn định nhất cho nó.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="week-block" id="p4-w14">
+        <div class="week-label">Tuần 14 · AntD & Material Controls</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🧰</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Select, Search Select, Date Picker, Dialog, Cascader</div>
+                    <div class="topic-desc">portal render · overlay pane · option list lifecycle</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Kiến thức thực chiến</div>
+                    <p>AntD và Angular Material hiếm khi map 1:1 với thẻ HTML thuần. Một “select” có thể là input giả + overlay + list render động + search box bên trong. Nếu hiểu lifecycle của control, bạn sẽ biết phải click chỗ nào, chờ cái gì và assert cái gì.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">TypeScript</span>
+                            <span class="code-filename">enterprise-select.spec.ts</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>await page.getByLabel("Assignee").click();
+await page.locator(".ant-select-selection-search input").fill("linh");
+await page.getByRole("option", { name: "Linh Nguyen" }).click();
+
+await page.getByLabel("Status").click();
+await page.getByRole("option", { name: "Approved" }).click();</pre>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts4-ex-3" onchange="onCheck(this)">
+                            <label for="ts4-ex-3" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Handle search select enterprise</div>
+                                    <div class="ex-desc">Viết một test mở search select, nhập keyword, chọn option và verify value đã lên control.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts4-ex-4" onchange="onCheck(this)">
+                            <label for="ts4-ex-4" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Handle date picker hoặc dialog</div>
+                                    <div class="ex-desc">Chọn một control popup kiểu date picker hoặc confirm dialog và mô tả/viết flow thao tác ổn định với nó.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="week-block" id="p4-w15">
+        <div class="week-label">Tuần 15 · Table, Overlay, Virtual Scroll</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">📊</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Enterprise Tables, Filters, Sticky UI, Async Rendering</div>
+                    <div class="topic-desc">business key assertions · pagination · scroll container · lazy rows</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Kiến thức thực chiến</div>
+                    <p>Ở enterprise UI, bạn hiếm khi test một row “đứng yên” trong DOM. Table có thể filter server-side, sort, sticky header, virtual list, infinite scroll hoặc loading nhiều bước. Assertion tốt phải dựa trên business key chứ không phải vị trí.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">TypeScript</span>
+                            <span class="code-filename">table-search.spec.ts</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>const responsePromise = page.waitForResponse("**/api/orders*");
+await page.getByRole("button", { name: "Search" }).click();
+await responsePromise;
+
+const table = page.locator("[data-testid='orders-table']");
+await expect(table).toContainText("ORD-10025");</pre>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts4-ex-5" onchange="onCheck(this)">
+                            <label for="ts4-ex-5" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Assert theo business key</div>
+                                    <div class="ex-desc">Viết assertion cho 1 table dựa trên mã record hoặc giá trị độc nhất thay vì row index.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts4-ex-6" onchange="onCheck(this)">
+                            <label for="ts4-ex-6" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Handle virtual scroll</div>
+                                    <div class="ex-desc">Tìm hiểu hoặc thử một table/list cần scroll container để row mục tiêu mới render ra DOM.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="week-block" id="p4-w16">
+        <div class="week-label">Tuần 16 · Debugging & Dev Contract</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🤝</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Test Hooks, Source Review, Flaky Prevention</div>
+                    <div class="topic-desc">data-testid requests · loading state contract · sustainable automation</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Kiến thức thực chiến</div>
+                    <p>Một QC automation mạnh không cố “hack selector cho chạy”, mà biết khi nào cần đọc source, khi nào nên yêu cầu dev thêm <code>data-testid</code>, khi nào cần loading state rõ ràng hơn, và khi nào một control nên được refactor để testable.</p>
+                    <div class="tip-box success">
+                        <span class="tip-icon">✅</span>
+                        <div class="tip-content">Nếu control quá phức tạp, hãy mô tả rõ cho dev: element nào là trigger, list render ở đâu, text nào đại diện business value, và test hook nào sẽ giúp suite bền hơn.</div>
+                    </div>
+                    <div class="tip-box warning">
+                        <span class="tip-icon">⚠️</span>
+                        <div class="tip-content">Một dấu hiệu tốt để push back: selector hiện tại bắt buộc phải bám vào generated id/class, overlay không có accessible name, hoặc loading state biến mất quá sớm so với API/data thật.</div>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts4-ex-7" onchange="onCheck(this)">
+                            <label for="ts4-ex-7" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Viết testability request cho dev</div>
+                                    <div class="ex-desc">Chọn 1 control enterprise khó test và viết request ngắn gọn: cần thêm hook gì, accessible label gì, hoặc loading state nào.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts4-ex-8" onchange="onCheck(this)">
+                            <label for="ts4-ex-8" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Mổ xẻ một test flaky</div>
+                                    <div class="ex-desc">Chọn một flow khó và ghi lại nguyên nhân flake theo 4 góc: selector, timing, data, source contract.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="milestone-card p4" id="p4-milestone">
+    <div class="milestone-label">Bài Tập Lớn · Phase 4</div>
+    <div class="milestone-title">Enterprise UI Challenge</div>
+    <div class="milestone-desc">Xây một mini suite cho một màn enterprise thật có Angular hoặc Ant Design: search form động, select khó, table lớn, dialog và overlay.</div>
+    <ul class="checklist">
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts4-ml-1" onclick="event.stopPropagation()"><span>Viết selector contract cho màn enterprise đã chọn</span></li>
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts4-ml-2" onclick="event.stopPropagation()"><span>Automate ít nhất 1 AntD/Material control phức tạp</span></li>
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts4-ml-3" onclick="event.stopPropagation()"><span>Assert table/filter bằng business key và network-aware waits</span></li>
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts4-ml-4" onclick="event.stopPropagation()"><span>Đề xuất ít nhất 3 test hooks hoặc source improvements cho dev</span></li>
+    </ul>
+</div>

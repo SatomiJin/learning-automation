@@ -1,0 +1,247 @@
+<div class="phase-block" id="phase3" data-phase="3">
+    <div class="phase-tag p3">Phase 3 · Tuần 9–12</div>
+    <div class="phase-title">Nâng Cao & Production-Ready</div>
+    <div class="phase-subtitle">POM typed, test data management, API-first setup và CI/CD cho TypeScript stack</div>
+    <div class="phase-progress-wrap p3" id="prog-phase3">
+        <div class="phase-progress-header">
+            <span class="phase-progress-title">Tiến độ Phase 3</span>
+            <span class="phase-progress-pct" style="color:var(--p3)" id="pct-phase3">0%</span>
+        </div>
+        <div class="phase-bar-track">
+            <div class="phase-bar-fill" id="bar-phase3"></div>
+        </div>
+        <div class="phase-progress-tasks" id="tasks-phase3">0 / 0 nhiệm vụ hoàn thành</div>
+    </div>
+
+    <div class="week-block" id="p3-w9">
+        <div class="week-label">Tuần 9 · Page Object Model</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🏛️</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Typed Page Objects, Components, Locator Ownership</div>
+                    <div class="topic-desc">class page objects · private locators · return typed methods</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Lý thuyết</div>
+                    <p>TypeScript rất hợp với POM vì method signature và object shape rõ ràng. Bạn có thể trả về page object tiếp theo sau action để test flow đọc như business steps.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">TypeScript</span>
+                            <span class="code-filename">pages/LoginPage.ts</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>export class LoginPage {
+  constructor(private page: Page) {}
+
+  async goto() {
+    await this.page.goto("/");
+  }
+
+  async login(username: string, password: string) {
+    await this.page.locator("#user-name").fill(username);
+    await this.page.locator("#password").fill(password);
+    await this.page.locator("#login-button").click();
+  }
+}</pre>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts3-ex-1" onchange="onCheck(this)">
+                            <label for="ts3-ex-1" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Tách login flow sang page object</div>
+                                    <div class="ex-desc">Refactor test raw selectors sang class <code>LoginPage</code> và <code>InventoryPage</code>.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts3-ex-2" onchange="onCheck(this)">
+                            <label for="ts3-ex-2" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Tạo component object cho header/cart badge</div>
+                                    <div class="ex-desc">Kéo phần header dùng chung ra riêng thay vì lặp lại ở nhiều page object.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="week-block" id="p3-w10">
+        <div class="week-label">Tuần 10 · Reporting & Debugging</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">📊</div>
+                <div class="topic-meta">
+                    <div class="topic-name">HTML Report, Trace, Screenshots, Test Step Logging</div>
+                    <div class="topic-desc">reporter config · trace viewer · debugging evidence</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Lý thuyết</div>
+                    <p>Automation chỉ thực sự hữu ích với team khi lỗi fail được kể lại rõ ràng. Report, screenshot, trace và step log là bằng chứng giúp QA, dev và reviewer cùng hiểu vấn đề.</p>
+                    <div class="tip-box warning">
+                        <span class="tip-icon">⚠️</span>
+                        <div class="tip-content">Đừng chỉ assert fail rồi bỏ đó. Hãy đính kèm context: URL hiện tại, screenshot, trace, request/response liên quan hoặc test.step có mô tả business action.</div>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts3-ex-3" onchange="onCheck(this)">
+                            <label for="ts3-ex-3" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Bọc flow bằng test.step</div>
+                                    <div class="ex-desc">Tách một test lớn thành nhiều step có tên business-friendly để report đọc dễ hơn.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts3-ex-4" onchange="onCheck(this)">
+                            <label for="ts3-ex-4" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Chạy trace viewer cho một test fail</div>
+                                    <div class="ex-desc">Tạo một assertion sai có chủ đích, rồi mở trace để đọc từng step và screenshot timeline.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="week-block" id="p3-w11">
+        <div class="week-label">Tuần 11 · API & CI/CD</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🔌</div>
+                <div class="topic-meta">
+                    <div class="topic-name">APIRequestContext, Storage State, GitHub Actions</div>
+                    <div class="topic-desc">API setup · auth reuse · workflow automation</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Lý thuyết</div>
+                    <p>Track TS rất mạnh ở mô hình “API setup, UI verify”. Bạn có thể login qua API, lưu storage state rồi tái sử dụng trong hàng chục test UI để chạy nhanh và ổn định hơn.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">TypeScript</span>
+                            <span class="code-filename">auth.setup.ts</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>test("create auth state", async ({ request, page }) => {
+  await request.post("/login", {
+    data: { username: "standard_user", password: "secret_sauce" },
+  });
+  await page.context().storageState({ path: ".auth/user.json" });
+});</pre>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts3-ex-5" onchange="onCheck(this)">
+                            <label for="ts3-ex-5" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Dùng API để setup session</div>
+                                    <div class="ex-desc">Thử một flow auth hoặc seed data qua API trước, rồi mở UI để verify kết quả.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts3-ex-6" onchange="onCheck(this)">
+                            <label for="ts3-ex-6" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Tạo GitHub Actions workflow</div>
+                                    <div class="ex-desc">Cấu hình install deps, install browsers, run tests và upload report artifact.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="week-block" id="p3-w12">
+        <div class="week-label">Tuần 12 · Best Practices</div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🏆</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Stable Tests, Typed Fixtures, Clean Project Structure</div>
+                    <div class="topic-desc">anti-flaky · deterministic data · maintainable suite</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Lý thuyết</div>
+                    <div class="tip-box danger">
+                        <span class="tip-icon">❌</span>
+                        <div class="tip-content">Tránh hardcode selector dễ vỡ, dùng <code>waitForTimeout</code> bừa bãi, để test phụ thuộc nhau, và nhét business logic vào spec file.</div>
+                    </div>
+                    <div class="tip-box success">
+                        <span class="tip-icon">✅</span>
+                        <div class="tip-content">Ưu tiên fixture typed, test data có ownership rõ ràng, page object nhỏ gọn, và helper nào cũng nên có tên phản ánh business action.</div>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts3-ex-7" onchange="onCheck(this)">
+                            <label for="ts3-ex-7" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Audit một test flaky</div>
+                                    <div class="ex-desc">Chọn 1 test dễ fail ngẫu nhiên và liệt kê 3 cách làm nó deterministic hơn.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts3-ex-8" onchange="onCheck(this)">
+                            <label for="ts3-ex-8" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Tổ chức lại cấu trúc project</div>
+                                    <div class="ex-desc">Tách rõ <code>pages/</code>, <code>fixtures/</code>, <code>test-data/</code>, <code>utils/</code> và <code>tests/</code>.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="milestone-card p3" id="p3-milestone">
+    <div class="milestone-label">Bài Tập Lớn · Phase 3 — Capstone Project</div>
+    <div class="milestone-title">Full TypeScript Automation Portfolio</div>
+    <div class="milestone-desc">Hoàn thiện một automation suite TypeScript đủ đẹp để đưa vào portfolio: có POM, API setup, report, CI và cấu trúc dễ scale.</div>
+    <ul class="checklist">
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts3-ml-1" onclick="event.stopPropagation()"><span>Page Objects và shared components rõ ownership</span></li>
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts3-ml-2" onclick="event.stopPropagation()"><span>Có auth setup hoặc seeded data qua API</span></li>
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts3-ml-3" onclick="event.stopPropagation()"><span>Có report, trace và artifact trên CI</span></li>
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts3-ml-4" onclick="event.stopPropagation()"><span>README giải thích cách setup, run và debug suite</span></li>
+    </ul>
+</div>
