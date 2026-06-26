@@ -642,6 +642,33 @@ const customerCode = `CUSTOMER_${test.info().workerIndex}_${Date.now()}`;
 // Wait theo trạng thái thật
 await expect(page.getByText("Created successfully")).toBeVisible();</pre>
                 </div>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">TypeScript</span>
+                        <span class="code-filename">strict-mode-violation.ts</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>// Dễ lỗi: trên trang có nhiều nút Save
+await page.getByText("Save").click();
+
+// Tốt hơn: dùng role + accessible name
+await page.getByRole("button", { name: "Save" }).click();
+
+// Nếu vẫn có nhiều nút Save, khoanh vùng trong form/modal/row
+const orderForm = page.getByTestId("order-form");
+await orderForm.getByRole("button", { name: "Save" }).click();
+
+// Với table, tìm row theo business key rồi mới click action trong row đó
+const row = page.getByRole("row", { name: /ORDER001/ });
+await row.getByRole("button", { name: "Detail" }).click();
+
+// Chỉ dùng first()/nth() khi UI thật sự không có định danh tốt hơn
+await page.getByRole("button", { name: "Save" }).first().click();</pre>
+                </div>
+                <div class="tip-box info">
+                    <span class="tip-icon">💡</span>
+                    <div class="tip-content">Checklist khi gặp <code>Strict mode violation</code>: locator có quá chung không, có thể scope bằng form/modal/row không, có dùng được role/name/label không, hoặc có nên xin dev thêm <code>data-testid</code> không.</div>
+                </div>
             </div>
             <div class="theory-section">
                 <div class="section-label">Bài tập thực hành</div>

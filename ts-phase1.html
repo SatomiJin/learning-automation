@@ -108,7 +108,7 @@ function printSummary(id: string, status: TestStatus) {
         <div class="topic-body">
             <div class="theory-section">
                 <div class="section-label">Kiến thức quan trọng</div>
-                <p>Nếu học TypeScript để làm automation mà tắt <code>strict</code>, bạn sẽ mất đi nửa giá trị của ngôn ngữ này. Rất nhiều bug trong test data, API response hoặc helper function sẽ bị bỏ sót đến lúc runtime.</p>
+                <p>Nếu học TypeScript để làm automation mà tắt <code>strict</code>, bạn sẽ mất đi nửa giá trị của ngôn ngữ này. Rất nhiều bug trong test data, API response hoặc helper function sẽ bị bỏ sót đến lúc runtime. Project mới nên bật ngay từ đầu, còn project cũ có thể bật từng rule để sửa dần.</p>
                 <div class="code-block">
                     <div class="code-header">
                         <span class="code-lang text">JSON</span>
@@ -118,11 +118,14 @@ function printSummary(id: string, status: TestStatus) {
                     <pre>{
   "compilerOptions": {
     "target": "ES2022",
-    "module": "commonjs",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
     "strict": true,
-    "noImplicitAny": true,
-    "noUncheckedIndexedAccess": true
-  }
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["node", "@playwright/test"]
+  },
+  "include": ["tests", "pages", "data", "types", "utils", "fixtures"]
 }</pre>
                 </div>
                 <div class="code-block">
@@ -139,9 +142,55 @@ function printSummary(id: string, status: TestStatus) {
   }
 }</pre>
                 </div>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">TypeScript</span>
+                        <span class="code-filename">strict-errors.ts</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>type Product = {
+  sku: string;
+  name: string;
+  status: "ACTIVE" | "INACTIVE";
+};
+
+const products: Product[] = [
+  { sku: "SKU001", name: "Mouse", status: "ACTIVE" },
+];
+
+function findProduct(sku: string): Product | undefined {
+  return products.find((product) => product.sku === sku);
+}
+
+const product = findProduct("SKU999");
+
+if (!product) {
+  throw new Error("Product not found");
+}
+
+console.log(product.name);</pre>
+                </div>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">JSON</span>
+                        <span class="code-filename">tsconfig-step-by-step.json</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>{
+  "compilerOptions": {
+    "strict": false,
+    "noImplicitAny": true,
+    "strictNullChecks": true
+  }
+}</pre>
+                </div>
                 <div class="tip-box warning">
                     <span class="tip-icon">⚠️</span>
                     <div class="tip-content"><strong>Dấu hiệu nên bật strict ngay:</strong> helper nhận object nhưng không rõ shape, API response bị truy cập sai field, hoặc test data thiếu key mà code vẫn compile.</div>
+                </div>
+                <div class="tip-box info">
+                    <span class="tip-icon">💡</span>
+                    <div class="tip-content"><code>strict</code> của TypeScript khác với lỗi <code>Strict mode violation</code> của Playwright. TypeScript strict bắt lỗi type khi code; Playwright strict locator bắt lỗi khi một locator match nhiều element trên UI.</div>
                 </div>
             </div>
             <div class="theory-section">
@@ -152,7 +201,7 @@ function printSummary(id: string, status: TestStatus) {
                         <label for="ts-ex-strict-1" style="display:contents;cursor:pointer">
                             <div class="ex-text">
                                 <div class="ex-title">Bật strict mode và sửa compile errors</div>
-                                <div class="ex-desc">Tạo một file TS có vài biến chưa typed rõ ràng, bật <code>strict</code> rồi sửa cho compile pass.</div>
+                                <div class="ex-desc">Tạo một file TS có parameter thiếu type và giá trị có thể <code>undefined</code>, bật <code>strict</code>, chạy <code>npm run typecheck</code> rồi sửa cho compile pass.</div>
                             </div>
                         </label>
                     </div>

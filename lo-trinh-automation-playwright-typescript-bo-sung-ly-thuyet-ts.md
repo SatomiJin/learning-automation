@@ -2250,7 +2250,247 @@ export const validOrderPayload: CreateOrderPayload = {
 
 ---
 
-## 2.23 Những phần TypeScript chưa cần học sâu lúc đầu
+## 2.23 Bật strict mode trong TypeScript
+
+### Strict mode là gì?
+
+`strict` là nhóm rule kiểm tra type chặt hơn của TypeScript. Khi bật `strict`, TypeScript sẽ bắt lỗi sớm ngay lúc viết code, trước khi chạy test.
+
+Với Automation Test, nên bật `strict` từ sớm vì nó giúp phát hiện các lỗi rất hay gặp:
+
+- Dùng biến chưa rõ kiểu.
+- Gọi field trên giá trị có thể là `undefined`.
+- Viết function thiếu type cho parameter.
+- Dữ liệu test/API response không đúng shape mong đợi.
+
+### Bước 1: Tạo hoặc mở file `tsconfig.json`
+
+Nếu project chưa có `tsconfig.json`, tạo bằng lệnh:
+
+```bash
+npx tsc --init
+```
+
+Sau đó chỉnh file:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["node", "@playwright/test"]
+  },
+  "include": ["tests", "pages", "data", "types", "utils", "fixtures"]
+}
+```
+
+Trong đó quan trọng nhất là:
+
+```json
+"strict": true
+```
+
+### Bước 2: Thêm script kiểm tra type
+
+Trong `package.json`, thêm:
+
+```json
+{
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}
+```
+
+Chạy kiểm tra:
+
+```bash
+npm run typecheck
+```
+
+`--noEmit` nghĩa là chỉ kiểm tra lỗi TypeScript, không build ra file JavaScript.
+
+### Bước 3: Sửa các lỗi strict mode thường gặp
+
+#### Lỗi 1: Parameter bị implicit `any`
+
+Sai:
+
+```ts
+function getSku(item) {
+  return item.sku;
+}
+```
+
+Khi bật `strict`, TypeScript sẽ báo vì `item` chưa có type.
+
+Đúng:
+
+```ts
+type OrderItem = {
+  sku: string;
+  quantity: number;
+};
+
+function getSku(item: OrderItem) {
+  return item.sku;
+}
+```
+
+#### Lỗi 2: Giá trị có thể là `undefined`
+
+Sai:
+
+```ts
+const product = products.find((item) => item.sku === "SKU999");
+
+expect(product.name).toBe("Mouse");
+```
+
+`find()` có thể không tìm thấy data, lúc đó `product` là `undefined`.
+
+Đúng:
+
+```ts
+const product = products.find((item) => item.sku === "SKU999");
+
+expect(product).toBeDefined();
+expect(product!.name).toBe("Mouse");
+```
+
+Hoặc rõ ràng hơn:
+
+```ts
+const product = products.find((item) => item.sku === "SKU999");
+
+if (!product) {
+  throw new Error("Product not found");
+}
+
+expect(product.name).toBe("Mouse");
+```
+
+Trong test automation, cách `throw new Error()` thường dễ debug hơn vì message rõ.
+
+#### Lỗi 3: API response chưa có type
+
+Sai:
+
+```ts
+const body = await response.json();
+
+expect(body.data.orderCode).toBe("ORDER001");
+```
+
+Code này chạy được, nhưng TypeScript không kiểm soát được `body` có đúng field hay không.
+
+Đúng:
+
+```ts
+type OrderResponse = {
+  data: {
+    orderCode: string;
+    status: "New" | "Approved" | "Cancelled";
+  };
+};
+
+const body = (await response.json()) as OrderResponse;
+
+expect(body.data.orderCode).toBe("ORDER001");
+expect(body.data.status).toBe("Approved");
+```
+
+### Bước 4: Bật strict theo từng giai đoạn nếu project cũ lỗi quá nhiều
+
+Nếu project mới, nên bật luôn:
+
+```json
+"strict": true
+```
+
+Nếu project cũ có quá nhiều lỗi, có thể đi từng bước:
+
+```json
+{
+  "compilerOptions": {
+    "strict": false,
+    "noImplicitAny": true,
+    "strictNullChecks": true
+  }
+}
+```
+
+Thứ tự học/sửa nên là:
+
+| Rule               | Nên học vì sao                                      |
+| ------------------ | --------------------------------------------------- |
+| `noImplicitAny`    | Bắt lỗi thiếu type cho biến, parameter, response    |
+| `strictNullChecks` | Bắt lỗi `null`/`undefined`, rất hay gặp khi find data |
+| `strict`           | Bật toàn bộ rule strict khi code đã ổn hơn          |
+
+### Bài tập tự luyện
+
+Tạo file:
+
+```txt
+practice/strict-mode.ts
+```
+
+Viết code sai trước:
+
+```ts
+type User = {
+  username: string;
+  role: "admin" | "staff";
+};
+
+const users: User[] = [
+  { username: "admin01", role: "admin" },
+  { username: "staff01", role: "staff" },
+];
+
+function findUser(username) {
+  return users.find((user) => user.username === username);
+}
+
+const user = findUser("admin02");
+
+console.log(user.role);
+```
+
+Chạy:
+
+```bash
+npm run typecheck
+```
+
+Sau đó sửa lại:
+
+```ts
+function findUser(username: string): User | undefined {
+  return users.find((user) => user.username === username);
+}
+
+const user = findUser("admin02");
+
+if (!user) {
+  throw new Error("User not found");
+}
+
+console.log(user.role);
+```
+
+Mục tiêu không phải là tắt lỗi TypeScript, mà là sửa code để lỗi runtime ít xảy ra hơn.
+
+> Lưu ý: `strict` trong TypeScript khác với lỗi `Strict mode violation` của Playwright locator. TypeScript strict kiểm tra type khi viết code. Playwright strict locator báo lỗi khi một locator match nhiều element trên màn hình.
+
+---
+
+## 2.24 Những phần TypeScript chưa cần học sâu lúc đầu
 
 Có thể để sau:
 
@@ -3605,6 +3845,57 @@ await page.pause();
 | Element not visible   | Element bị ẩn hoặc chưa render                |
 | Test flaky            | Wait sai, data trùng, phụ thuộc test khác     |
 | Auth fail             | Session hết hạn, token sai, env sai           |
+
+### Cách xử lý `Strict mode violation`
+
+Playwright locator mặc định khá "strict": khi action như `click()`, `fill()`, `check()` mà locator match nhiều hơn 1 element, Playwright sẽ báo lỗi để tránh click nhầm.
+
+Ví dụ lỗi:
+
+```ts
+await page.getByText("Save").click();
+```
+
+Nếu màn hình có 2 nút hoặc 2 text `Save`, locator này không đủ rõ.
+
+Cách sửa nên làm:
+
+```ts
+await page.getByRole("button", { name: "Save" }).click();
+```
+
+Nếu vẫn match nhiều element, khoanh vùng bằng parent/container:
+
+```ts
+const orderForm = page.getByTestId("order-form");
+
+await orderForm.getByRole("button", { name: "Save" }).click();
+```
+
+Hoặc dùng text gần ngữ cảnh hơn:
+
+```ts
+await page
+  .getByRole("row", { name: /SKU001/ })
+  .getByRole("button", { name: "Edit" })
+  .click();
+```
+
+Chỉ dùng `.first()`, `.nth()` khi UI thật sự không có cách định danh tốt hơn:
+
+```ts
+await page.getByRole("button", { name: "Save" }).first().click();
+```
+
+Checklist khi gặp lỗi này:
+
+| Câu hỏi kiểm tra                         | Cách xử lý                                          |
+| ---------------------------------------- | --------------------------------------------------- |
+| Locator có quá chung không?              | Đổi sang `getByRole`, `getByLabel`, `getByTestId`   |
+| Có nhiều vùng giống nhau trên màn hình?  | Khoanh vùng bằng form, modal, row, table, section   |
+| Nút/text có accessible name rõ không?    | Dùng role + name thay vì text đơn thuần             |
+| UI thiếu định danh ổn định?              | Trao đổi dev thêm `data-testid`                     |
+| Đang dùng `.first()` để né lỗi?          | Kiểm tra lại có thể click nhầm khi UI thay đổi      |
 
 ---
 
