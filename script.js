@@ -61,7 +61,7 @@ const TRACKS = {
       p1: "Phase 1 — TypeScript",
       p2: "Phase 2 — Playwright + TS",
       p3: "Phase 3 — Advanced",
-      p4: "Phase 4 — Enterprise UI",
+      p4: "Phase 4 — Advanced",
     },
     navLabels: {
       "p1-w1": "Tuần 1 · Setup & Types",

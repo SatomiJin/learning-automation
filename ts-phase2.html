@@ -210,6 +210,71 @@ page.locator(".login-form button.submit");</pre>
         <div class="week-label">Tuần 7 · Waits & Network</div>
         <div class="topic-card">
             <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🧾</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Form, Table, Modal, Toast trong app thật</div>
+                    <div class="topic-desc">fill form · row by business key · dialog · toast assertion</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Kiến thức quan trọng</div>
+                    <p>Đây là nhóm case đi làm gặp liên tục. Mục tiêu không chỉ là click được, mà là biết scope locator trong form, tìm row theo mã nghiệp vụ, thao tác modal đúng context và assert toast bằng auto-wait.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">TypeScript</span>
+                            <span class="code-filename">ui-patterns.spec.ts</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>await page.getByLabel("Customer name").fill("Nguyen Van A");
+await page.getByLabel("Phone").fill("0909000000");
+await page.getByRole("button", { name: "Submit" }).click();
+
+const row = page.locator("tr").filter({ hasText: "ORDER001" });
+await expect(row).toContainText("Approved");
+await row.getByRole("button", { name: "Detail" }).click();
+
+const modal = page.getByRole("dialog");
+await expect(modal).toBeVisible();
+await modal.getByRole("button", { name: "Confirm" }).click();
+
+await expect(page.getByText("Saved successfully")).toBeVisible();</pre>
+                    </div>
+                    <div class="tip-box success">
+                        <span class="tip-icon">✅</span>
+                        <div class="tip-content">Với table, ưu tiên tìm row theo business key như order code, customer code hoặc SKU thay vì dùng index như <code>nth(0)</code>.</div>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts2-ex-ui-1" onchange="onCheck(this)">
+                            <label for="ts2-ex-ui-1" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Automate flow CRUD cơ bản</div>
+                                    <div class="ex-desc">Tạo customer, search customer vừa tạo, edit, delete và assert toast success sau mỗi action chính.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts2-ex-ui-2" onchange="onCheck(this)">
+                            <label for="ts2-ex-ui-2" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Assert table bằng business key</div>
+                                    <div class="ex-desc">Tìm đúng row theo mã record và verify status/action trong chính row đó, không assert theo vị trí.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
                 <div class="topic-icon">🌐</div>
                 <div class="topic-meta">
                     <div class="topic-name">Route Mocking, Network Assertions, Debug Tools</div>
@@ -319,6 +384,65 @@ projects: [
                                 </div>
                             </label>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">🧱</div>
+            <div class="topic-meta">
+                <div class="topic-name">Test Structure, Hooks, Tags, Data-driven Cases</div>
+                <div class="topic-desc">describe · beforeEach · test.step · grep tags · static data</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Lý thuyết</div>
+                <p>Khi suite bắt đầu lớn, spec file cần có cấu trúc rõ: gom theo module bằng <code>test.describe()</code>, setup chung bằng hook, đặt tag để chạy smoke/regression và tách data khỏi step thao tác.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">TypeScript</span>
+                        <span class="code-filename">tests/order.spec.ts</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>test.describe("Order Management", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/login");
+  });
+
+  test("create order successfully @smoke", async ({ page }) => {
+    await test.step("Fill required order fields", async () => {
+      // test steps
+    });
+  });
+});</pre>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts2-ex-structure-1" onchange="onCheck(this)">
+                        <label for="ts2-ex-structure-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Nhóm test theo module</div>
+                                <div class="ex-desc">Dùng <code>test.describe</code>, <code>beforeEach</code> và <code>test.step</code> để làm một spec login/order dễ đọc hơn.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts2-ex-structure-2" onchange="onCheck(this)">
+                        <label for="ts2-ex-structure-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Chạy test theo tag</div>
+                                <div class="ex-desc">Đánh dấu smoke/regression và chạy thử bằng <code>npx playwright test --grep @smoke</code>.</div>
+                            </div>
+                        </label>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 <div class="phase-block p4" id="phase4" data-phase="4">
     <div class="phase-tag p4">Phase 4 · Tuần 13–16</div>
-    <div class="phase-title">QC Automation Với Angular & Enterprise UI</div>
-    <div class="phase-subtitle">Thực chiến với Angular source, Ant Design, Angular Material và các pattern DOM động trong app doanh nghiệp</div>
+    <div class="phase-title">Enterprise UI & Advanced Delivery</div>
+    <div class="phase-subtitle">Thực chiến với Angular/AntD/Material, advanced Playwright, flaky control, visual/mobile và test design</div>
     <div class="phase-progress-wrap p4" id="prog-phase4">
         <div class="phase-progress-header">
             <span class="phase-progress-title">Tiến độ Phase 4</span>
@@ -189,6 +189,66 @@ await expect(table).toContainText("ORD-10025");</pre>
         <div class="week-label">Tuần 16 · Debugging & Dev Contract</div>
         <div class="topic-card">
             <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">⚙️</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Advanced Playwright: File, Tab, iFrame, Context</div>
+                    <div class="topic-desc">download · upload · multi-tab · multi-user · iframe · clipboard</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Kỹ năng nâng cao</div>
+                    <p>Sau khi vững UI/API cơ bản, hãy luyện các case thường xuất hiện trong hệ thống thật: export/import file, mở tab mới, iframe, nhiều user context, permission, cookie/localStorage, drag-and-drop và keyboard shortcut.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">TypeScript</span>
+                            <span class="code-filename">advanced.spec.ts</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>const downloadPromise = page.waitForEvent("download");
+await page.getByRole("button", { name: "Export" }).click();
+const download = await downloadPromise;
+expect(download.suggestedFilename()).toContain(".xlsx");
+
+const pagePromise = page.context().waitForEvent("page");
+await page.getByRole("link", { name: "Open detail" }).click();
+const detailPage = await pagePromise;
+await expect(detailPage).toHaveURL(/detail/);
+
+const frame = page.frameLocator("iframe[name='payment']");
+await frame.getByLabel("Card number").fill("4242424242424242");</pre>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts4-ex-advanced-1" onchange="onCheck(this)">
+                            <label for="ts4-ex-advanced-1" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Automate import/export</div>
+                                    <div class="ex-desc">Viết test upload file mẫu, export file sau xử lý và verify filename hoặc nội dung cơ bản.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts4-ex-advanced-2" onchange="onCheck(this)">
+                            <label for="ts4-ex-advanced-2" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Test multi-tab hoặc iframe</div>
+                                    <div class="ex-desc">Chọn một flow mở tab mới hoặc có iframe và viết assertion đúng context.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
                 <div class="topic-icon">🤝</div>
                 <div class="topic-meta">
                     <div class="topic-name">Test Hooks, Source Review, Flaky Prevention</div>
@@ -236,16 +296,152 @@ await expect(table).toContainText("ORD-10025");</pre>
             </div>
         </div>
     </div>
+
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">🧪</div>
+            <div class="topic-meta">
+                <div class="topic-name">Parallel, Retry, Flaky Test, Visual & Mobile</div>
+                <div class="topic-desc">workers · isolation · data collision · screenshot comparison · viewport</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Kỹ năng production</div>
+                <p>Từ trung cấp trở lên, bạn cần biết vì sao test flake khi chạy song song, cách retry chỉ dùng như lưới an toàn, khi nào cần sharding/Docker để scale suite trên CI, và khi nào nên thêm visual/mobile test để bắt lỗi giao diện.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">TypeScript</span>
+                        <span class="code-filename">parallel-visual-mobile.ts</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>// Tránh data collision khi chạy parallel
+const orderCode = `ORDER_${Date.now()}_${test.info().workerIndex}`;
+
+// Visual regression
+await expect(page).toHaveScreenshot("dashboard.png", {
+  mask: [page.getByTestId("current-time")],
+});
+
+// Mobile/responsive
+test.use({
+  viewport: { width: 390, height: 844 },
+});</pre>
+                </div>
+                <div class="tip-box warning">
+                    <span class="tip-icon">⚠️</span>
+                    <div class="tip-content">Nếu test chỉ pass khi chạy một mình, hãy kiểm tra isolation, shared data, cleanup, network wait và selector trước khi tăng retry.</div>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts4-ex-quality-1" onchange="onCheck(this)">
+                        <label for="ts4-ex-quality-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Chạy song song và xử lý data collision</div>
+                                <div class="ex-desc">Tạo mã dữ liệu động có worker index/timestamp, chạy nhiều worker và kiểm tra test không đụng data.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts4-ex-quality-2" onchange="onCheck(this)">
+                        <label for="ts4-ex-quality-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Thêm visual hoặc mobile smoke test</div>
+                                <div class="ex-desc">Viết một screenshot comparison có mask dynamic element hoặc một test viewport mobile cho flow quan trọng.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">🎓</div>
+            <div class="topic-meta">
+                <div class="topic-name">Test Design, Checklist Đi Làm, Mini Project CV</div>
+                <div class="topic-desc">smoke · regression · negative · boundary · risk-based · portfolio</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Tư duy automation</div>
+                <p>Automation không phải auto mọi case. Hãy ưu tiên case có giá trị lặp lại cao: smoke, regression quan trọng, E2E rủi ro lớn, negative/boundary dễ bug và flow cần API verify.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">Portfolio Structure</span>
+                        <span class="code-filename">playwright-typescript-e2e</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>playwright-typescript-e2e/
+  tests/
+    login.spec.ts
+    product.spec.ts
+    order.spec.ts
+  pages/
+    LoginPage.ts
+    ProductPage.ts
+    OrderPage.ts
+  data/
+    users.ts
+    orderData.ts
+  utils/
+    random.ts
+  fixtures/
+    test.ts
+  playwright.config.ts
+  README.md</pre>
+                </div>
+                <div class="tip-box success">
+                    <span class="tip-icon">✅</span>
+                    <div class="tip-content">Checklist apply job: locator chắc, assertion đúng, debug trace nhanh, POM maintain được, API testing, CI/report, fixture và mock API cơ bản.</div>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts4-ex-design-1" onchange="onCheck(this)">
+                        <label for="ts4-ex-design-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Thiết kế test suite cho OMS/ecommerce</div>
+                                <div class="ex-desc">Phân loại case thành smoke, regression, negative, E2E, API verify và ghi rõ vì sao nên/không nên automate.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts4-ex-design-2" onchange="onCheck(this)">
+                        <label for="ts4-ex-design-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Hoàn thiện mini project đưa vào CV</div>
+                                <div class="ex-desc">Có login, product/order, API setup, UI+API verify, HTML report, GitHub Actions và README tech stack.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="milestone-card p4" id="p4-milestone">
     <div class="milestone-label">Bài Tập Lớn · Phase 4</div>
-    <div class="milestone-title">Enterprise UI Challenge</div>
-    <div class="milestone-desc">Xây một mini suite cho một màn enterprise thật có Angular hoặc Ant Design: search form động, select khó, table lớn, dialog và overlay.</div>
+    <div class="milestone-title">Enterprise UI & Portfolio Challenge</div>
+    <div class="milestone-desc">Xây một mini suite TypeScript đủ đưa vào CV: enterprise UI khó, API+UI flow, visual/mobile smoke, CI report và checklist test design rõ ràng.</div>
     <ul class="checklist">
         <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts4-ml-1" onclick="event.stopPropagation()"><span>Viết selector contract cho màn enterprise đã chọn</span></li>
         <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts4-ml-2" onclick="event.stopPropagation()"><span>Automate ít nhất 1 AntD/Material control phức tạp</span></li>
         <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts4-ml-3" onclick="event.stopPropagation()"><span>Assert table/filter bằng business key và network-aware waits</span></li>
-        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts4-ml-4" onclick="event.stopPropagation()"><span>Đề xuất ít nhất 3 test hooks hoặc source improvements cho dev</span></li>
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts4-ml-4" onclick="event.stopPropagation()"><span>Có advanced case: download/upload, iframe, multi-tab hoặc multi-user context</span></li>
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts4-ml-5" onclick="event.stopPropagation()"><span>Có visual/mobile smoke test và xử lý data khi chạy parallel</span></li>
+        <li onclick="toggleMilestone(this)"><input type="checkbox" class="milestone-check" id="ts4-ml-6" onclick="event.stopPropagation()"><span>README ghi tech stack, cách chạy test, report, CI và test design scope</span></li>
     </ul>
 </div>

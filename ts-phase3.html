@@ -129,6 +129,71 @@
         <div class="week-label">Tuần 11 · API & CI/CD</div>
         <div class="topic-card">
             <div class="topic-header" onclick="toggleTopic(this)">
+                <div class="topic-icon">🔐</div>
+                <div class="topic-meta">
+                    <div class="topic-name">Authentication State, Test Data, Environment Config</div>
+                    <div class="topic-desc">storageState · global setup · dynamic data · .env · secrets</div>
+                </div>
+                <div class="topic-toggle">▼</div>
+                <span class="note-dot"></span>
+            </div>
+            <div class="topic-body">
+                <div class="theory-section">
+                    <div class="section-label">Kiến thức quan trọng</div>
+                    <p>Trong dự án thật, không nên login lại ở từng test nếu flow không cần kiểm tra login. Hãy lưu session bằng <code>storageState</code>, tạo test data động để tránh trùng khi chạy parallel, và đọc credential từ environment thay vì hardcode.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">TypeScript</span>
+                            <span class="code-filename">auth-and-data.ts</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>const username = process.env.ADMIN_USERNAME;
+const password = process.env.ADMIN_PASSWORD;
+const orderCode = `AUTO_${Date.now()}`;
+
+export const customer = {
+  name: "Automation Test",
+  phone: "0909000000",
+};
+
+// playwright.config.ts
+use: {
+  baseURL: process.env.BASE_URL,
+  storageState: ".auth/admin.json",
+}</pre>
+                    </div>
+                    <div class="tip-box warning">
+                        <span class="tip-icon">⚠️</span>
+                        <div class="tip-content">Không commit password, token hoặc file auth thật. Với CI, dùng GitHub Secret/GitLab CI variable rồi đọc qua <code>process.env</code>.</div>
+                    </div>
+                </div>
+                <div class="theory-section">
+                    <div class="section-label">Bài tập thực hành</div>
+                    <div class="exercises">
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts3-ex-auth-1" onchange="onCheck(this)">
+                            <label for="ts3-ex-auth-1" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Lưu và tái dùng auth state</div>
+                                    <div class="ex-desc">Tạo global setup login một lần, lưu <code>.auth/admin.json</code> và dùng lại trong các test không cần kiểm tra login.</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="ex-item">
+                            <input type="checkbox" class="ex-check" id="ts3-ex-auth-2" onchange="onCheck(this)">
+                            <label for="ts3-ex-auth-2" style="display:contents;cursor:pointer">
+                                <div class="ex-text">
+                                    <div class="ex-title">Tách test data và env config</div>
+                                    <div class="ex-desc">Tạo data file cho user/order, dùng timestamp hoặc faker cho mã động, và đọc baseURL/credential từ <code>.env</code>.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="topic-card">
+            <div class="topic-header" onclick="toggleTopic(this)">
                 <div class="topic-icon">🔌</div>
                 <div class="topic-meta">
                     <div class="topic-name">APIRequestContext, Storage State, GitHub Actions</div>
@@ -141,6 +206,10 @@
                 <div class="theory-section">
                     <div class="section-label">Lý thuyết</div>
                     <p>Track TS rất mạnh ở mô hình “API setup, UI verify”. Bạn có thể login qua API, lưu storage state rồi tái sử dụng trong hàng chục test UI để chạy nhanh và ổn định hơn.</p>
+                    <div class="tip-box info">
+                        <span class="tip-icon">💡</span>
+                        <div class="tip-content">Khi đưa lên CI, nên biết HTML report để xem local, JUnit XML cho pipeline đọc, Allure nếu team cần report đẹp, upload artifact khi fail và notification qua Slack/Telegram nếu suite chạy định kỳ.</div>
+                    </div>
                     <div class="code-block">
                         <div class="code-header">
                             <span class="code-lang text">TypeScript</span>
@@ -152,6 +221,28 @@
     data: { username: "standard_user", password: "secret_sauce" },
   });
   await page.context().storageState({ path: ".auth/user.json" });
+});</pre>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">TypeScript</span>
+                            <span class="code-filename">ui-api-flow.spec.ts</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>test("approve order created by API", async ({ page, request }) => {
+  const createRes = await request.post("/api/orders", {
+    data: { customerCode: "C001", warehouseCode: "W103" },
+  });
+  expect(createRes.status()).toBe(200);
+  const order = await createRes.json();
+
+  await page.goto("/orders");
+  await page.getByPlaceholder("Search order").fill(order.code);
+  await page.getByRole("button", { name: "Search" }).click();
+  await page.locator("tr", { hasText: order.code }).getByRole("button", { name: "Approve" }).click();
+
+  const detailRes = await request.get(`/api/orders/${order.id}`);
+  expect((await detailRes.json()).status).toBe("Approved");
 });</pre>
                     </div>
                 </div>
@@ -204,6 +295,44 @@
                     <div class="tip-box success">
                         <span class="tip-icon">✅</span>
                         <div class="tip-content">Ưu tiên fixture typed, test data có ownership rõ ràng, page object nhỏ gọn, và helper nào cũng nên có tên phản ánh business action.</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">TypeScript</span>
+                            <span class="code-filename">fixtures/index.ts</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>import { test as base } from "@playwright/test";
+import { LoginPage } from "../pages/LoginPage";
+
+type Fixtures = {
+  loginPage: LoginPage;
+};
+
+export const test = base.extend&lt;Fixtures&gt;({
+  loginPage: async ({ page }, use) => {
+    await use(new LoginPage(page));
+  },
+});</pre>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang text">Project Structure</span>
+                            <span class="code-filename">reference</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>tests/
+  order.spec.ts
+pages/
+  LoginPage.ts
+  OrderPage.ts
+fixtures/
+  test.ts
+data/
+  orderData.ts
+utils/
+  random.ts
+playwright.config.ts</pre>
                     </div>
                 </div>
                 <div class="theory-section">
