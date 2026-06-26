@@ -170,6 +170,213 @@ function printSummary(id: string, status: TestStatus) {
         </div>
     </div>
 
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">📘</div>
+            <div class="topic-meta">
+                <div class="topic-name">Cách Học TypeScript Cho Automation</div>
+                <div class="topic-desc">khái niệm · ví dụ nhỏ · automation case · bài tập · lỗi thường gặp</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Lý thuyết nền</div>
+                <p>Không cần học TypeScript sâu như backend developer ngay từ đầu. Với QA Automation, mục tiêu là đọc hiểu Playwright test, viết test data, helper, Page Object, API payload/response và debug lỗi type trong dự án thật.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">Learning Formula</span>
+                        <span class="code-filename">typescript-for-automation.txt</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>1. Hiểu khái niệm
+2. Viết ví dụ nhỏ
+3. Áp dụng vào case automation
+4. Tự làm bài tập
+5. Biết lỗi thường gặp</pre>
+                </div>
+                <div class="tip-box info">
+                    <span class="tip-icon">💡</span>
+                    <div class="tip-content">Học tới đâu nên gắn với nghiệp vụ tới đó: order code, SKU, warehouse, customer, API response, table row, form validation.</div>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-theory-approach-1" onchange="onCheck(this)">
+                        <label for="ts-ex-theory-approach-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Tạo folder practice</div>
+                                <div class="ex-desc">Tạo folder <code>practice/</code>, mỗi chủ đề TypeScript tạo một file riêng để chạy bằng <code>ts-node</code>.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-theory-approach-2" onchange="onCheck(this)">
+                        <label for="ts-ex-theory-approach-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Gắn mỗi bài học với automation data</div>
+                                <div class="ex-desc">Với mỗi ví dụ biến/object/array/function, đổi dữ liệu mẫu thành order, product, customer hoặc API response.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">🔤</div>
+            <div class="topic-meta">
+                <div class="topic-name">Variables, String, Number, Boolean Chi Tiết</div>
+                <div class="topic-desc">let/const · template string · parse money · condition · assertion mindset</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Lý thuyết chi tiết</div>
+                <p><code>const</code> dùng cho giá trị không gán lại như username, warehouse code, order code. <code>let</code> dùng cho trạng thái có thể thay đổi như retry count hoặc order status. String dùng cho URL, locator text, SKU, token, message. Number dùng cho quantity, price, total, status code. Boolean dùng cho điều kiện đúng/sai.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">TypeScript</span>
+                        <span class="code-filename">primitive-automation.ts</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>const warehouseCode: string = "W103";
+const orderCode = `AUTO_ORDER_${Date.now()}`;
+let orderStatus: "New" | "Approved" = "New";
+
+orderStatus = "Approved";
+
+function parseMoney(text: string): number {
+  return Number(text.replaceAll(",", "").trim());
+}
+
+function canApproveOrder(status: string): boolean {
+  return status === "New";
+}
+
+console.log(orderCode);
+console.log(parseMoney("1,250,000"));
+console.log(canApproveOrder(orderStatus));</pre>
+                </div>
+                <div class="tip-box warning">
+                    <span class="tip-icon">⚠️</span>
+                    <div class="tip-content">Dữ liệu lấy từ UI thường là string. Muốn so sánh với number thì convert rõ ràng bằng <code>Number()</code> sau khi clean dấu phẩy/khoảng trắng.</div>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-primitive-detail-1" onchange="onCheck(this)">
+                        <label for="ts-ex-primitive-detail-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Generate mã nghiệp vụ bằng template string</div>
+                                <div class="ex-desc">Viết <code>generateCode(prefix)</code> để tạo ORDER, SKU, CUSTOMER không trùng bằng <code>Date.now()</code>.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-primitive-detail-2" onchange="onCheck(this)">
+                        <label for="ts-ex-primitive-detail-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Parse tiền từ UI text</div>
+                                <div class="ex-desc">Viết function nhận text dạng <code>1,250,000</code>, trả về number và assert kết quả bằng <code>expect</code>.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">📚</div>
+            <div class="topic-meta">
+                <div class="topic-name">Array Và Object Cho Test Data/API</div>
+                <div class="topic-desc">find · filter · map · some · every · reduce · nested object · spread</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Lý thuyết chi tiết</div>
+                <p>Array xuất hiện trong item order, serial, table rows và API response. Object là hình dạng chính của test data và request body. Cần chắc <code>find</code>, <code>filter</code>, <code>map</code>, <code>some</code>, <code>every</code>, <code>reduce</code>, nested object, destructuring và spread.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">TypeScript</span>
+                        <span class="code-filename">array-object-order.ts</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>type Product = {
+  sku: string;
+  name: string;
+  price: number;
+  status: "ACTIVE" | "INACTIVE";
+};
+
+const products: Product[] = [
+  { sku: "SKU001", name: "Mouse", price: 100000, status: "ACTIVE" },
+  { sku: "SKU002", name: "Keyboard", price: 250000, status: "ACTIVE" },
+  { sku: "SKU003", name: "Monitor", price: 2500000, status: "INACTIVE" },
+];
+
+const product = products.find((item) => item.sku === "SKU002");
+if (!product) throw new Error("Product not found");
+
+const activeSkus = products
+  .filter((item) => item.status === "ACTIVE")
+  .map((item) => item.sku);
+
+const totalPrice = products.reduce((total, item) => total + item.price, 0);
+
+const baseOrder = {
+  customerCode: "C001",
+  warehouseCode: "W103",
+  items: [{ sku: product.sku, quantity: 1 }],
+};
+
+const orderForW104 = { ...baseOrder, warehouseCode: "W104" };</pre>
+                </div>
+                <div class="tip-box warning">
+                    <span class="tip-icon">⚠️</span>
+                    <div class="tip-content"><code>find()</code> có thể trả về <code>undefined</code>. Luôn check trước khi đọc field, nhất là khi dùng dữ liệu từ API hoặc file test data.</div>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-array-object-detail-1" onchange="onCheck(this)">
+                        <label for="ts-ex-array-object-detail-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Xử lý danh sách product</div>
+                                <div class="ex-desc">Tìm SKU002, lọc product ACTIVE, lấy danh sách SKU, tính tổng giá và check có product giá trên 1,000,000 không.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-array-object-detail-2" onchange="onCheck(this)">
+                        <label for="ts-ex-array-object-detail-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Tạo order object có nested data</div>
+                                <div class="ex-desc">Tạo order có customer, address, items; in province, SKU đầu tiên và dùng spread để đổi warehouse.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="week-block" id="p1-w2">
         <div class="week-label">Tuần 2 · Functions & Objects</div>
         <div class="topic-card">
@@ -229,6 +436,87 @@ function getAdminUsers(items: LoginUser[]) {
                                 </div>
                             </label>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">🏷️</div>
+            <div class="topic-meta">
+                <div class="topic-name">Type, Interface, Optional Field Và Union Type</div>
+                <div class="topic-desc">object shape · API payload · optional data · status/env/browser type</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Lý thuyết chi tiết</div>
+                <p><code>type</code> và <code>interface</code> mô tả hình dạng dữ liệu. Optional field dùng khi field có thể không tồn tại. Union type giúp giới hạn status, env, browser, severity để tránh nhập sai string trong test.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">TypeScript</span>
+                        <span class="code-filename">typed-order.ts</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>type Env = "local" | "dev" | "staging" | "production";
+type OrderStatus = "New" | "Approved" | "Cancelled";
+
+type Customer = {
+  code: string;
+  name: string;
+  phone: string;
+  email?: string;
+};
+
+type OrderItem = {
+  sku: string;
+  quantity: number;
+  price: number;
+};
+
+type CreateOrderPayload = {
+  customer: Customer;
+  warehouseCode: "W103" | "W104" | "W105";
+  items: OrderItem[];
+};
+
+type CreateOrderResponse = {
+  message: string;
+  data: {
+    orderCode: string;
+    status: OrderStatus;
+  };
+};</pre>
+                </div>
+                <div class="tip-box info">
+                    <span class="tip-icon">💡</span>
+                    <div class="tip-content">Trong automation, có thể ưu tiên <code>type</code> cho test data/API vì dễ kết hợp union type. <code>interface</code> vẫn tốt khi mô tả object/class contract.</div>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-type-detail-1" onchange="onCheck(this)">
+                        <label for="ts-ex-type-detail-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Tạo type cho payload order</div>
+                                <div class="ex-desc">Định nghĩa Customer, OrderItem, CreateOrderPayload và tạo object payload đúng type.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-type-detail-2" onchange="onCheck(this)">
+                        <label for="ts-ex-type-detail-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Dùng union type cho status/env</div>
+                                <div class="ex-desc">Tạo type cho order status, env và browser; thử nhập sai giá trị để xem TypeScript báo lỗi.</div>
+                            </div>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -296,6 +584,84 @@ export async function printFirstUser() {
         </div>
     </div>
 
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">⚙️</div>
+            <div class="topic-meta">
+                <div class="topic-name">Function, Async/Await, Promise Và Try/Catch</div>
+                <div class="topic-desc">helper function · return type · missing await · API response handling · error log</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Lý thuyết chi tiết</div>
+                <p>Playwright gần như dùng <code>async/await</code> ở mọi action. Function giúp tái sử dụng logic tạo data, tính toán expected result, parse UI text hoặc gọi API. <code>try/catch</code> nên dùng khi cần log lỗi rõ hơn rồi throw lại để test fail đúng.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">TypeScript</span>
+                        <span class="code-filename">helpers-and-api.ts</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>type ApiResponse = {
+  status: number;
+  message: string;
+};
+
+function generateCode(prefix: string): string {
+  return `${prefix}_${Date.now()}`;
+}
+
+function calculateTotal(items: { quantity: number; price: number }[]): number {
+  return items.reduce((total, item) => total + item.quantity * item.price, 0);
+}
+
+async function fakeCreateOrder(): Promise<ApiResponse> {
+  return { status: 200, message: "success" };
+}
+
+async function main() {
+  try {
+    const response = await fakeCreateOrder();
+    if (response.status !== 200) throw new Error(response.message);
+  } catch (error) {
+    console.error("Create order failed:", error);
+    throw error;
+  }
+}</pre>
+                </div>
+                <div class="tip-box warning">
+                    <span class="tip-icon">⚠️</span>
+                    <div class="tip-content">Lỗi rất thường gặp là thiếu <code>await</code>: action chưa chạy xong nhưng test đã đi tiếp, dẫn tới fail khó đoán hoặc flaky.</div>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-function-async-detail-1" onchange="onCheck(this)">
+                        <label for="ts-ex-function-async-detail-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Viết helper tạo code và tính tổng tiền</div>
+                                <div class="ex-desc">Tạo <code>generateCode(prefix)</code> và <code>calculateTotal(items)</code>, sau đó dùng với order data mẫu.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-function-async-detail-2" onchange="onCheck(this)">
+                        <label for="ts-ex-function-async-detail-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Giả lập async API response</div>
+                                <div class="ex-desc">Viết async function trả về Promise, dùng await để đọc response và xử lý lỗi bằng try/catch.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="week-block" id="p1-w4">
         <div class="week-label">Tuần 4 · Classes & DOM Thinking</div>
         <div class="topic-card">
@@ -351,6 +717,155 @@ console.log(loginWidget.getSubmitSelector());</pre>
                                 </div>
                             </label>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">🧬</div>
+            <div class="topic-meta">
+                <div class="topic-name">Generic, Type Narrowing, JSON, Null/Undefined</div>
+                <div class="topic-desc">generic helper · unknown vs any · optional chaining · nullish coalescing · JSON parse</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Lý thuyết chi tiết</div>
+                <p>Các phần này không cần quá sâu lúc đầu, nhưng nên biết để đọc framework. Generic giúp helper dùng lại cho nhiều kiểu dữ liệu. Type narrowing giúp xử lý dữ liệu chưa rõ kiểu. Optional chaining và nullish coalescing giúp đọc optional data an toàn hơn.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">TypeScript</span>
+                        <span class="code-filename">safe-data.ts</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>function getFirstItem&lt;T&gt;(items: T[]): T | undefined {
+  return items[0];
+}
+
+function printValue(value: string | number) {
+  if (typeof value === "string") {
+    console.log(value.toUpperCase());
+  } else {
+    console.log(value.toFixed(2));
+  }
+}
+
+const raw = '{"message":"success","data":{"orderCode":"O001"}}';
+const body = JSON.parse(raw) as {
+  message: string;
+  data?: { orderCode?: string };
+};
+
+const orderCode = body.data?.orderCode ?? "NO_ORDER_CODE";
+console.log(orderCode);</pre>
+                </div>
+                <div class="tip-box warning">
+                    <span class="tip-icon">⚠️</span>
+                    <div class="tip-content">Hạn chế <code>any</code> vì nó tắt kiểm tra kiểu. Nếu dữ liệu chưa rõ, dùng <code>unknown</code> hoặc type rõ cho response rồi narrowing trước khi xử lý.</div>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-safe-data-1" onchange="onCheck(this)">
+                        <label for="ts-ex-safe-data-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Viết generic helper</div>
+                                <div class="ex-desc">Tạo <code>getFirstItem&lt;T&gt;</code> và dùng với string array, product array, order item array.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-safe-data-2" onchange="onCheck(this)">
+                        <label for="ts-ex-safe-data-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Parse JSON response an toàn</div>
+                                <div class="ex-desc">Tạo JSON string mô phỏng API, parse ra object typed và dùng optional chaining để đọc field optional.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">🗂️</div>
+            <div class="topic-meta">
+                <div class="topic-name">Destructuring, Spread/Rest Và Module Structure</div>
+                <div class="topic-desc">clean object handling · reusable files · data/type/utils/service split</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Lý thuyết chi tiết</div>
+                <p>Destructuring giúp lấy field gọn hơn. Spread giúp copy object và override test data. Rest parameter hữu ích khi helper nhận nhiều giá trị. Khi project lớn, nên tách <code>types/</code>, <code>data/</code>, <code>utils/</code>, <code>services/</code> để code maintain được.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">Project Structure</span>
+                        <span class="code-filename">practice-order-toolkit</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>practice/
+  types/
+    order.ts
+  data/
+    orderData.ts
+  utils/
+    random.ts
+  services/
+    orderService.ts
+  main.ts</pre>
+                </div>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">TypeScript</span>
+                        <span class="code-filename">spread-destructure.ts</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>const baseOrder = {
+  customerCode: "C001",
+  warehouseCode: "W103",
+  items: [{ sku: "SKU001", quantity: 1 }],
+};
+
+const { customerCode, items } = baseOrder;
+const orderForW104 = { ...baseOrder, warehouseCode: "W104" };
+
+function joinCodes(...codes: string[]): string {
+  return codes.join(",");
+}</pre>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-module-structure-1" onchange="onCheck(this)">
+                        <label for="ts-ex-module-structure-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Tách file data, type, utils</div>
+                                <div class="ex-desc">Tạo structure <code>types/order.ts</code>, <code>utils/random.ts</code>, <code>data/orderData.ts</code>, <code>main.ts</code> và chạy thử.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts-ex-module-structure-2" onchange="onCheck(this)">
+                        <label for="ts-ex-module-structure-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Dùng spread để tạo nhiều payload</div>
+                                <div class="ex-desc">Tạo base order payload, sau đó dùng spread để tạo payload cho W103, W104 và W105.</div>
+                            </div>
+                        </label>
                     </div>
                 </div>
             </div>

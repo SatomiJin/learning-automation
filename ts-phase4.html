@@ -430,6 +430,304 @@ test.use({
             </div>
         </div>
     </div>
+
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">📐</div>
+            <div class="topic-meta">
+                <div class="topic-name">Coding Convention Cho Automation Project</div>
+                <div class="topic-desc">naming · test title · Arrange Act Assert · POM boundary · lint/format</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Quy ước code đi làm</div>
+                <p>Automation code cần dễ đọc như tài liệu nghiệp vụ nhỏ. File test nên cho reviewer thấy flow chính, Page Object giữ locator/action, helper xử lý data chung và assertion nên kiểm tra đúng expected result thay vì chỉ nhìn toast.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">TypeScript</span>
+                        <span class="code-filename">order-creation.spec.ts</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>test("should create order successfully when required fields are valid", async ({ page, request }) => {
+  // Arrange
+  const orderData = buildOrderData();
+
+  // Act
+  await orderPage.goto();
+  await orderPage.create(orderData);
+
+  // Assert
+  await expect(orderPage.getOrderRow(orderData.orderCode)).toContainText("New");
+});</pre>
+                </div>
+                <div class="tip-box success">
+                    <span class="tip-icon">✅</span>
+                    <div class="tip-content">Tên file dùng <code>*.spec.ts</code>, Page Object dùng PascalCase, helper dùng camelCase, test title mô tả hành vi mong đợi và điều kiện xảy ra.</div>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts4-ex-convention-1" onchange="onCheck(this)">
+                        <label for="ts4-ex-convention-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Refactor tên test và file</div>
+                                <div class="ex-desc">Chọn 3 test cũ, đổi tên theo format should + behavior + condition và đảm bảo file/module đọc được theo nghiệp vụ.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts4-ex-convention-2" onchange="onCheck(this)">
+                        <label for="ts4-ex-convention-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Tách selector khỏi file test</div>
+                                <div class="ex-desc">Di chuyển locator/action lặp lại vào Page Object, giữ file test chỉ còn Arrange, Act và Assert chính.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">🧭</div>
+            <div class="topic-meta">
+                <div class="topic-name">Workflow Viết Một Automation Test Case</div>
+                <div class="topic-desc">understand business · choose strategy · skeleton · debug · review</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Quy trình từ requirement tới test chạy ổn</div>
+                <p>Đừng bắt đầu bằng click selector ngay. Hãy hiểu nghiệp vụ, xác định expected result, chọn setup bằng UI hay API, viết skeleton, chạy headed/debug rồi review lại locator, data và assertion trước khi commit.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">Checklist</span>
+                        <span class="code-filename">test-case-workflow.txt</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>1. Hiểu user action, input và expected result
+2. Phân loại smoke/regression/negative/e2e
+3. Chọn setup data bằng UI hoặc API
+4. Viết skeleton Arrange -> Act -> Assert
+5. Chạy headed, debug, headless
+6. Review locator, data uniqueness, assertion và secret</pre>
+                </div>
+                <div class="tip-box warning">
+                    <span class="tip-icon">⚠️</span>
+                    <div class="tip-content">Một test pass local một lần chưa đủ. Nên chạy lại nhiều lần, chạy headless và chạy cùng các file liên quan để phát hiện shared data hoặc timing issue.</div>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts4-ex-workflow-1" onchange="onCheck(this)">
+                        <label for="ts4-ex-workflow-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Viết skeleton trước khi code</div>
+                                <div class="ex-desc">Chọn một flow tạo đơn/customer, viết comment Arrange/Act/Assert rõ ràng rồi mới điền code.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts4-ex-workflow-2" onchange="onCheck(this)">
+                        <label for="ts4-ex-workflow-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Review test trước khi commit</div>
+                                <div class="ex-desc">Tạo checklist review nhỏ cho locator, wait, test data, assertion, secret và khả năng chạy parallel.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">🏷️</div>
+            <div class="topic-meta">
+                <div class="topic-name">Tag Test Và Chia Test Suite</div>
+                <div class="topic-desc">@smoke · @regression · @api · @ui · @negative · nightly · production smoke</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Chạy đúng nhóm test đúng thời điểm</div>
+                <p>Khi suite lớn, tag giúp team chạy nhanh nhóm test phù hợp: smoke sau deploy, regression trước release, API khi backend thay đổi, nightly cho full suite và production smoke với case nhẹ, ít rủi ro data.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">TypeScript</span>
+                        <span class="code-filename">tagged-tests.spec.ts</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>test("should login successfully @smoke @ui", async ({ page }) => {
+  await loginPage.goto();
+  await loginPage.login("admin", "password");
+  await expect(page).toHaveURL(/dashboard/);
+});
+
+// CLI
+// npx playwright test --grep @smoke
+// npx playwright test --grep-invert @slow</pre>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts4-ex-tag-1" onchange="onCheck(this)">
+                        <label for="ts4-ex-tag-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Gắn tag cho test hiện có</div>
+                                <div class="ex-desc">Phân loại ít nhất 10 test thành @smoke, @regression, @api, @ui hoặc @negative.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts4-ex-tag-2" onchange="onCheck(this)">
+                        <label for="ts4-ex-tag-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Thiết kế suite chạy trên CI</div>
+                                <div class="ex-desc">Ghi rõ pull request chạy gì, merge main chạy gì, deploy staging chạy gì và nightly chạy gì.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">🛠️</div>
+            <div class="topic-meta">
+                <div class="topic-name">Lỗi Người Mới Hay Gặp Và Cách Sửa</div>
+                <div class="topic-desc">missing await · strict mode violation · weak assertion · test dependency · waitForTimeout</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Debug từ nguyên nhân thật</div>
+                <p>Các lỗi phổ biến nhất là quên <code>await</code>, locator match nhiều element, assertion chỉ nhìn toast, test phụ thuộc thứ tự, data bị trùng khi chạy song song và lạm dụng wait cứng. Sửa đúng nguyên nhân sẽ giúp suite bền hơn retry.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">TypeScript</span>
+                        <span class="code-filename">common-fixes.ts</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>// Thiếu await
+await page.getByRole("button", { name: "Save" }).click();
+
+// Locator match nhiều element
+const row = page.locator("tr").filter({ hasText: orderCode });
+await row.getByRole("button", { name: "Detail" }).click();
+
+// Data unique khi chạy parallel
+const customerCode = `CUSTOMER_${test.info().workerIndex}_${Date.now()}`;
+
+// Wait theo trạng thái thật
+await expect(page.getByText("Created successfully")).toBeVisible();</pre>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts4-ex-mistake-1" onchange="onCheck(this)">
+                        <label for="ts4-ex-mistake-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Sửa một strict mode violation</div>
+                                <div class="ex-desc">Tìm locator đang match nhiều element, thu hẹp bằng role/name, label hoặc row/container có business key.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts4-ex-mistake-2" onchange="onCheck(this)">
+                        <label for="ts4-ex-mistake-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Thay wait cứng bằng wait thật</div>
+                                <div class="ex-desc">Chọn một test đang dùng waitForTimeout và thay bằng expect, waitForResponse hoặc trạng thái UI rõ ràng.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <div class="topic-header" onclick="toggleTopic(this)">
+            <div class="topic-icon">💼</div>
+            <div class="topic-meta">
+                <div class="topic-name">Checklist Chuẩn Bị Phỏng Vấn</div>
+                <div class="topic-desc">TypeScript fundamentals · Playwright concepts · framework design · situation questions</div>
+            </div>
+            <div class="topic-toggle">▼</div>
+            <span class="note-dot"></span>
+        </div>
+        <div class="topic-body">
+            <div class="theory-section">
+                <div class="section-label">Nội dung cần tự trả lời được</div>
+                <p>Trước khi apply, hãy tự giải thích được async/await, type/interface, Page Object Model, fixture, storageState, locator strategy, trace debugging, test data management, CI report và cách xử lý flaky test.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang text">Interview Notes</span>
+                        <span class="code-filename">qa-automation-interview.txt</span>
+                        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre>Flaky test xử lý sao?
+- Xem trace, screenshot, network và console
+- Kiểm tra locator có unique không
+- Kiểm tra wait có dựa trên trạng thái thật không
+- Kiểm tra data có bị shared/collision không
+- Phân biệt lỗi môi trường và lỗi product
+
+Vì sao kết hợp UI + API?
+- Setup nhanh hơn
+- Verify sâu hơn
+- Giảm thao tác UI không cần thiết
+- Test ổn định hơn khi flow dài</pre>
+                </div>
+            </div>
+            <div class="theory-section">
+                <div class="section-label">Bài tập thực hành</div>
+                <div class="exercises">
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts4-ex-interview-1" onchange="onCheck(this)">
+                        <label for="ts4-ex-interview-1" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Tự trả lời 10 câu phỏng vấn</div>
+                                <div class="ex-desc">Ghi câu trả lời ngắn cho TypeScript, locator, POM, fixture, API testing, CI/CD và flaky test.</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="ex-item">
+                        <input type="checkbox" class="ex-check" id="ts4-ex-interview-2" onchange="onCheck(this)">
+                        <label for="ts4-ex-interview-2" style="display:contents;cursor:pointer">
+                            <div class="ex-text">
+                                <div class="ex-title">Chuẩn bị demo portfolio</div>
+                                <div class="ex-desc">Mở mini project, chạy test, mở report và tập trình bày vì sao chọn cấu trúc framework hiện tại.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="milestone-card p4" id="p4-milestone">
